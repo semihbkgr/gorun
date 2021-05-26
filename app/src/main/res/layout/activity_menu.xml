@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:context=".MenuActivity">
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/golang"
+            android:id="@+id/imageViewLogo"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="95dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
+            android:contentDescription="@string/golang_logo"/>
+
+    <Button
+            android:text="@string/menu_button_run"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/buttonRun"/>
+
+    <Button
+            android:text="@string/menu_button_tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/buttonTutorial"/>
+
+</LinearLayout>

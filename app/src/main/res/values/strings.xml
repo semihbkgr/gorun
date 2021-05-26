@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GoRun</string>
+    <string name="golang_logo">GoLangLogo</string>
+    <string name="menu_button_run">Run</string>
+    <string name="menu_button_tutorial">Tutorial</string>
+    <string name="menu_button_setting">Setting</string>
+
+
 </resources>
