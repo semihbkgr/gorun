@@ -4,6 +4,9 @@
     <string name="menu_button_run">Run</string>
     <string name="menu_button_tutorial">Tutorial</string>
     <string name="menu_button_setting">Setting</string>
+    <string name="run_button_new">Create New</string>
+    <string name="run_button_saved">From Saved</string>
+    <string name="run_button_snippet">From Snippets</string>
 
 
 </resources>

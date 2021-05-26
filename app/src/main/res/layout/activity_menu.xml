@@ -7,7 +7,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        tools:context=".MenuActivity">
+        tools:context=".MenuActivity"
+        android:background="@color/white">
 
     <ImageView
             android:layout_width="wrap_content"
@@ -28,7 +29,11 @@
             android:layout_marginStart="35dp"
             android:layout_marginEnd="35dp"
             android:layout_marginBottom="15dp"
-            android:id="@+id/buttonRun"/>
+            android:textAllCaps="false"
+            android:id="@+id/buttonRun"
+            android:stateListAnimator="@null"
+            android:background="@drawable/background_button_default"
+            android:textColor="@color/black"/>
 
     <Button
             android:text="@string/menu_button_tutorial"
@@ -37,6 +42,10 @@
             android:layout_marginStart="35dp"
             android:layout_marginEnd="35dp"
             android:layout_marginBottom="15dp"
-            android:id="@+id/buttonTutorial"/>
+            android:textAllCaps="false"
+            android:id="@+id/buttonTutorial"
+            android:stateListAnimator="@null"
+            android:background="@drawable/background_button_default"
+            android:textColor="@color/black"/>
 
 </LinearLayout>
