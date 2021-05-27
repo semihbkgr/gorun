@@ -10,6 +10,8 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.run.CodeRunClient;
+import com.semihbg.gorun.util.InputStreamHandler;
 
 public class MenuActivity extends AppCompatActivity {
 

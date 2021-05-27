@@ -38,6 +38,8 @@ public class CodeRunService {
                 fileService.deleteFile();
             }
             stringFluxSink.complete();
+            System.out.println(code);
+            System.out.println(System.currentTimeMillis());
         });
 
     }

@@ -24,7 +24,14 @@ public class RunActivity extends AppCompatActivity {
             actionBar.setDefaultDisplayHomeAsUpEnabled(true);
         }
 
+        findViewById(R.id.buttonNew).setOnClickListener(i->{
+            startActivity(new Intent(this,EditorActivity.class));
+        });
+
     }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
