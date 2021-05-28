@@ -14,8 +14,10 @@ public class SequentialFileNameGenerator implements FileNameGenerator{
     }
 
     @Override
-    public String generate() {
-        return String.valueOf(sequence.getAndIncrement());
+    public String generate(String extension) {
+        return String.valueOf(sequence.getAndIncrement())
+                .concat(".")
+                .concat(extension);
     }
 
 }

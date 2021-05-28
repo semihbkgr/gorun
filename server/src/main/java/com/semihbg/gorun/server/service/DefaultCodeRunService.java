@@ -1,7 +1,7 @@
-package com.semihbg.gorun.server;
+package com.semihbg.gorun.server.service;
 
+import com.semihbg.gorun.server.component.FileNameGenerator;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -12,19 +12,18 @@ import java.io.InputStreamReader;
 
 @Service
 @RequiredArgsConstructor
-public class CodeRunService {
+public class DefaultCodeRunService implements CodeRunService {
 
-
+    private final FileNameGenerator fileNameGenerator;
     private final FileService fileService;
 
-    @SneakyThrows
+    @Override
     public Flux<String> run(String code) {
         return Flux.create(stringFluxSink -> {
-            fileService.createFile(code);
-            String fileName = fileService.getFileName();
-            String fileFullPathString = fileService.getFileFullPathString();
+            String fileName=fileNameGenerator.generate(".go");
+            fileService.createFile(fileName,code);
             try {
-                Process process = Runtime.getRuntime().exec("go run " + fileFullPathString);
+                Process process = Runtime.getRuntime().exec("go run " + fileName);
                 InputStream inputStream = process.getInputStream();
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -35,14 +34,12 @@ public class CodeRunService {
                 e.printStackTrace();
                 stringFluxSink.error(e);
             } finally {
-                fileService.deleteFile();
+                fileService.deleteFile(fileName);
             }
             stringFluxSink.complete();
             System.out.println(code);
             System.out.println(System.currentTimeMillis());
         });
-
     }
-
 
 }

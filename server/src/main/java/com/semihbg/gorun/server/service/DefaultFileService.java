@@ -31,7 +31,7 @@ public class DefaultFileService implements FileService{
     @Override
     public boolean createFile(String fileName, String content) {
         try{
-            Path filePath=rootPath.resolve(concatExtension(fileName));
+            Path filePath=rootPath.resolve(fileName);
             Files.createFile(filePath);
             Files.write(filePath,content.getBytes());
             return true;
@@ -44,17 +44,13 @@ public class DefaultFileService implements FileService{
     @Override
     public boolean deleteFile(String fileName) {
         try{
-            Path filePath=rootPath.resolve(concatExtension(fileName));
+            Path filePath=rootPath.resolve(fileName);
             Files.delete(filePath);
             return true;
         }catch (Exception e){
             e.printStackTrace();
         }
         return false;
-    }
-
-    private String concatExtension(String fileName){
-        return fileName.concat(".go");
     }
 
     public String getRootPath(){
