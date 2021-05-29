@@ -2,29 +2,30 @@ package com.semihbg.gorun.command;
 
 public class CodeCommand {
 
-    public final Command command;
+    public final CodeCommandType codeCommandType;
     public final String code;
 
-    public CodeCommand(Command command, String code) {
-        this.command = command;
+    public CodeCommand(CodeCommandType codeCommandType, String code) {
+        this.codeCommandType = codeCommandType;
         this.code = code;
     }
 
-    public CodeCommand(Command command) {
-        this.command = command;
+    public CodeCommand(CodeCommandType codeCommandType) {
+        this.codeCommandType = codeCommandType;
         code=null;
     }
 
-    public Command getCommandType() {
-        return command;
+    public CodeCommandType getCommandType() {
+        return codeCommandType;
     }
 
     public String getCode() {
         return code;
     }
 
-    public String getStringCommand(){
-
+    public String getCommandAsStringData(){
+        return codeCommandType.getFullPrefix().concat(code);
     }
 
 }
+

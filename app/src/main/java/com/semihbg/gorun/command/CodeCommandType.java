@@ -1,13 +1,13 @@
 package com.semihbg.gorun.command;
 
-public enum Command {
+public enum CodeCommandType {
 
     RUN("run"),
     INTERRUPT("interrupt");
 
     public final String prefix;
 
-    Command(String prefix) {
+    CodeCommandType(String prefix) {
         this.prefix = prefix;
     }
 

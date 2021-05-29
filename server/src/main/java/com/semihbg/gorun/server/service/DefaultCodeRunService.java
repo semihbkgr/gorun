@@ -37,8 +37,6 @@ public class DefaultCodeRunService implements CodeRunService {
                 fileService.deleteFile(fileName);
             }
             stringFluxSink.complete();
-            System.out.println(code);
-            System.out.println(System.currentTimeMillis());
         });
     }
 

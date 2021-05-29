@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AppSocketSessionHolder.connect();
         new Handler(getMainLooper())
                 .postDelayed(() -> {
                     Intent intent = new Intent(this, MenuActivity.class);

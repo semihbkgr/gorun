@@ -4,19 +4,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.semihbg.gorun.run.CodeRunClient;
-import com.semihbg.gorun.run.DefaultCodeRunClient;
-import com.semihbg.gorun.util.InputStreamHandler;
-
-import java.io.InputStream;
+import com.semihbg.gorun.util.TextChangeUpdater;
 
 public class EditorActivity extends AppCompatActivity {
 
     private Button runButton;
     private EditText codeEditText;
     private TextView outputTextView;
+    private TextChangeUpdater textChangeUpdater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +29,23 @@ public class EditorActivity extends AppCompatActivity {
         //Set view listener
         runButton.setOnClickListener(this::onRunButtonClicked);
 
+
+        textChangeUpdater=new TextChangeUpdater(outputTextView);
+
+        if(AppSocketSessionHolder.isConnected())
+           AppSocketSessionHolder.getSession().addOutputConsumer(str -> {
+               textChangeUpdater.append(str);
+               System.out.println("----------------------------------"+str);
+           });
+        else Toast.makeText(this, "Cannot connect to server", Toast.LENGTH_SHORT).show();
+
     }
 
 
     private void onRunButtonClicked(View v){
         String code=codeEditText.getText().toString();
-        outputTextView.setText("");
-        CodeRunClient.DEFAULT.run(code,(i)->{
-            InputStreamHandler.handle(()->i, outputTextView,this);
-        });
+        textChangeUpdater.clear();
+        AppSocketSessionHolder.getSession().run(code);
     }
 
 

@@ -36,7 +36,12 @@ public class CustomWebSocketHandler implements WebSocketHandler {
                 })
                 .flatMap(codeRunWebSocketSession::executeCommand)
                 .map(session::textMessage)
-                .flatMap(i-> session.send(Mono.just(i)))
+                .flatMap(i-> {
+                    System.out.println("-------------------------");
+                    System.out.println(i);
+                    System.out.println("-------------------------");
+                    return session.send(Mono.just(i));
+                })
                 .then();
     }
 

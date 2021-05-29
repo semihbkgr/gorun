@@ -4,6 +4,4 @@ public interface CodeRunWebSocketClient {
 
     CodeRunWebSocketSession connect();
 
-    void disconnect();
-
 }
