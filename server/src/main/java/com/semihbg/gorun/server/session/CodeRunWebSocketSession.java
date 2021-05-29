@@ -7,6 +7,7 @@ public class CodeRunWebSocketSession {
 
     public final CodeRunService codeRunService;
 
+
     public CodeRunWebSocketSession(CodeRunService codeRunService) {
         this.codeRunService = codeRunService;
     }
@@ -14,9 +15,6 @@ public class CodeRunWebSocketSession {
     public Flux<String> executeCommand(String command) {
         String c=extractCommand(command);
         String cc=extractCode(command);
-        System.out.println(c);
-        System.out.println("---");
-        System.out.println(cc);
         if(c==null)
            return Flux.empty();
         if(c.equalsIgnoreCase(CodeRunCommandConstants.RUN_CODE_COMMAND))

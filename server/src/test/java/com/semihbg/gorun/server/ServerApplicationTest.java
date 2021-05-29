@@ -35,13 +35,13 @@ class ServerApplicationTest {
             @Override
             public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
                 System.out.println("onMessage");
-                System.out.println(String.format("Message: %s", text));
+                System.out.println(String.format("ResponseMessage: %s", text));
             }
 
             @Override
             public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
                 System.out.println("onMessage");
-                System.out.println(String.format("Message: %s", bytes));
+                System.out.println(String.format("ResponseMessage: %s", bytes));
             }
 
             @Override
