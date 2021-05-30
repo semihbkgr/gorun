@@ -20,13 +20,16 @@ public class ServerApplication {
     private final CodeRunLogService codeRunLogService;
 
 
-    @GetMapping("/code")
-    public Mono<String> code() {
-        return Mono.just("package main\r\n" +
-                "import \"fmt\"\r\n" +
-                "func main() {\r\n" +
-                "    fmt.Println(\"hello world\")\r\n" +
-                "}");
+    @GetMapping("/code/1")
+    public Mono<String> code1() {
+        StringBuilder code=new StringBuilder();
+        code.append("<html>")
+                .append("<body>")
+                .append("")
+                .append("</body>")
+                .append("</html>")
+
+        return Mono.just();
     }
 
     @GetMapping("/log")

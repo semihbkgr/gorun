@@ -5,17 +5,17 @@ import okhttp3.WebSocket;
 
 import java.util.function.Consumer;
 
-public class ListenedRunWebSocketContext extends CodeRunWebSocketContext {
+public class ListenedRunWebSocketSession extends CodeRunWebSocketSession {
 
     private final MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener;
 
-    public ListenedRunWebSocketContext(WebSocket webSocket, MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener) {
+    public ListenedRunWebSocketSession(WebSocket webSocket, MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener) {
         super(webSocket);
         this.messageConsumeCodeRunWebSocketListener = messageConsumeCodeRunWebSocketListener;
     }
 
     @Override
-    public void addOutputConsumer(Consumer<Message> messageConsumer) {
+    public void addMessageConsumer(Consumer<Message> messageConsumer) {
         messageConsumeCodeRunWebSocketListener.addMessageConsumer(messageConsumer);
     }
 

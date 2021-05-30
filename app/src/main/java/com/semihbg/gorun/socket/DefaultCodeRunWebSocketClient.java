@@ -19,11 +19,11 @@ public class DefaultCodeRunWebSocketClient implements CodeRunWebSocketClient {
     }
 
     @Override
-    public CodeRunWebSocketContext connect() {
+    public CodeRunWebSocketSession connect() {
         Request req=new Request.Builder().url(CODE_RUN_SERVER_URI).build();
         MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener=MessageConsumeCodeRunWebSocketListener.empty();
         WebSocket webSocket=client.newWebSocket(req,messageConsumeCodeRunWebSocketListener);
-        return new ListenedRunWebSocketContext(webSocket,messageConsumeCodeRunWebSocketListener);
+        return new ListenedRunWebSocketSession(webSocket,messageConsumeCodeRunWebSocketListener);
     }
 
 }

@@ -4,9 +4,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.socket.CodeRunContext;
 import com.semihbg.gorun.util.TextChangeUpdater;
 
 public class EditorActivity extends AppCompatActivity {
@@ -29,15 +29,14 @@ public class EditorActivity extends AppCompatActivity {
         //Set view listener
         runButton.setOnClickListener(this::onRunButtonClicked);
 
-
         textChangeUpdater=new TextChangeUpdater(outputTextView);
 
-        if(AppSocketSessionHolder.isConnected())
-           AppSocketSessionHolder.getSession().addOutputConsumer(str -> {
-               textChangeUpdater.append(str);
-               System.out.println("----------------------------------"+str);
-           });
-        else Toast.makeText(this, "Cannot connect to server", Toast.LENGTH_SHORT).show();
+        CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message->{
+            if(message.body!=null){
+                textChangeUpdater.append(message.body);
+                textChangeUpdater.append(System.lineSeparator());
+            }
+        });
 
     }
 
@@ -45,7 +44,7 @@ public class EditorActivity extends AppCompatActivity {
     private void onRunButtonClicked(View v){
         String code=codeEditText.getText().toString();
         textChangeUpdater.clear();
-        AppSocketSessionHolder.getSession().run(code);
+        CodeRunContext.instance.run(code);
     }
 
 

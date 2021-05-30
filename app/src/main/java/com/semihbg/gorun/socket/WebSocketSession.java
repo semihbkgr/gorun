@@ -6,6 +6,4 @@ public interface WebSocketSession {
 
     void sendMessage(Message message);
 
-    void disconnect();
-
 }
