@@ -1,9 +1,5 @@
 package com.semihbg.gorun.server.message;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Objects;
 
 public class Message {
@@ -16,12 +12,12 @@ public class Message {
         this.body = body;
     }
 
-    public static Message of(Command command,String body){
-        return new Message(Objects.requireNonNull(command),Objects.requireNonNull(body));
+    public static Message of(Command command, String body) {
+        return new Message(Objects.requireNonNull(command), Objects.requireNonNull(body));
     }
 
-    public static Message of(Command command){
-        return new Message(Objects.requireNonNull(command),null);
+    public static Message of(Command command) {
+        return new Message(Objects.requireNonNull(command), null);
     }
 
 

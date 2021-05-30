@@ -12,12 +12,9 @@ import java.nio.file.Path;
 @Slf4j
 public class DefaultFileService implements FileService{
 
-    private final String rootPathString;
     private final Path rootPath;
 
-
-    public DefaultFileService(@Value("${file.path.root:${user.dir}}") String rootFolderPath) throws IOException {
-        this.rootPathString=rootFolderPath;
+    public DefaultFileService(@Value("${file-service.path:${user.dir}}") String rootFolderPath) throws IOException {
         this.rootPath=Path.of(rootFolderPath);
         if(!Files.exists(rootPath)){
             log.info("RootPath folder is not exists, Path : {}",rootFolderPath);
@@ -29,32 +26,27 @@ public class DefaultFileService implements FileService{
     }
 
     @Override
-    public boolean createFile(String fileName, String content) {
+    public String createFile(String fileName, String content){
         try{
             Path filePath=rootPath.resolve(fileName);
             Files.createFile(filePath);
             Files.write(filePath,content.getBytes());
-            return true;
+            return filePath.toString();
         }catch (Exception e){
             e.printStackTrace();
+            throw new RuntimeException("FileCreateException");
         }
-        return false;
     }
 
     @Override
-    public boolean deleteFile(String fileName) {
+    public void deleteFile(String fileName){
         try{
             Path filePath=rootPath.resolve(fileName);
             Files.delete(filePath);
-            return true;
         }catch (Exception e){
             e.printStackTrace();
+            throw new RuntimeException("FileDeleteException");
         }
-        return false;
-    }
-
-    public String getRootPath(){
-        return this.rootPathString;
     }
 
 }

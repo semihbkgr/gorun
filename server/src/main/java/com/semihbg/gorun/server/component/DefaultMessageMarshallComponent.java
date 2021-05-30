@@ -3,7 +3,6 @@ package com.semihbg.gorun.server.component;
 import com.semihbg.gorun.server.exception.MessageMarshallException;
 import com.semihbg.gorun.server.message.Command;
 import com.semihbg.gorun.server.message.Message;
-import com.semihbg.gorun.server.message.MessageConstants;
 import org.springframework.stereotype.Component;
 
 import static com.semihbg.gorun.server.message.MessageConstants.*;
@@ -25,7 +24,7 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
                     if (body.equalsIgnoreCase("null") || body.isEmpty() || body.isBlank())
                         return Message.of(command);
                     else
-                        return Message.of(command, data);
+                        return Message.of(command, body);
                 } catch (Exception ignore) {
                     throw new MessageMarshallException(String.format("Illegal command field, command : %s", commandString));
                 }
@@ -40,9 +39,9 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
 
     @Override
     public String unmarshall(Message message) {
-        StringBuilder unmarshallStringBuilder=new StringBuilder();
+        StringBuilder unmarshallStringBuilder = new StringBuilder();
         unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
-        String commandString=message.command.name();
+        String commandString = message.command.name();
         unmarshallStringBuilder.append(commandString);
         unmarshallStringBuilder.append(MESSAGE_COMMAND_BODY_SEPARATOR);
         unmarshallStringBuilder.append(message.body);

@@ -1,9 +1,11 @@
 package com.semihbg.gorun.server.service;
 
+import java.io.IOException;
+
 public interface FileService {
 
-    boolean createFile(String fileName,String content);
+    String createFile(String fileName, String content);
 
-    boolean deleteFile(String fileName);
+    void deleteFile(String fileName);
 
 }
