@@ -1,6 +1,8 @@
 package com.semihbg.gorun.socket;
 
 import android.util.Log;
+import com.semihbg.gorun.message.Message;
+import com.semihbg.gorun.message.MessageUtils;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -8,6 +10,7 @@ import okio.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +20,7 @@ public class MessageConsumeCodeRunWebSocketListener extends WebSocketListener {
 
     private final String TAG = CodeRunWebSocketClient.class.getName();
 
-    private final List<Consumer<String>> messageConsumerList;
+    private final List<Consumer<Message>> messageConsumerList;
     private Optional<WebSocketListener> webSocketListenerOptional;
 
     private MessageConsumeCodeRunWebSocketListener() {
@@ -36,7 +39,7 @@ public class MessageConsumeCodeRunWebSocketListener extends WebSocketListener {
         return messageConsumeCodeRunWebSocketListener;
     }
 
-    public void addMessageConsumer(Consumer<String> messageConsumer) {
+    public void addMessageConsumer(Consumer<Message> messageConsumer) {
         messageConsumerList.add(messageConsumer);
     }
 
@@ -62,14 +65,16 @@ public class MessageConsumeCodeRunWebSocketListener extends WebSocketListener {
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
         Log.i(TAG, "onMessage: Session has been received message in String format");
         webSocketListenerOptional.ifPresent(webSocketListener -> webSocketListener.onMessage(webSocket,text));
-        messageConsumerList.forEach(i -> i.accept(text));
+        Message message= MessageUtils.unmarshall(text);
+        messageConsumerList.forEach(i -> i.accept(message));
     }
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
         Log.i(TAG, "onMessage: Session has been received message in byte[] format");
         webSocketListenerOptional.ifPresent(webSocketListener -> webSocketListener.onMessage(webSocket,bytes));
-        messageConsumerList.forEach(i -> i.accept(String.valueOf(bytes)));
+        Message message= MessageUtils.unmarshall(bytes.string(StandardCharsets.UTF_8));
+        messageConsumerList.forEach(i -> i.accept(message));
     }
 
     @Override

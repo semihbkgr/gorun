@@ -1,9 +1,11 @@
 package com.semihbg.gorun.socket;
 
+import com.semihbg.gorun.message.Message;
+
 public interface WebSocketSession {
 
-    void send(String data);
+    void sendMessage(Message message);
 
-    void close();
+    void disconnect();
 
 }

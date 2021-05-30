@@ -2,6 +2,7 @@ package com.semihbg.gorun.socket;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.WebSocket;
 
 public class DefaultCodeRunWebSocketClient implements CodeRunWebSocketClient {
 
@@ -18,10 +19,11 @@ public class DefaultCodeRunWebSocketClient implements CodeRunWebSocketClient {
     }
 
     @Override
-    public CodeRunWebSocketSession connect() {
-        Request req=new Request.Builder().url("ws://192.168.1.8:8080/echo").build();
+    public CodeRunWebSocketContext connect() {
+        Request req=new Request.Builder().url(CODE_RUN_SERVER_URI).build();
         MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener=MessageConsumeCodeRunWebSocketListener.empty();
-        return new ListenedRunWebSocketSession(client.newWebSocket(req,messageConsumeCodeRunWebSocketListener),messageConsumeCodeRunWebSocketListener);
+        WebSocket webSocket=client.newWebSocket(req,messageConsumeCodeRunWebSocketListener);
+        return new ListenedRunWebSocketContext(webSocket,messageConsumeCodeRunWebSocketListener);
     }
 
 }

@@ -1,13 +1,13 @@
 package com.semihbg.gorun;
 
-import com.semihbg.gorun.socket.CodeRunWebSocketSession;
+import com.semihbg.gorun.socket.CodeRunWebSocketContext;
 import com.semihbg.gorun.socket.DefaultCodeRunWebSocketClient;
 
 import java.util.Optional;
 
 public class AppSocketSessionHolder {
 
-    private volatile static Optional<CodeRunWebSocketSession> sessionInstanceOptional;
+    private volatile static Optional<CodeRunWebSocketContext> sessionInstanceOptional;
 
     static{
         sessionInstanceOptional=Optional.empty();
@@ -21,7 +21,7 @@ public class AppSocketSessionHolder {
         return sessionInstanceOptional.isPresent();
     }
 
-    public static CodeRunWebSocketSession getSession(){
+    public static CodeRunWebSocketContext getSession(){
         return sessionInstanceOptional.get();
     }
 

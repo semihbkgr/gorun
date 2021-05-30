@@ -25,9 +25,9 @@ public class CodeRunWebSocketHandler implements WebSocketHandler {
         return session
                 .receive()
                 .map(WebSocketMessage::getPayloadAsText)
-                .map(messageMarshallComponent::marshall)
-                .flatMap(codeRunWebSocketSession::executeCommand)
                 .map(messageMarshallComponent::unmarshall)
+                .flatMap(codeRunWebSocketSession::executeCommand)
+                .map(messageMarshallComponent::marshall)
                 .map(session::textMessage)
                 .flatMap(i -> session.send(Mono.just(i)))
                 .then();

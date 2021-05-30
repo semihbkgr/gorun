@@ -1,18 +1,11 @@
-package com.semihbg.gorun.server.component;
+package com.semihbg.gorun.message;
 
-import com.semihbg.gorun.server.exception.MessageMarshallException;
-import com.semihbg.gorun.server.message.Command;
-import com.semihbg.gorun.server.message.Message;
-import org.springframework.stereotype.Component;
+import static com.semihbg.gorun.message.MessageConstants.*;
 
-import static com.semihbg.gorun.server.message.MessageConstants.*;
+public class MessageUtils {
 
-@Component
-public class DefaultMessageMarshallComponent implements MessageMarshallComponent {
-
-    @Override
-    public Message unmarshall(String data) throws MessageMarshallException {
-        data = data.strip();
+    public static Message unmarshall(String data) {
+        data = data.trim();
         if (data.startsWith(MESSAGE_BEGIN_CHARACTER) && data.endsWith(MESSAGE_END_CHARACTER)) {
             data = data.substring(1, data.length() - 1);
             if (data.contains(MESSAGE_COMMAND_BODY_SEPARATOR)) {
@@ -20,8 +13,8 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
                 String commandString = data.substring(0, index);
                 String body = data.substring(index + 1);
                 try {
-                    Command command = Command.of(commandString, false);
-                    if (body.equalsIgnoreCase("null") || body.isEmpty() || body.isBlank())
+                    Command command = Command.of(commandString, true);
+                    if (body.equalsIgnoreCase("null") || body.isEmpty())
                         return Message.of(command);
                     else
                         return Message.of(command, body);
@@ -37,8 +30,7 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
 
     }
 
-    @Override
-    public String marshall(Message message) {
+    public static String marshall(Message message) {
         StringBuilder unmarshallStringBuilder = new StringBuilder();
         unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
         String commandString = message.command.name();
@@ -49,5 +41,10 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
         return unmarshallStringBuilder.toString();
     }
 
+    public static class MessageMarshallException extends RuntimeException {
+        public MessageMarshallException(String message) {
+            super(message);
+        }
+    }
 
 }

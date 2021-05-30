@@ -5,8 +5,8 @@ import com.semihbg.gorun.server.message.Message;
 
 public interface MessageMarshallComponent {
 
-    Message marshall(String data) throws MessageMarshallException;
+    Message unmarshall(String data) throws MessageMarshallException;
 
-    String unmarshall(Message message) throws MessageMarshallException;
+    String marshall(Message message) throws MessageMarshallException;
 
 }
