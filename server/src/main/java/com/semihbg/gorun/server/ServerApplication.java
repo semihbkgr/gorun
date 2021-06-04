@@ -19,19 +19,6 @@ public class ServerApplication {
 
     private final CodeRunLogService codeRunLogService;
 
-
-    @GetMapping("/code/1")
-    public Mono<String> code1() {
-        StringBuilder code=new StringBuilder();
-        code.append("<html>")
-                .append("<body>")
-                .append("")
-                .append("</body>")
-                .append("</html>")
-
-        return Mono.just();
-    }
-
     @GetMapping("/log")
     public Mono<String> log(){
         return Mono.just(codeRunLogService.getLogAsString());

@@ -1,44 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        tools:context=".EditorActivity">
+        android:padding="15dp"
+        tools:context=".EditorActivity"
+        android:focusableInTouchMode="true">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical">
+        <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:clipToPadding="false"
+                    android:orientation="vertical">
 
-        <com.semihbg.gorun.view.CodeEditView
-                android:id="@+id/codeEditText"
+            <com.semihbg.gorun.view.CodeEditView
+                    android:text="@string/code_hello_world"
+                    android:id="@+id/codeEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="35dp"
+                    android:lines="13"
+                    android:background="@drawable/background_code_edit_view"
+                    android:scrollHorizontally="true"
+                    android:scrollbars = "vertical"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textCursorDrawable="@drawable/cursor_code_edit_text"
+                    android:ellipsize="end"/>
+
+        </ScrollView>
+
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="center"
+                      android:orientation="horizontal">
+
+            <CheckBox
+                    android:text="ReadOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/readOnlyCheckBox"/>
+
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/runButton"
+                    android:text="Run"/>
+
+        </LinearLayout>
+
+
+
+        <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:paddingLeft="20dp"
-                android:gravity="top|left"
-                android:scrollbars="vertical|horizontal"
-                android:text=""
-                android:background="@drawable/background_code_edit_view"
-                android:ellipsize="end"/>
-
-
-        <Button android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/runButton"
-                android:text="Run"/>
+                android:gravity="center"
+                android:orientation="vertical">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_output_text_view"
+                    android:textColor="@color/white"
+                    android:lines="7"
+                    android:id="@+id/outputTextView"/>
 
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:background="@drawable/background_output_text_view"
-                android:textColor="@color/white"
-                android:id="@+id/outputTextView"/>
+        </ScrollView>
 
-    </LinearLayout>
-
-
-
-
-</ScrollView>
+</LinearLayout>

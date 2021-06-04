@@ -8,5 +8,6 @@
     <string name="run_button_saved">From Saved</string>
     <string name="run_button_snippet">From Snippets</string>
 
+    <string name="code_hello_world">package main \nimport \"fmt\" \nfunc main() { \n\tfmt.Println(\"Hello World\") \n}</string>
 
 </resources>
