@@ -7,11 +7,24 @@
         <item name="android:windowAnimationStyle">@style/SlideActivityAnimation</item>
     </style>
 
+    <!--Slide Animation Style-->
+
     <style name="SlideActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
         <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
+
+
+    <!--Code Editor Highlight Style-->
+
+    <style name="PseudoStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange</item>
+    </style>
+
+
+
 
 </resources>

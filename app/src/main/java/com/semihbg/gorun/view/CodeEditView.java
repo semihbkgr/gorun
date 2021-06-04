@@ -6,27 +6,22 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.text.style.BackgroundColorSpan;
 import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.semihbg.gorun.util.TextWatcherAdapter;
+import com.semihbg.gorun.view.highlight.CodeHighlighter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.IntStream;
-
-import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
-import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 
 public class CodeEditView extends androidx.appcompat.widget.AppCompatEditText {
 
     private Rect rect;
     private Paint paint;
+    private CodeHighlighter codeHighlighter;
 
     public CodeEditView(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -43,29 +38,10 @@ public class CodeEditView extends androidx.appcompat.widget.AppCompatEditText {
         setText((getText()==null?"":getText().toString())
                 .concat(lineStringBuilder.toString()));
 
-        List<BackgroundColorSpan> backgroundColorSpanList=new ArrayList<>();
-
-        addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String code=getText().toString();
-                for int i
-                for(int i=code.indexOf("func");i>-1;i=code.indexOf("func",i+4)){
-
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        codeHighlighter=new CodeHighlighter(this);
+        codeHighlighter.update();
+        addTextChangedListener((TextWatcherAdapter)
+                (s, start, before, count) -> codeHighlighter.update());
 
 
     }
