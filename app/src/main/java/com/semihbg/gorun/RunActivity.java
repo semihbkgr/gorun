@@ -24,12 +24,9 @@ public class RunActivity extends AppCompatActivity {
             actionBar.setDefaultDisplayHomeAsUpEnabled(true);
         }
 
-        findViewById(R.id.buttonNew).setOnClickListener(i->{
-            startActivity(new Intent(this,EditorActivity.class));
-        });
-
+        findViewById(R.id.buttonNew).setOnClickListener(v-> startActivity(new Intent(this,EditorActivity.class)));
+        findViewById(R.id.buttonSnippet).setOnClickListener(v-> startActivity(new Intent(this,SnippetActivity.class)));
     }
-
 
 
     @Override

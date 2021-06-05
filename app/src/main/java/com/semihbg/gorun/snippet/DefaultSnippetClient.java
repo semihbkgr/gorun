@@ -2,11 +2,9 @@ package com.semihbg.gorun.snippet;
 
 import android.util.Log;
 import androidx.annotation.Nullable;
+import com.google.gson.Gson;
 import com.semihbg.gorun.AppConstants;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -18,13 +16,21 @@ public class DefaultSnippetClient implements SnippetClient {
 
     private static final String TAG = DefaultSnippetClient.class.getName();
 
+    private final OkHttpClient httpClient;
+    private final Gson gson;
+
+    public DefaultSnippetClient(OkHttpClient httpClient, Gson gson) {
+        this.httpClient = httpClient;
+        this.gson = gson;
+    }
+
     @Nullable
     @Override
     public Snippet[] getSnippetsBlock() {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Snippet[]> snippetArrayReference = new AtomicReference<>();
         Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
-        Call call = AppConstants.httpClient.newCall(request);
+        Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -35,7 +41,7 @@ public class DefaultSnippetClient implements SnippetClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.i(TAG, "onResponse: Snippet response is successful");
-                Snippet[] snippets = AppConstants.gson.fromJson(response.body().string(), Snippet[].class);
+                Snippet[] snippets = gson.fromJson(response.body().string(), Snippet[].class);
                 snippetArrayReference.set(snippets);
                 Log.i(TAG, "onResponse: Snippet response deserialized successfully");
                 latch.countDown();
@@ -52,7 +58,7 @@ public class DefaultSnippetClient implements SnippetClient {
     @Override
     public void getSnippetAsync(Consumer<? super Snippet[]> snippetArrayConsumer) {
         Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
-        Call call = AppConstants.httpClient.newCall(request);
+        Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -63,7 +69,7 @@ public class DefaultSnippetClient implements SnippetClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.i(TAG, "onResponse: Snippet response deserialized successfully");
-                Snippet[] snippets = AppConstants.gson.fromJson(response.body().string(), Snippet[].class);
+                Snippet[] snippets = gson.fromJson(response.body().string(), Snippet[].class);
                 Log.i(TAG, "onResponse: Snippet response deserialized successfully");
                 snippetArrayConsumer.accept(snippets);
             }
@@ -75,7 +81,7 @@ public class DefaultSnippetClient implements SnippetClient {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<String> stringReference = new AtomicReference<>();
         Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
-        Call call = AppConstants.httpClient.newCall(request);
+        Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -101,7 +107,7 @@ public class DefaultSnippetClient implements SnippetClient {
     @Override
     public void getSnippetAsJsonAsync(Consumer<? super String> stringConsumer) {
         Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
-        Call call = AppConstants.httpClient.newCall(request);
+        Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

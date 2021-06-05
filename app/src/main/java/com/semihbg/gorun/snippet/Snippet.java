@@ -2,11 +2,11 @@ package com.semihbg.gorun.snippet;
 
 public class Snippet {
 
-    public final String name;
+    public final String title;
     public final String code;
 
-    public Snippet(String name, String code) {
-        this.name = name;
+    public Snippet(String title, String code) {
+        this.title = title;
         this.code = code;
     }
 

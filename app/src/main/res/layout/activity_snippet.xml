@@ -14,6 +14,7 @@
             android:layout_height="match_parent"
             tools:layout_editor_absoluteY="257dp"
             tools:layout_editor_absoluteX="191dp"
+            android:id="@+id/snippetListView"
             android:background="@drawable/border_line_default"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
