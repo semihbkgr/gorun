@@ -16,13 +16,24 @@
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
+    <!--Code Editor Highlight Styles-->
 
-    <!--Code Editor Highlight Style-->
-
-    <style name="PseudoStyle">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/orange</item>
+    <style name="PackageStyle">
+        <item name="android:textColor">@color/Package</item>
     </style>
+
+    <style name="FuncStyle">
+        <item name="android:textColor">@color/Func</item>
+    </style>
+
+    <style name="ImportStyle">
+        <item name="android:textColor">@color/Import</item>
+    </style>
+
+    <style name="ReturnStyle">
+        <item name="android:textColor">@color/Return</item>
+    </style>
+
 
 
 

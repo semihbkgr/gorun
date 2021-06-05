@@ -25,7 +25,7 @@ public class CodeHighlighter {
         handler.post(()->{
             List<CodeHighlightContext> newCodeHighlightContextList=new ArrayList<>();
             for(CodeKeyword codeKeyword:CodeKeyword.values())
-                for(int i=code.indexOf(codeKeyword.code);i>-1;i=code.indexOf(codeKeyword.code,i+codeKeyword.code.length()))
+                for(int i = code.indexOf(codeKeyword.keyword); i>-1; i=code.indexOf(codeKeyword.keyword,i+codeKeyword.keyword.length()))
                     newCodeHighlightContextList.add(CodeHighlightContext.of(this.editText.getContext(), codeKeyword,i));
             editText.post(()->{
                 for(CodeHighlightContext context:codeHighlightContextList)

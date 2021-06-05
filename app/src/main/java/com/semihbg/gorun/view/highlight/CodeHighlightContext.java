@@ -1,10 +1,8 @@
 package com.semihbg.gorun.view.highlight;
 
 import android.content.Context;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.TextAppearanceSpan;
-import com.semihbg.gorun.R;
 
 public class CodeHighlightContext {
 
@@ -19,7 +17,7 @@ public class CodeHighlightContext {
     }
 
     public static CodeHighlightContext of(Context context, CodeKeyword codeKeyword, int start){
-        return new CodeHighlightContext(new TextAppearanceSpan(context, R.style.PseudoStyle),start, start+codeKeyword.code.length());
+        return new CodeHighlightContext(new TextAppearanceSpan(context, codeKeyword.style),start, start+codeKeyword.keyword.length());
     }
 
     public CharacterStyle getCharacterStyle() {

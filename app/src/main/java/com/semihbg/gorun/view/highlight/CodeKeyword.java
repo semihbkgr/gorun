@@ -1,20 +1,20 @@
 package com.semihbg.gorun.view.highlight;
 
-import android.graphics.Color;
+import com.semihbg.gorun.R;
 
 public enum CodeKeyword {
 
-    FUNC("func",Color.GRAY),
-    IMPORT("import",Color.RED),
-    FMT("fmt",Color.WHITE),
-    RETURN("return",Color.BLUE);
+    FUNC("func", R.style.FuncStyle),
+    IMPORT("import",R.style.ImportStyle),
+    FMT("fmt",R.style.PackageStyle),
+    RETURN("return",R.color.Return);
 
-    public final String code;
-    public final int color;
+    public final String keyword;
+    public final int style;
 
-    CodeKeyword(String code, int color) {
-        this.code = code;
-        this.color = color;
+    CodeKeyword(String keyword, int style) {
+        this.keyword = keyword;
+        this.style=style;
     }
 
 }

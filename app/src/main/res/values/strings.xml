@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">GoRun</string>
     <string name="golang_logo">GoLangLogo</string>
     <string name="menu_button_run">Run</string>
@@ -9,5 +9,13 @@
     <string name="run_button_snippet">From Snippets</string>
 
     <string name="code_hello_world">package main \nimport \"fmt\" \nfunc main() { \n\tfmt.Println(\"Hello World\") \n}</string>
+
+    <!--Code shortcuts button texts-->
+    <string name="leftBrace">(</string>
+    <string name="rightBrace">)</string>
+    <string name="leftCurlyBrace">{</string>
+    <string name="rightCurlyBrace">}</string>
+    <string name="quote">\"…\"</string>
+    <string name="tab">TAB</string>
 
 </resources>

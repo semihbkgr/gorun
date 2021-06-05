@@ -10,52 +10,78 @@
         tools:context=".EditorActivity"
         android:focusableInTouchMode="true">
 
-        <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:clipToPadding="false"
-                    android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center"
+                  android:orientation="horizontal">
 
-            <com.semihbg.gorun.view.CodeEditView
-                    android:text="@string/code_hello_world"
-                    android:id="@+id/codeEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="35dp"
-                    android:lines="13"
-                    android:background="@drawable/background_code_edit_view"
-                    android:scrollHorizontally="true"
-                    android:scrollbars = "vertical"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textCursorDrawable="@drawable/cursor_code_edit_text"
-                    android:ellipsize="end"/>
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="40dp"
+                android:id="@+id/leftBraceButton"
+                android:text="@string/leftBrace"/>
 
-        </ScrollView>
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="40dp"
+                android:id="@+id/rightBraceButton"
+                android:text="@string/rightBrace"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="40dp"
+                android:id="@+id/leftCurlyBraceButton"
+                android:text="@string/leftCurlyBrace"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="40dp"
+                android:id="@+id/rightCurlyBraceButton"
+                android:text="@string/rightCurlyBrace"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="40dp"
+                android:id="@+id/quoteButton"
+                android:text="@string/quote"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="40dp"
+                android:id="@+id/tabButton"
+                android:text="@string/tab"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/runButton"
+                android:text="Run"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+        <com.semihbg.gorun.view.CodeEditText
+                android:text="@string/code_hello_world"
+                android:id="@+id/codeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="35dp"
+                android:lines="13"
+                android:background="@drawable/background_code_edit_view"
+                android:scrollHorizontally="true"
+                android:scrollbars = "vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textCursorDrawable="@drawable/cursor_code_edit_text"
+                android:ellipsize="end"/>
+    </ScrollView>
 
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:gravity="center"
-                      android:orientation="horizontal">
-
-            <CheckBox
-                    android:text="ReadOnly"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/readOnlyCheckBox"/>
-
-            <Button android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/runButton"
-                    android:text="Run"/>
-
-        </LinearLayout>
-
-
-
-        <ScrollView
+    <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
