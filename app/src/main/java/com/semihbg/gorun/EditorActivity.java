@@ -6,7 +6,6 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbg.gorun.run.CodeRunContext;
-import com.semihbg.gorun.util.TextChangeUpdater;
 import com.semihbg.gorun.view.code.CodeEditText;
 
 public class EditorActivity extends AppCompatActivity {
@@ -27,8 +26,6 @@ public class EditorActivity extends AppCompatActivity {
     private Button quoteButton;
     private Button tabButton;
 
-    private TextChangeUpdater textChangeUpdater;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +39,11 @@ public class EditorActivity extends AppCompatActivity {
         //Set view listener
         runButton.setOnClickListener(this::onRunButtonClicked);
 
-        textChangeUpdater=new TextChangeUpdater(outputTextView);
-
         CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message->{
             if(message.body!=null){
-                textChangeUpdater.append(message.body);
-                textChangeUpdater.append(System.lineSeparator());
+                runOnUiThread(()->{
+                    outputTextView.setText(outputTextView.getText().toString().concat(message.body));
+                });
             }
         });
 
@@ -67,12 +63,22 @@ public class EditorActivity extends AppCompatActivity {
         quoteButton.setOnClickListener(this::onQuoteButtonClicked);
         tabButton.setOnClickListener(this::onTabButtonClicked);
 
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        String code=getIntent().getStringExtra(AppConstants.INTENT_EXTRA_SNIPPET_CODE);
+        if(code!=null){
+            Log.i(TAG, "onStart: Activity started with code");
+            codeEditText.setText(code);}
+        else
+            Log.i(TAG, "onStart: Activity started with no code");
     }
 
     private void onRunButtonClicked(View v){
         String code=codeEditText.getText().toString();
-        textChangeUpdater.clear();
+        outputTextView.setText("");
         CodeRunContext.instance.run(code);
     }
 

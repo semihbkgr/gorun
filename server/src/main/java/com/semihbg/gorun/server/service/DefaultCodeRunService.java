@@ -1,5 +1,6 @@
 package com.semihbg.gorun.server.service;
 
+import com.semihbg.gorun.server.component.CodeRunHandler;
 import com.semihbg.gorun.server.component.FileNameGenerator;
 import com.semihbg.gorun.server.message.Command;
 import com.semihbg.gorun.server.message.Message;
@@ -19,6 +20,7 @@ import java.io.InputStreamReader;
 public class DefaultCodeRunService implements CodeRunService {
 
     private final FileNameGenerator fileNameGenerator;
+    private final CodeRunHandler codeRunHandler;
     private final FileService fileService;
 
     @Override
@@ -27,15 +29,17 @@ public class DefaultCodeRunService implements CodeRunService {
             String fileName = fileNameGenerator.generate("go");
             String filePath = fileService.createFile(fileName, codeRunContext.getCode());
             codeRunContext.start();
+            codeRunHandler.registerRunning(Thread.currentThread(),codeRunContext);
             stringFluxSink.next(Message.of(Command.START));
             try {
                 Process process = Runtime.getRuntime().exec(new String[]{"go", "run", filePath});
                 try (InputStream inputStream = process.getInputStream();
-                     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                    String line = "";
-                    while ((line = bufferedReader.readLine()) != null)
-                        stringFluxSink.next(Message.of(Command.OUTPUT, line));
+                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    char[] charArray=new char[1];
+                    int i;
+                    while ((i = bufferedReader.read(charArray)) != -1)
+                        stringFluxSink.next(Message.of(Command.OUTPUT, String.valueOf(charArray)));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -2,9 +2,12 @@ package com.semihbg.gorun.server.socket;
 
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class CodeRunContext {
 
+    private String id;
     private long startTimestamp;
     private long endTimestamp;
     private final String code;
@@ -12,9 +15,27 @@ public class CodeRunContext {
 
     public CodeRunContext(String code) {
         this.code = code;
+        id= UUID.randomUUID().toString();
         state=State.READY;
         startTimestamp=-1;
         endTimestamp=-1;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CodeRunContext that = (CodeRunContext) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
     public void start(){

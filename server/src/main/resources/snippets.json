@@ -1,4 +1,5 @@
 [
-  {"title": "title01","code": "code"},
-  {"title": "title02","code": "code"}
+  {"title": "Hello World","code": "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Println(\"hello world\")\n}"},
+  {"title": "For Loop","code": "package main\nimport \"fmt\"\nfunc main() {\n\tfor i := 1;  i<=5; i++ {\n\t\tfmt.Printf(\"Welcome %d times\\n\",i)\n\t}\n}"},
+  {"title": "For With Sleep","code": "package main\nimport (\n\t\"fmt\"\n\t\"time\"\n)\n\nfunc main() {\n\tfmt.Printf(\"Start Unix Time: %v\\n\", time.Now().Unix())\n\ttime.Sleep(2 * time.Second)\n\tfmt.Printf(\"Current Unix Time: %v\\n\", time.Now().Unix())\n\ttime.Sleep(2 * time.Second)\n\tfmt.Printf(\"Current Unix Time: %v\\n\", time.Now().Unix())\n\ttime.Sleep(2 * time.Second)\n\tfmt.Printf(\"Current Unix Time: %v\\n\", time.Now().Unix())\n\ttime.Sleep(2 * time.Second)\n\tfmt.Printf(\"Current Unix Time: %v\\n\", time.Now().Unix())\n\ttime.Sleep(2 * time.Second)\n\tfmt.Printf(\"End Unix Time: %v\\n\", time.Now().Unix())\n}"}
 ]
