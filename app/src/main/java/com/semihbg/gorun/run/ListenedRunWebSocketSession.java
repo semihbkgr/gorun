@@ -1,4 +1,4 @@
-package com.semihbg.gorun.socket;
+package com.semihbg.gorun.run;
 
 import com.semihbg.gorun.message.Message;
 import okhttp3.WebSocket;

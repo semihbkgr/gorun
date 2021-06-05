@@ -10,5 +10,4 @@ public class Snippet {
         this.code = code;
     }
 
-
 }

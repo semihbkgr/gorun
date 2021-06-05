@@ -1,11 +1,8 @@
-package com.semihbg.gorun.socket;
+package com.semihbg.gorun.run;
 
 import com.semihbg.gorun.message.Command;
 import com.semihbg.gorun.message.Message;
-import com.semihbg.gorun.socket.CodeRunWebSocketSession;
-import com.semihbg.gorun.socket.DefaultCodeRunWebSocketClient;
 
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CodeRunContext {

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.semihbg.gorun.socket.CodeRunContext;
+import com.semihbg.gorun.run.CodeRunContext;
 import com.semihbg.gorun.util.TextChangeUpdater;
 import com.semihbg.gorun.view.code.CodeEditText;
 

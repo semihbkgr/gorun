@@ -1,4 +1,4 @@
-package com.semihbg.gorun.socket;
+package com.semihbg.gorun.run;
 
 import android.util.Log;
 import com.semihbg.gorun.message.Message;
