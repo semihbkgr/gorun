@@ -9,19 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
-@RestController
-@RequiredArgsConstructor
 public class ServerApplication {
+
+    public static final String SNIPPETS_JSON_FILE_NAME="snippets.json";
 
     public static void main(String[] args) {
         SpringApplication.run(ServerApplication.class, args);
-    }
-
-    private final CodeRunLogService codeRunLogService;
-
-    @GetMapping("/log")
-    public Mono<String> log(){
-        return Mono.just(codeRunLogService.getLogAsString());
     }
 
 }

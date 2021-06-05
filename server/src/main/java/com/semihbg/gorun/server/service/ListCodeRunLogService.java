@@ -26,13 +26,8 @@ public class ListCodeRunLogService implements CodeRunLogService {
     }
 
     @Override
-    public String getLogAsString() {
-        StringBuilder logStringSB=new StringBuilder();
-        logStringSB.append("[");
-        codeRunContextList.forEach(c->logStringSB.append(c.getLogMessage()));
-        logStringSB.append("]");
-        return logStringSB.toString();
+    public List<CodeRunContext> getLogs() {
+        return codeRunContextList;
     }
-
 
 }
