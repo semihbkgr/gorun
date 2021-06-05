@@ -34,8 +34,12 @@
         <item name="android:textColor">@color/Return</item>
     </style>
 
+    <style name="StringStyle">
+        <item name="android:textColor">@color/String</item>
+    </style>
 
-
-
+    <style name="FunctionStyle">
+        <item name="android:textColor">@color/Function</item>
+    </style>
 
 </resources>

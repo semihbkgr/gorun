@@ -11,9 +11,11 @@
     <color name="black">#050608</color>
 
     <!--Code Editor Highlight Colors-->
-    <color name="Func">#9C27B0</color>
+    <color name="Func">#009688</color>
     <color name="Import">#9C27B0</color>
     <color name="Return">#9C27B0</color>
-    <color name="Package">#9C27B0</color>
+    <color name="Package">#FF5722</color>
+    <color name="String">#FF9800</color>
+    <color name="Function">#4CAF50</color>
 
 </resources>

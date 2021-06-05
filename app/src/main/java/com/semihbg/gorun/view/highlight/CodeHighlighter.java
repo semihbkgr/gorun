@@ -24,9 +24,24 @@ public class CodeHighlighter {
         String code=spannable.toString();
         handler.post(()->{
             List<CodeHighlightContext> newCodeHighlightContextList=new ArrayList<>();
-            for(CodeKeyword codeKeyword:CodeKeyword.values())
-                for(int i = code.indexOf(codeKeyword.keyword); i>-1; i=code.indexOf(codeKeyword.keyword,i+codeKeyword.keyword.length()))
-                    newCodeHighlightContextList.add(CodeHighlightContext.of(this.editText.getContext(), codeKeyword,i));
+
+            for(Highlight highlight : Highlight.values())
+                if(highlight.isOnly())
+                    for(int i = code.indexOf(highlight.startWord); i>-1; i=code.indexOf(highlight.startWord,i+ highlight.startWord.length()))
+                        newCodeHighlightContextList.add(CodeHighlightContext.ofOnly(this.editText.getContext(), highlight,i));
+                else{
+                    boolean isStart=true;
+                    int index=0;
+                    for(int i = code.indexOf(highlight.startWord); i>-1; i=code.indexOf(isStart?highlight.startWord :highlight.endWord,i+1),index++)
+                        if(!isStart){
+                            newCodeHighlightContextList.add(CodeHighlightContext.ofBetween(editText.getContext(), highlight,index,i));
+                            isStart=true;
+                        }else{
+                            index=i;
+                            isStart=false;
+                        }
+                }
+
             editText.post(()->{
                 for(CodeHighlightContext context:codeHighlightContextList)
                     spannable.removeSpan(context.getCharacterStyle());
