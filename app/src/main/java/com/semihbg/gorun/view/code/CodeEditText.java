@@ -1,4 +1,4 @@
-package com.semihbg.gorun.view;
+package com.semihbg.gorun.view.code;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,11 +10,10 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbg.gorun.util.TextWatcherAdapter;
-import com.semihbg.gorun.view.highlight.CodeHighlighter;
+import com.semihbg.gorun.view.code.highlight.CodeHighlighter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
-import java.util.stream.IntStream;
 
 public class CodeEditText extends androidx.appcompat.widget.AppCompatEditText {
 
@@ -24,25 +23,20 @@ public class CodeEditText extends androidx.appcompat.widget.AppCompatEditText {
 
     public CodeEditText(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
         super(context, attrs);
+
         rect = new Rect();
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.GRAY);
         paint.setTextSize(40);
+
         setHorizontallyScrolling(true);
         setMovementMethod(new ScrollingMovementMethod());
-        StringBuilder lineStringBuilder = new StringBuilder();
-        IntStream.range(0, 15).forEach(i -> lineStringBuilder
-                .append(System.lineSeparator()));
-        setText((getText() == null ? "" : getText().toString())
-                .concat(lineStringBuilder.toString()));
 
         codeHighlighter = new CodeHighlighter(this);
         codeHighlighter.update();
         addTextChangedListener((TextWatcherAdapter)
                 (s, start, before, count) -> codeHighlighter.update());
-
-
 
     }
 
@@ -56,6 +50,18 @@ public class CodeEditText extends androidx.appcompat.widget.AppCompatEditText {
         }
     }
 
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        super.setText(text, type);
+        int lineCount=stringLineCount(getText().toString());
+        if(lineCount<20){
+            String padding="";
+            for(int i=lineCount;i<=20;i++)
+                padding=padding.concat(System.lineSeparator());
+            getText().append(padding);
+        }
+    }
+
     public void addText(String text) {
         if(getText()!=null)
             getText().insert(getSelectionStart(),text);
@@ -63,11 +69,15 @@ public class CodeEditText extends androidx.appcompat.widget.AppCompatEditText {
             setText(text);
     }
 
-    public void startQuote(){
+    public void quote(){
         addText("\"");
         int index=getSelectionStart();
         addText("\"");
         setSelection(index);
+    }
+
+    private int stringLineCount(String str){
+        return str.split(System.lineSeparator()).length+1;
     }
 
 }

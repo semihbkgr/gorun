@@ -1,4 +1,4 @@
-package com.semihbg.gorun.view.highlight;
+package com.semihbg.gorun.view.code.highlight;
 
 import com.semihbg.gorun.R;
 
@@ -6,6 +6,7 @@ public enum Highlight {
 
     STRING("\"","\"",R.style.StringStyle),
     FUNCTION(".","(",R.style.FunctionStyle),
+    CUSTOM_FUNCTION("func ","(",R.style.CustomFunctionStyle),
     FUNC("func",null, R.style.FuncStyle),
     IMPORT("import",null,R.style.ImportStyle),
     FMT("fmt",null,R.style.PackageStyle),

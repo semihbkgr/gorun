@@ -1,4 +1,4 @@
-package com.semihbg.gorun.view.highlight;
+package com.semihbg.gorun.view.code.highlight;
 
 import android.os.Handler;
 import android.text.Spannable;
@@ -30,15 +30,22 @@ public class CodeHighlighter {
                     for(int i = code.indexOf(highlight.startWord); i>-1; i=code.indexOf(highlight.startWord,i+ highlight.startWord.length()))
                         newCodeHighlightContextList.add(CodeHighlightContext.ofOnly(this.editText.getContext(), highlight,i));
                 else{
-                    boolean isStart=true;
+                    boolean isStarting=true;
                     int index=0;
-                    for(int i = code.indexOf(highlight.startWord); i>-1; i=code.indexOf(isStart?highlight.startWord :highlight.endWord,i+1),index++)
-                        if(!isStart){
+                    for(int i = code.indexOf(highlight.startWord); i>-1; i=code.indexOf(isStarting?highlight.startWord :highlight.endWord,i+1),
+                            index+=isStarting?highlight.startWord.length():highlight.endWord.length())
+                        if(!isStarting){
                             newCodeHighlightContextList.add(CodeHighlightContext.ofBetween(editText.getContext(), highlight,index,i));
-                            isStart=true;
+                            isStarting=true;
+                            if(highlight==Highlight.CUSTOM_FUNCTION){
+                                String functionName=code.substring(index+highlight.startWord.length()-1,i);
+                                int functionNameLength=functionName.length();
+                                for(int j=code.indexOf(functionName);j>-1;j=code.indexOf(functionName,j+functionNameLength))
+                                    newCodeHighlightContextList.add(CodeHighlightContext.ofBetween(editText.getContext(), highlight,j,j+functionNameLength));
+                            }
                         }else{
                             index=i;
-                            isStart=false;
+                            isStarting=false;
                         }
                 }
 

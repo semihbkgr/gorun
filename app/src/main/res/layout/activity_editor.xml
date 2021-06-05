@@ -64,7 +64,7 @@
         android:gravity="center"
         android:clipToPadding="false"
         android:orientation="vertical">
-        <com.semihbg.gorun.view.CodeEditText
+        <com.semihbg.gorun.view.code.CodeEditText
                 android:text="@string/code_hello_world"
                 android:id="@+id/codeEditText"
                 android:layout_width="match_parent"

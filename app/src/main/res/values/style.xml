@@ -42,4 +42,8 @@
         <item name="android:textColor">@color/Function</item>
     </style>
 
+    <style name="CustomFunctionStyle">
+        <item name="android:textColor">@color/CustomFunction</item>
+    </style>
+
 </resources>

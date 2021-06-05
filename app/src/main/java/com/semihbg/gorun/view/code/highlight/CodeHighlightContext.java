@@ -1,4 +1,4 @@
-package com.semihbg.gorun.view.highlight;
+package com.semihbg.gorun.view.code.highlight;
 
 import android.content.Context;
 import android.text.style.CharacterStyle;

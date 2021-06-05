@@ -17,5 +17,6 @@
     <color name="Package">#FF5722</color>
     <color name="String">#FF9800</color>
     <color name="Function">#4CAF50</color>
+    <color name="CustomFunction">#673AB7</color>
 
 </resources>
