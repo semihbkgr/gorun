@@ -36,10 +36,16 @@ public class DefaultCodeRunService implements CodeRunService {
                 try (InputStream inputStream = process.getInputStream();
                     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                    char[] charArray=new char[1];
-                    int i;
-                    while ((i = bufferedReader.read(charArray)) != -1)
-                        stringFluxSink.next(Message.of(Command.OUTPUT, String.valueOf(charArray)));
+                    char[] oneLengthCharBuffer=new char[1];
+                    while (bufferedReader.read(oneLengthCharBuffer) != -1)
+                        stringFluxSink.next(Message.of(Command.OUTPUT, String.valueOf(oneLengthCharBuffer)));
+                }
+                try(InputStream inputStream=process.getErrorStream();
+                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader)){
+                    char[] oneLengthCharBuffer=new char[1];
+                    while (bufferedReader.read(oneLengthCharBuffer) != -1)
+                        stringFluxSink.next(Message.of(Command.ERROR, String.valueOf(oneLengthCharBuffer)));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -51,6 +57,7 @@ public class DefaultCodeRunService implements CodeRunService {
             stringFluxSink.next(Message.of(Command.END));
             stringFluxSink.complete();
         });
+
         return messageFlux.subscribeOn(Schedulers.boundedElastic());
     }
 

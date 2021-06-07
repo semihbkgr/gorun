@@ -40,6 +40,9 @@ public class EditorActivity extends AppCompatActivity {
         runButton.setOnClickListener(this::onRunButtonClicked);
 
         CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message->{
+            System.out.println("----------------------------------");
+            System.out.println(message.command+" - "+message.body);
+            System.out.println("----------------------------------");
             if(message.body!=null){
                 runOnUiThread(()->{
                     outputTextView.setText(outputTextView.getText().toString().concat(message.body));
