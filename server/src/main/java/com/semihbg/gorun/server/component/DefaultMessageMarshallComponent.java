@@ -10,8 +10,7 @@ import static com.semihbg.gorun.server.message.MessageConstants.*;
 @Component
 public class DefaultMessageMarshallComponent implements MessageMarshallComponent {
 
-    @Override
-    public Message unmarshall(String data) throws MessageMarshallException {
+    public Message unmarshall(String data,boolean isInResponse) throws MessageMarshallException {
         data = data.strip();
         if (data.startsWith(MESSAGE_BEGIN_CHARACTER) && data.endsWith(MESSAGE_END_CHARACTER)) {
             data = data.substring(1, data.length() - 1);
@@ -20,8 +19,8 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
                 String commandString = data.substring(0, index);
                 String body = data.substring(index + 1);
                 try {
-                    Command command = Command.of(commandString, false);
-                    if (body.equalsIgnoreCase("null") || body.isEmpty() || body.isBlank())
+                    Command command = Command.of(commandString, isInResponse);
+                    if (body.equalsIgnoreCase("null") || body.isEmpty())
                         return Message.of(command);
                     else
                         return Message.of(command, body);
@@ -38,7 +37,13 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
     }
 
     @Override
-    public String marshall(Message message) {
+    public Message unmarshall(String data) throws MessageMarshallException {
+        return this.unmarshall(data,false);
+    }
+
+    public String marshall(Message message,boolean isInResponse) {
+        if(message.command.isInResponse!=isInResponse)
+            throw new MessageMarshallException(String.format("Illegal command field, command : %s", message.command.name()));
         StringBuilder unmarshallStringBuilder = new StringBuilder();
         unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
         String commandString = message.command.name();
@@ -49,5 +54,9 @@ public class DefaultMessageMarshallComponent implements MessageMarshallComponent
         return unmarshallStringBuilder.toString();
     }
 
+    @Override
+    public String marshall(Message message) {
+        return this.marshall(message,true);
+    }
 
 }

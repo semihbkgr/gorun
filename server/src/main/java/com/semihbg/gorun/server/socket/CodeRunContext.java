@@ -12,6 +12,7 @@ public class CodeRunContext {
     private long endTimestamp;
     private final String code;
     private volatile State state;
+    private Process process;
 
     public CodeRunContext(String code) {
         this.code = code;
@@ -21,8 +22,8 @@ public class CodeRunContext {
         endTimestamp=-1;
     }
 
-    public String getId() {
-        return id;
+    public void setProcess(Process process) {
+        this.process = process;
     }
 
     @Override

@@ -13,8 +13,10 @@ public class EditorActivity extends AppCompatActivity {
     private static final String TAG=EditorActivity.class.getName();
 
     private CodeEditText codeEditText;
+    private EditText inputEditText;
 
     private Button runButton;
+    private Button inputButton;
 
     private TextView outputTextView;
 
@@ -35,6 +37,8 @@ public class EditorActivity extends AppCompatActivity {
         runButton=findViewById(R.id.runButton);
         codeEditText=findViewById(R.id.codeEditText);
         outputTextView=findViewById(R.id.outputTextView);
+        inputEditText=findViewById(R.id.inputEditText);
+        inputButton=findViewById(R.id.inputButton);
 
         //Set view listener
         runButton.setOnClickListener(this::onRunButtonClicked);
@@ -49,6 +53,8 @@ public class EditorActivity extends AppCompatActivity {
                 });
             }
         });
+
+        inputButton.setOnClickListener(this::onInputButtonClicked);
 
         //Assign code shortcuts buttons
         leftBraceButton=findViewById(R.id.leftBraceButton);
@@ -85,6 +91,11 @@ public class EditorActivity extends AppCompatActivity {
         CodeRunContext.instance.run(code);
     }
 
+    private void onInputButtonClicked(View v){
+        Log.i(TAG, "onInputButtonClicked: button has been clicked");
+        String input=inputEditText.getText().toString();
+        inputEditText.setText("");
+    }
 
     //Code shortcuts button click listener methods
 

@@ -11,6 +11,7 @@ public enum Command {
     SYSTEM(true),
     //From Request
     RUN(false),
+    INPUT(false),
     INTERRUPT(false),
     DISCONNECT(false);
 
@@ -28,6 +29,7 @@ public enum Command {
         else if (commandString.equalsIgnoreCase(ERROR.name())) return ERROR;
         else if (commandString.equalsIgnoreCase(SYSTEM.name())) return SYSTEM;
         else if (commandString.equalsIgnoreCase(RUN.name())) return RUN;
+        else if (commandString.equalsIgnoreCase(INPUT.name())) return INPUT;
         else if (commandString.equalsIgnoreCase(INTERRUPT.name())) return INTERRUPT;
         else if (commandString.equalsIgnoreCase(DISCONNECT.name())) return DISCONNECT;
         else throw new IllegalArgumentException(String.format("Illegal command parameter, parameter : %s", commandString));
@@ -41,6 +43,7 @@ public enum Command {
         else if (isInResponse == ERROR.isInResponse && commandString.equalsIgnoreCase(ERROR.name())) return ERROR;
         else if (isInResponse == SYSTEM.isInResponse && commandString.equalsIgnoreCase(SYSTEM.name())) return SYSTEM;
         else if (isInResponse == RUN.isInResponse && commandString.equalsIgnoreCase(RUN.name())) return RUN;
+        else if (isInResponse == INPUT.isInResponse && commandString.equalsIgnoreCase(INPUT.name())) return INPUT;
         else if (isInResponse == INTERRUPT.isInResponse && commandString.equalsIgnoreCase(INTERRUPT.name())) return INTERRUPT;
         else if (isInResponse == DISCONNECT.isInResponse && commandString.equalsIgnoreCase(DISCONNECT.name())) return DISCONNECT;
         else

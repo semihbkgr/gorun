@@ -10,4 +10,6 @@ public interface CodeRunService {
 
     Flux<Message> run(CodeRunContext codeRunContext);
 
+    Flux<Void> execute(Runnable runnable);
+
 }

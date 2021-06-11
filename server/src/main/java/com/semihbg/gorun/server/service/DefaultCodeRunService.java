@@ -57,8 +57,16 @@ public class DefaultCodeRunService implements CodeRunService {
             stringFluxSink.next(Message.of(Command.END));
             stringFluxSink.complete();
         });
-
         return messageFlux.subscribeOn(Schedulers.boundedElastic());
+    }
+
+    @Override
+    public Flux<Void> execute(Runnable runnable) {
+        Flux<Void> voidFlux = Flux.defer(() -> {
+            runnable.run();
+            return Flux.empty();
+        });
+        return voidFlux.subscribeOn(Schedulers.boundedElastic());
     }
 
 }

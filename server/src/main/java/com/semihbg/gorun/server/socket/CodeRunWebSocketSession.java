@@ -6,6 +6,9 @@ import com.semihbg.gorun.server.service.CodeRunLogService;
 import com.semihbg.gorun.server.service.CodeRunService;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 public class CodeRunWebSocketSession {
 
     private final CodeRunService codeRunService;
@@ -26,6 +29,17 @@ public class CodeRunWebSocketSession {
                         .doOnComplete(()-> codeRunLogService.log(lastCodeRunContext));
             }else
                 return Flux.just(Message.of(Command.ERROR,"This session already has an on going process"));
+        else if(message.command==Command.INPUT)
+            if(lastCodeRunContext!=null && lastCodeRunContext.isRunning())
+                codeRunService.execute(()->{
+                    try {
+                        lastCodeRunContext.getProcess().getOutputStream().write(message.body.getBytes(StandardCharsets.UTF_8));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            else
+                Flux.just(Message.of(Command.ERROR,"This session has not an on going process"));
         else if(message.command==Command.INTERRUPT)
             if(lastCodeRunContext!=null && lastCodeRunContext.isRunning()){
                 lastCodeRunContext.interrupt();
