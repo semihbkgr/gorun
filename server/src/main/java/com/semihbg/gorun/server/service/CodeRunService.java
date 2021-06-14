@@ -10,6 +10,22 @@ public interface CodeRunService {
 
     Flux<Message> run(CodeRunContext codeRunContext);
 
-    Flux<Void> execute(Runnable runnable);
+    Flux<Void> execute(Execution execution);
+
+    @FunctionalInterface
+    interface Execution{
+        void run() throws Exception;
+
+        default Runnable toRunnable(){
+            return ()->{
+                try {
+                    this.run();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            };
+        }
+
+    }
 
 }

@@ -6,7 +6,6 @@ import com.semihbg.gorun.server.service.CodeRunLogService;
 import com.semihbg.gorun.server.service.CodeRunService;
 import reactor.core.publisher.Flux;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class CodeRunWebSocketSession {
@@ -15,49 +14,45 @@ public class CodeRunWebSocketSession {
     private final CodeRunLogService codeRunLogService;
     private volatile CodeRunContext lastCodeRunContext;
 
-    public CodeRunWebSocketSession(CodeRunService codeRunService,CodeRunLogService codeRunLogService) {
-        this.codeRunService=codeRunService;
-        this.codeRunLogService=codeRunLogService;
-        lastCodeRunContext=null;
+    public CodeRunWebSocketSession(CodeRunService codeRunService, CodeRunLogService codeRunLogService) {
+        this.codeRunService = codeRunService;
+        this.codeRunLogService = codeRunLogService;
+        lastCodeRunContext = null;
     }
 
-    public Flux<Message> executeCommand(Message message){
-        if(message.command==Command.RUN)
-            if(lastCodeRunContext==null || !lastCodeRunContext.isRunning()){
-                lastCodeRunContext=new CodeRunContext(message.body);
+    public Flux<Message> executeCommand(Message message) {
+        if (message.command == Command.RUN) {
+            if (lastCodeRunContext == null || !lastCodeRunContext.isRunning()) {
+                lastCodeRunContext = new CodeRunContext(message.body);
                 return codeRunService.run(lastCodeRunContext)
-                        .doOnComplete(()-> codeRunLogService.log(lastCodeRunContext));
-            }else{
-                return Flux.just(Message.of(Command.ERROR,"This session already has an on going process"));
+                        .doOnComplete(() -> codeRunLogService.log(lastCodeRunContext));
+            } else {
+                return Flux.just(Message.of(Command.ERROR, "This session already has an on going process"));
             }
-        else if(message.command==Command.INPUT) {
-            if (lastCodeRunContext != null && lastCodeRunContext.isRunning())
-                codeRunService.execute(() -> {
-                    try {
-                        lastCodeRunContext.getProcess().getOutputStream().write(message.body.getBytes(StandardCharsets.UTF_8));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-            else {
+        } else if (message.command == Command.INPUT) {
+            if (lastCodeRunContext != null && lastCodeRunContext.isRunning()) {
+                System.out.println(message.body);
+                return codeRunService.execute(() ->
+                        lastCodeRunContext.getProcess().getOutputStream()
+                                .write(message.body.concat(System.lineSeparator()).getBytes(StandardCharsets.UTF_8)))
+                        .thenMany(Flux.just(Message.of(Command.INFO, "Input is sent")));
+            } else {
                 return Flux.just(Message.of(Command.ERROR, "This session has not an on going process"));
             }
-        }
-        else if(message.command==Command.INTERRUPT) {
+        } else if (message.command == Command.INTERRUPT) {
             if (lastCodeRunContext != null && lastCodeRunContext.isRunning()) {
                 lastCodeRunContext.interrupt();
                 return Flux.just(Message.of(Command.INFO, "Interrupted"));
             } else {
                 return Flux.just(Message.of(Command.ERROR, "This session has not an on going process"));
             }
-        }
-        else if(message.command==Command.DISCONNECT){
-            if(lastCodeRunContext!=null && lastCodeRunContext.isRunning()){
+        } else if (message.command == Command.DISCONNECT) {
+            if (lastCodeRunContext != null && lastCodeRunContext.isRunning()) {
                 lastCodeRunContext.interrupt();
                 return Flux.empty();
             }
         }
-        return Flux.just(Message.of(Command.ERROR,"Illegal Command"));
+        return Flux.just(Message.of(Command.ERROR, "Illegal Command"));
     }
 
 }

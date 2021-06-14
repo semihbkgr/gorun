@@ -22,10 +22,6 @@ public class CodeRunContext {
         endTimestamp=-1;
     }
 
-    public void setProcess(Process process) {
-        this.process = process;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,8 +35,9 @@ public class CodeRunContext {
         return id.hashCode();
     }
 
-    public void start(){
+    public void start(Process process){
         if(state==State.READY){
+            this.process=process;
             startTimestamp=System.currentTimeMillis();
             state=State.RUNNING;
         }else throw new IllegalStateException();

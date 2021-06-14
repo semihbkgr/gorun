@@ -28,11 +28,11 @@ public class DefaultCodeRunService implements CodeRunService {
         Flux<Message> messageFlux= Flux.create(stringFluxSink -> {
             String fileName = fileNameGenerator.generate("go");
             String filePath = fileService.createFile(fileName, codeRunContext.getCode());
-            codeRunContext.start();
-            codeRunHandler.registerRunning(Thread.currentThread(),codeRunContext);
-            stringFluxSink.next(Message.of(Command.START));
             try {
                 Process process = Runtime.getRuntime().exec(new String[]{"go", "run", filePath});
+                codeRunContext.start(process);
+                codeRunHandler.registerRunning(Thread.currentThread(),codeRunContext);
+                stringFluxSink.next(Message.of(Command.START));
                 try (InputStream inputStream = process.getInputStream();
                     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
@@ -61,12 +61,9 @@ public class DefaultCodeRunService implements CodeRunService {
     }
 
     @Override
-    public Flux<Void> execute(Runnable runnable) {
-        Flux<Void> voidFlux = Flux.defer(() -> {
-            runnable.run();
-            return Flux.empty();
-        });
-        return voidFlux.subscribeOn(Schedulers.boundedElastic());
+    public Flux<Void> execute(Execution execution) {
+        Schedulers.boundedElastic().schedule(execution.toRunnable());
+        return Flux.empty();
     }
 
 }
