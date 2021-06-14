@@ -27,26 +27,30 @@ public class CodeRunWebSocketSession {
                 lastCodeRunContext=new CodeRunContext(message.body);
                 return codeRunService.run(lastCodeRunContext)
                         .doOnComplete(()-> codeRunLogService.log(lastCodeRunContext));
-            }else
+            }else{
                 return Flux.just(Message.of(Command.ERROR,"This session already has an on going process"));
-        else if(message.command==Command.INPUT)
-            if(lastCodeRunContext!=null && lastCodeRunContext.isRunning())
-                codeRunService.execute(()->{
+            }
+        else if(message.command==Command.INPUT) {
+            if (lastCodeRunContext != null && lastCodeRunContext.isRunning())
+                codeRunService.execute(() -> {
                     try {
                         lastCodeRunContext.getProcess().getOutputStream().write(message.body.getBytes(StandardCharsets.UTF_8));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
-            else
-                Flux.just(Message.of(Command.ERROR,"This session has not an on going process"));
-        else if(message.command==Command.INTERRUPT)
-            if(lastCodeRunContext!=null && lastCodeRunContext.isRunning()){
-                lastCodeRunContext.interrupt();
-                return Flux.just(Message.of(Command.INFO,"Interrupted"));
+            else {
+                return Flux.just(Message.of(Command.ERROR, "This session has not an on going process"));
             }
-            else
-                return Flux.just(Message.of(Command.ERROR,"This session has not an on going process"));
+        }
+        else if(message.command==Command.INTERRUPT) {
+            if (lastCodeRunContext != null && lastCodeRunContext.isRunning()) {
+                lastCodeRunContext.interrupt();
+                return Flux.just(Message.of(Command.INFO, "Interrupted"));
+            } else {
+                return Flux.just(Message.of(Command.ERROR, "This session has not an on going process"));
+            }
+        }
         else if(message.command==Command.DISCONNECT){
             if(lastCodeRunContext!=null && lastCodeRunContext.isRunning()){
                 lastCodeRunContext.interrupt();

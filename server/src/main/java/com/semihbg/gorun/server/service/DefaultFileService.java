@@ -49,4 +49,10 @@ public class DefaultFileService implements FileService{
         }
     }
 
+    @Override
+    public Path getRootPath() {
+        return this.rootPath;
+    }
+
+
 }

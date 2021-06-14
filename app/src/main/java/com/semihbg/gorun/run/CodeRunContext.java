@@ -14,23 +14,23 @@ public class CodeRunContext {
     }
 
     private CodeRunWebSocketSession codeRunWebSocketSession;
-    private AtomicBoolean isRunning;
+
 
     public CodeRunContext(CodeRunWebSocketSession codeRunWebSocketSession) {
         this.codeRunWebSocketSession = codeRunWebSocketSession;
-        this.isRunning=new AtomicBoolean(false);
     }
 
     public void run(String code){
-        if(!isRunning.get()){
-            codeRunWebSocketSession.sendMessage(Message.of(Command.RUN,code));
-        }else throw new IllegalArgumentException("Context already has an on going code running");
+        codeRunWebSocketSession.sendMessage(Message.of(Command.RUN,code));
+
+    }
+
+    public void send(String command){
+        codeRunWebSocketSession.sendMessage(Message.of(Command.INPUT,command));
     }
 
     public void interrupt(){
-        if(isRunning.get()){
-            codeRunWebSocketSession.sendMessage(Message.of(Command.INTERRUPT));
-        }else throw new IllegalArgumentException("Context already have not an on going code running");
+        codeRunWebSocketSession.sendMessage(Message.of(Command.INTERRUPT));
     }
 
     public void disconnect(){

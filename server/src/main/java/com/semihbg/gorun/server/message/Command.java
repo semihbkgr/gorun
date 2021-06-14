@@ -46,8 +46,7 @@ public enum Command {
         else if (isInResponse == INPUT.isInResponse && commandString.equalsIgnoreCase(INPUT.name())) return INPUT;
         else if (isInResponse == INTERRUPT.isInResponse && commandString.equalsIgnoreCase(INTERRUPT.name())) return INTERRUPT;
         else if (isInResponse == DISCONNECT.isInResponse && commandString.equalsIgnoreCase(DISCONNECT.name())) return DISCONNECT;
-        else
-            throw new IllegalArgumentException(String.format("Illegal command parameter, parameter : %s", commandString));
+        else throw new IllegalArgumentException(String.format("Illegal command parameter, parameter : %s", commandString));
     }
 
 

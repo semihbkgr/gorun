@@ -92,9 +92,9 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void onInputButtonClicked(View v){
-        Log.i(TAG, "onInputButtonClicked: button has been clicked");
-        String input=inputEditText.getText().toString();
+        String command=inputEditText.getText().toString();
         inputEditText.setText("");
+        CodeRunContext.instance.send(command);
     }
 
     //Code shortcuts button click listener methods
