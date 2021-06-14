@@ -2,6 +2,8 @@ package com.semihbg.gorun.server.socket;
 
 import lombok.Getter;
 
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Getter
@@ -13,6 +15,7 @@ public class CodeRunContext {
     private final String code;
     private volatile State state;
     private Process process;
+    private PrintWriter printWriter;
 
     public CodeRunContext(String code) {
         this.code = code;
@@ -38,6 +41,7 @@ public class CodeRunContext {
     public void start(Process process){
         if(state==State.READY){
             this.process=process;
+            this.printWriter=new PrintWriter(process.getOutputStream(),true);
             startTimestamp=System.currentTimeMillis();
             state=State.RUNNING;
         }else throw new IllegalStateException();
@@ -45,20 +49,28 @@ public class CodeRunContext {
 
     public void end(){
         if(state==State.RUNNING){
-            endTimestamp=System.currentTimeMillis();
+            terminate();
             state=State.FINISHED;
         }else throw new IllegalStateException();
     }
 
     public void interrupt() {
         if(state==State.RUNNING){
-            endTimestamp=System.currentTimeMillis();
+            terminate();
             state=State.INTERRUPTED;
         }else throw new IllegalStateException();
     }
 
     public void unexpected(){
+        terminate();
         state=State.UNEXPECTED;
+    }
+
+    private void terminate(){
+        process=null;
+        printWriter.close();
+        printWriter=null;
+        endTimestamp=System.currentTimeMillis();
     }
 
     public String getLogMessage(){
@@ -77,6 +89,10 @@ public class CodeRunContext {
 
     public boolean isRunning(){
         return state==State.RUNNING;
+    }
+
+    public void sendInput(String str){
+        printWriter.println(str);
     }
 
     public enum State{

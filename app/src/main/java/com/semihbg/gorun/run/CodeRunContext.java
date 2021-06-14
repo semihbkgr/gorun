@@ -22,7 +22,6 @@ public class CodeRunContext {
 
     public void run(String code){
         codeRunWebSocketSession.sendMessage(Message.of(Command.RUN,code));
-
     }
 
     public void send(String command){

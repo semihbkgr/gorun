@@ -29,7 +29,10 @@ public class DefaultCodeRunService implements CodeRunService {
             String fileName = fileNameGenerator.generate("go");
             String filePath = fileService.createFile(fileName, codeRunContext.getCode());
             try {
-                Process process = Runtime.getRuntime().exec(new String[]{"go", "run", filePath});
+                Process process = new ProcessBuilder()
+                        .command("go", "run", filePath)
+                        .redirectErrorStream(true)
+                        .start();
                 codeRunContext.start(process);
                 codeRunHandler.registerRunning(Thread.currentThread(),codeRunContext);
                 stringFluxSink.next(Message.of(Command.START));
@@ -39,13 +42,6 @@ public class DefaultCodeRunService implements CodeRunService {
                     char[] oneLengthCharBuffer=new char[1];
                     while (bufferedReader.read(oneLengthCharBuffer) != -1)
                         stringFluxSink.next(Message.of(Command.OUTPUT, String.valueOf(oneLengthCharBuffer)));
-                }
-                try(InputStream inputStream=process.getErrorStream();
-                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader)){
-                    char[] oneLengthCharBuffer=new char[1];
-                    while (bufferedReader.read(oneLengthCharBuffer) != -1)
-                        stringFluxSink.next(Message.of(Command.ERROR, String.valueOf(oneLengthCharBuffer)));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
