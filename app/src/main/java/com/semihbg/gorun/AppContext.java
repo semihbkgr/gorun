@@ -5,10 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.semihbg.gorun.snippet.DefaultSnippetClient;
-import com.semihbg.gorun.snippet.DefaultSnippetRepository;
-import com.semihbg.gorun.snippet.SnippetClient;
-import com.semihbg.gorun.snippet.SnippetRepository;
+import com.semihbg.gorun.snippet.*;
 import okhttp3.OkHttpClient;
 
 import java.io.File;
@@ -24,7 +21,7 @@ public class AppContext {
     public static Gson gson;
     public static File rootDir;
     public static SnippetClient snippetClient;
-    public static SnippetRepository snippetRepository;
+    public static SnippetService snippetService;
 
     private static boolean isInitialized=false;
 
@@ -36,7 +33,7 @@ public class AppContext {
             gson=new GsonBuilder().create();
             rootDir=createAndGetExternalDir(context);
             snippetClient=new DefaultSnippetClient(httpClient,gson);
-            snippetRepository=new DefaultSnippetRepository(context,snippetClient,gson,rootDir);
+            snippetService=new DefaultSnippetService(snippetClient);
             Log.i(TAG, "initialize: AppContext has been ending initialization");
         }else Log.w(TAG, "initialize: AppContext has already been initialized");
     }

@@ -10,6 +10,7 @@
         tools:context=".EditorActivity"
         android:focusableInTouchMode="true">
 
+    <!--Shortcuts-->
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:gravity="center"
@@ -58,6 +59,7 @@
 
     </LinearLayout>
 
+    <!--CodeEditor-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,15 +78,16 @@
                 android:scrollbars = "vertical"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:textCursorDrawable="@drawable/cursor_code_edit_text"
+                android:textCursorDrawable="@drawable/code_editor_cursor"
                 android:ellipsize="end"/>
     </ScrollView>
 
 
+    <!--Console-->
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
-                    android:background="@color/black">
+                    android:background="@drawable/console_background">
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,9 +97,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/green"
-                    android:lines="7"
+                    android:minLines="7"
+                    android:maxLines="7"
                     android:id="@+id/outputTextView"
                     android:padding="15dp"
+                    android:scrollbars = "vertical"
                     android:textSize="15sp"/>
 
         </ScrollView>
