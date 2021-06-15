@@ -1,24 +1,30 @@
 package com.semihbg.gorun;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.message.Command;
 import com.semihbg.gorun.run.CodeRunContext;
-import com.semihbg.gorun.view.code.CodeEditText;
+import com.semihbg.gorun.util.TextChangeHandler;
+import com.semihbg.gorun.util.TextChangeListener;
+import com.semihbg.gorun.view.code.CodeEditor;
 
 public class EditorActivity extends AppCompatActivity {
 
     private static final String TAG=EditorActivity.class.getName();
+    private static final int CODE_EDITOR_UPDATE_DELAY_MS=500;
 
-    private CodeEditText codeEditText;
-    private EditText inputEditText;
+    private CodeEditor codeEditor;
+    private EditText consoleEditText;
 
     private Button runButton;
-    private Button inputButton;
+    private Button consoleButton;
 
-    private TextView outputTextView;
+    private TextView consoleTextView;
 
     //Code shortcuts buttons
     private Button leftBraceButton;
@@ -28,35 +34,23 @@ public class EditorActivity extends AppCompatActivity {
     private Button quoteButton;
     private Button tabButton;
 
+    private TextChangeHandler consoleTextChangeHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        //Find views
+        //-Find Views
+        //CodeEditor
+        codeEditor =findViewById(R.id.codeEditText);
+        //Console
+        consoleTextView =findViewById(R.id.outputTextView);
+        consoleEditText =findViewById(R.id.inputEditText);
+        consoleButton =findViewById(R.id.inputButton);
+        //Run Button
         runButton=findViewById(R.id.runButton);
-        codeEditText=findViewById(R.id.codeEditText);
-        outputTextView=findViewById(R.id.outputTextView);
-        inputEditText=findViewById(R.id.inputEditText);
-        inputButton=findViewById(R.id.inputButton);
-
-        //Set view listener
-        runButton.setOnClickListener(this::onRunButtonClicked);
-
-        CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message->{
-            System.out.println("----------------------------------");
-            System.out.println(message.command+" - "+message.body);
-            System.out.println("----------------------------------");
-            if(message.body!=null){
-                runOnUiThread(()->{
-                    outputTextView.setText(outputTextView.getText().toString().concat(message.body));
-                });
-            }
-        });
-
-        inputButton.setOnClickListener(this::onInputButtonClicked);
-
-        //Assign code shortcuts buttons
+        //Shortcuts buttons
         leftBraceButton=findViewById(R.id.leftBraceButton);
         rightBraceButton=findViewById(R.id.rightBraceButton);
         leftCurlyBraceButton=findViewById(R.id.leftCurlyBraceButton);
@@ -64,13 +58,32 @@ public class EditorActivity extends AppCompatActivity {
         quoteButton=findViewById(R.id.quoteButton);
         tabButton=findViewById(R.id.tabButton);
 
-        //Set code shortcuts buttons' listener
+        //-Set Listeners
+        //Console
+        consoleButton.setOnClickListener(this::onConsoleButtonClicked);
+        consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
+        //Run Button
+        runButton.setOnClickListener(this::onRunButtonClicked);
+        //Shortcuts Buttons
         leftBraceButton.setOnClickListener(this::onLeftBraceButtonClicked);
         rightBraceButton.setOnClickListener(this::onRightBraceButtonClicked);
         leftCurlyBraceButton.setOnClickListener(this::onLeftCurlyBraceButtonClicked);
         rightCurlyBraceButton.setOnClickListener(this::onRightCurlyBraceButtonClicked);
         quoteButton.setOnClickListener(this::onQuoteButtonClicked);
         tabButton.setOnClickListener(this::onTabButtonClicked);
+
+        //Console output update by delay
+        consoleTextChangeHandler =new TextChangeHandler(CODE_EDITOR_UPDATE_DELAY_MS);
+        consoleTextChangeHandler.addListener((event, text)-> runOnUiThread(()->{
+            if(event== TextChangeListener.Event.UPDATE) this.consoleTextView.setText(text);
+            else this.consoleTextView.setText(consoleTextView.getText().toString().concat(text));
+        }));
+        CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message->{
+            Log.i(TAG, "onCreate: Message : "+message.command+" - "+message.body);
+            if(message.command== Command.OUTPUT)
+                this.consoleTextChangeHandler.append(message.body);
+        });
+
 
     }
 
@@ -80,54 +93,54 @@ public class EditorActivity extends AppCompatActivity {
         String code=getIntent().getStringExtra(AppConstants.INTENT_EXTRA_SNIPPET_CODE);
         if(code!=null){
             Log.i(TAG, "onStart: Activity started with code");
-            codeEditText.setText(code);}
+            codeEditor.setText(code);}
         else
             Log.i(TAG, "onStart: Activity started with no code");
     }
 
     private void onRunButtonClicked(View v){
-        String code=codeEditText.getText().toString();
-        outputTextView.setText("");
+        String code= codeEditor.getText().toString();
+        consoleTextChangeHandler.clear();
         CodeRunContext.instance.run(code);
     }
 
-    private void onInputButtonClicked(View v){
-        String command=inputEditText.getText().toString();
-        inputEditText.setText("");
+    private void onConsoleButtonClicked(View v){
+        String command= consoleEditText.getText().toString();
+        consoleEditText.setText("");
         CodeRunContext.instance.send(command);
     }
 
-    //Code shortcuts button click listener methods
+    private void onConsoleTextViewClicked(View v){
+        this.consoleEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(consoleEditText, InputMethodManager.SHOW_IMPLICIT);
+    }
 
+    //Code shortcuts button click listener methods
     private void onLeftBraceButtonClicked(View view){
         Log.v(TAG, "onLeftBraceButtonClicked: button has been clicked");
-        codeEditText.addText("(");
+        codeEditor.addText("(");
     }
-
     private void onRightBraceButtonClicked(View view){
         Log.v(TAG, "onRightBraceButtonClicked: button has been clicked");
-        codeEditText.addText(")");
+        codeEditor.addText(")");
     }
-
     private void onLeftCurlyBraceButtonClicked(View view){
         Log.v(TAG, "onLeftCurlyBraceButtonClicked: button has been clicked");
-        codeEditText.addText("{");
+        codeEditor.addText("{");
     }
-
     private void onRightCurlyBraceButtonClicked(View view){
         Log.v(TAG, "onRightCurlyBraceButtonClicked: button has been clicked");
-        codeEditText.addText("}");
+        codeEditor.addText("}");
     }
-
     private void onQuoteButtonClicked(View view){
         Log.v(TAG, "onQuoteButtonClicked: button has been clicked");
-        codeEditText.quote();
+        codeEditor.quote();
     }
-
     private void onTabButtonClicked(View view){
         Log.v(TAG, "onTabButtonClicked: button has been clicked");
-        codeEditText.addText("\t");
+        codeEditor.addText("\t");
     }
-
+    //----------------------------------------------
 
 }

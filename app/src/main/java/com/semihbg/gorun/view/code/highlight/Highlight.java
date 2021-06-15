@@ -4,31 +4,28 @@ import com.semihbg.gorun.R;
 
 public enum Highlight {
 
-    STRING("\"","\"",R.style.StringStyle),
-    FUNCTION(".","(",R.style.FunctionStyle),
-    CUSTOM_FUNCTION("func ","(",R.style.CustomFunctionStyle),
-    FUNC("func",null, R.style.FuncStyle),
-    IMPORT("import",null,R.style.ImportStyle),
-    FMT("fmt",null,R.style.PackageStyle),
-    RETURN("return",null,R.style.ReturnStyle);
+    STRING(new String[]{"\""}, new String[]{"\""},R.style.StringStyle),
+    FUNCTION( new String[]{"."},  new String[]{"("},R.style.FunctionStyle),
+    CUSTOM_FUNCTION( new String[]{"func "},  new String[]{"("},R.style.CustomFunctionStyle),
+    FUNC( new String[]{"func"},null, R.style.FuncStyle),
+    IMPORT( new String[]{"import"},null,R.style.ImportStyle),
+    PACKAGE( new String[]{"fmt","time","io","log","net"},null,R.style.PackageStyle),
+    RETURN( new String[]{"return"},null,R.style.ReturnStyle),
+    VAR( new String[]{"var"},null,R.style.ReturnStyle),
+    TYPE(new String[]{"int,float","string","bool"},null,R.style.TypeStyle);
 
-
-    public final String startWord;
-    public final String endWord;
+    public final String[] startWords;
+    public final String[] endWords;
     public final int style;
 
-    Highlight(String startWord, String endWord, int style) {
-        this.startWord = startWord;
-        this.endWord = endWord;
+    Highlight(String[] startWords, String[] endWords, int style) {
+        this.startWords = startWords;
+        this.endWords = endWords;
         this.style=style;
     }
 
     public boolean isOnly(){
-        return endWord ==null;
-    }
-
-    public boolean isBetween(){
-        return endWord !=null;
+        return endWords ==null;
     }
 
 }

@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class CodeEditText extends androidx.appcompat.widget.AppCompatEditText {
+public class CodeEditor extends androidx.appcompat.widget.AppCompatEditText {
 
     private final Rect rect;
     private final Paint paint;
     private final CodeHighlighter codeHighlighter;
 
-    public CodeEditText(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
+    public CodeEditor(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
         super(context, attrs);
 
         rect = new Rect();

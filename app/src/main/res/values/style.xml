@@ -46,4 +46,12 @@
         <item name="android:textColor">@color/CustomFunction</item>
     </style>
 
+    <style name="VarStyle">
+        <item name="android:textColor">@color/Var</item>
+    </style>
+
+    <style name="TypeStyle">
+        <item name="android:textColor">@color/Type</item>
+    </style>
+
 </resources>

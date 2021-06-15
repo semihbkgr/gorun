@@ -33,7 +33,7 @@ public class CodeRunWebSocketSession {
             if (lastCodeRunContext != null && lastCodeRunContext.isRunning()) {
                 return codeRunService.execute(() ->
                         lastCodeRunContext.sendInput(message.body)
-                ).thenMany(Flux.just(Message.of(Command.INFO, "Input is sent")));
+                ).thenMany(Flux.just(Message.of(Command.OUTPUT, message.body.concat(System.lineSeparator()))));
             } else {
                 return Flux.just(Message.of(Command.ERROR, "This session has not an on going process"));
             }

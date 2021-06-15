@@ -64,7 +64,7 @@
         android:gravity="center"
         android:clipToPadding="false"
         android:orientation="vertical">
-        <com.semihbg.gorun.view.code.CodeEditText
+        <com.semihbg.gorun.view.code.CodeEditor
                 android:text="@string/code_hello_world"
                 android:id="@+id/codeEditText"
                 android:layout_width="match_parent"
@@ -83,7 +83,8 @@
 
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:orientation="vertical">
+                  android:orientation="vertical"
+                    android:background="@color/black">
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,10 +93,11 @@
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_output_text_view"
-                    android:textColor="@color/white"
+                    android:textColor="@color/green"
                     android:lines="7"
-                    android:id="@+id/outputTextView"/>
+                    android:id="@+id/outputTextView"
+                    android:padding="15dp"
+                    android:textSize="15sp"/>
 
         </ScrollView>
         <LinearLayout android:layout_width="match_parent"
@@ -103,16 +105,26 @@
                       android:orientation="horizontal">
             <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.4"
                     android:inputType="textPersonName"
                     android:ems="10"
-                    android:id="@+id/inputEditText"/>
+                    android:textColor="@color/green"
+                    android:id="@+id/inputEditText"
+                    android:padding="5dp"
+                    android:textCursorDrawable="@drawable/console_cursor"
+                    android:background="@null"/>
             <Button
-                    android:text="Input"
+                    android:text="@string/input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/inputButton"
+                    android:textColor="@color/green"
+                    android:background="@null"
+                    android:minWidth="0dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textSize="30sp"
                     android:layout_weight="0"/>
         </LinearLayout>
     </LinearLayout>

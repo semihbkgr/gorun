@@ -9,6 +9,7 @@
     <color name="orange">#f4d3a0</color>
     <color name="white">#fefefe</color>
     <color name="black">#050608</color>
+    <color name="green">#04930A</color>
 
     <!--Code Editor Highlight Colors-->
     <color name="Func">#009688</color>
@@ -18,5 +19,7 @@
     <color name="String">#FF9800</color>
     <color name="Function">#4CAF50</color>
     <color name="CustomFunction">#673AB7</color>
+    <color name="Var">#160633</color>
+    <color name="Type">#8878A5</color>
 
 </resources>

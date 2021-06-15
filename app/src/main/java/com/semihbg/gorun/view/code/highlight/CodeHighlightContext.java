@@ -16,11 +16,7 @@ public class CodeHighlightContext {
         this.end = end;
     }
 
-    public static CodeHighlightContext ofOnly(Context context, Highlight highlight, int start){
-        return new CodeHighlightContext(new TextAppearanceSpan(context, highlight.style),start, start+ highlight.startWord.length());
-    }
-
-    public static CodeHighlightContext ofBetween(Context context, Highlight highlight, int start, int end){
+    public static CodeHighlightContext of(Context context, Highlight highlight, int start, int end){
         return new CodeHighlightContext(new TextAppearanceSpan(context, highlight.style),start,end);
     }
 

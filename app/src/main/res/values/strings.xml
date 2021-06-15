@@ -18,5 +18,7 @@
     <string name="rightCurlyBrace">}</string>
     <string name="quote">\"…\"</string>
     <string name="tab">TAB</string>
+    <string name="input">">>"</string>
+
 
 </resources>

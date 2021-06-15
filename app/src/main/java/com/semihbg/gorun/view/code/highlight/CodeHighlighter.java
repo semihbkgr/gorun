@@ -27,26 +27,29 @@ public class CodeHighlighter {
 
             for(Highlight highlight : Highlight.values())
                 if(highlight.isOnly())
-                    for(int i = code.indexOf(highlight.startWord); i>-1; i=code.indexOf(highlight.startWord,i+ highlight.startWord.length()))
-                        newCodeHighlightContextList.add(CodeHighlightContext.ofOnly(this.editText.getContext(), highlight,i));
+                    for(String startWord:highlight.startWords)
+                        for(int i = code.indexOf(startWord); i>-1; i=code.indexOf(startWord,i+ startWord.length()))
+                            newCodeHighlightContextList.add(CodeHighlightContext.of(this.editText.getContext(), highlight,i,i+startWord.length()));
                 else{
                     boolean isStarting=true;
                     int index=0;
-                    for(int i = code.indexOf(highlight.startWord); i>-1; i=code.indexOf(isStarting?highlight.startWord :highlight.endWord,i+1),
-                            index+=isStarting?highlight.startWord.length():highlight.endWord.length())
-                        if(!isStarting){
-                            newCodeHighlightContextList.add(CodeHighlightContext.ofBetween(editText.getContext(), highlight,index,i));
-                            isStarting=true;
-                            if(highlight==Highlight.CUSTOM_FUNCTION){
-                                String functionName=code.substring(index+highlight.startWord.length()-1,i);
-                                int functionNameLength=functionName.length();
-                                for(int j=code.indexOf(functionName);j>-1;j=code.indexOf(functionName,j+functionNameLength))
-                                    newCodeHighlightContextList.add(CodeHighlightContext.ofBetween(editText.getContext(), highlight,j,j+functionNameLength));
-                            }
-                        }else{
-                            index=i;
-                            isStarting=false;
-                        }
+                    for(String startWord: highlight.startWords)
+                        for(String endWord: highlight.endWords)
+                            for(int i = code.indexOf(startWord); i>-1; i=code.indexOf(isStarting?startWord :endWord,i+1),
+                                    index+=isStarting?startWord.length():endWord.length())
+                                if(!isStarting){
+                                    newCodeHighlightContextList.add(CodeHighlightContext.of(editText.getContext(), highlight,index,i));
+                                    isStarting=true;
+                                    if(highlight==Highlight.CUSTOM_FUNCTION){
+                                        String functionName=code.substring(index+startWord.length()-1,i);
+                                        int functionNameLength=functionName.length();
+                                        for(int j=code.indexOf(functionName);j>-1;j=code.indexOf(functionName,j+functionNameLength))
+                                            newCodeHighlightContextList.add(CodeHighlightContext.of(editText.getContext(), highlight,j,j+functionNameLength));
+                                    }
+                                }else{
+                                    index=i;
+                                    isStarting=false;
+                                }
                 }
 
             editText.post(()->{

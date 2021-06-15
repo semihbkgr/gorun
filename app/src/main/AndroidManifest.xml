@@ -13,7 +13,8 @@
             android:theme="@style/AppTheme">
         <activity android:name=".SnippetActivity">
         </activity>
-        <activity android:name=".EditorActivity">
+        <activity android:name=".EditorActivity"
+                  android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
                 android:name=".SettingActivity"
@@ -25,8 +26,7 @@
         </activity>
         <activity
                 android:name=".RunActivity"
-                android:parentActivityName=".MenuActivity"
-                android:windowSoftInputMode="adjustNothing">
+                android:parentActivityName=".MenuActivity">
         </activity>
         <activity android:name=".MenuActivity">
         </activity>
