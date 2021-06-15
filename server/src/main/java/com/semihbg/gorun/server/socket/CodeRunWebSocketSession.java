@@ -6,8 +6,6 @@ import com.semihbg.gorun.server.service.CodeRunLogService;
 import com.semihbg.gorun.server.service.CodeRunService;
 import reactor.core.publisher.Flux;
 
-import java.nio.charset.StandardCharsets;
-
 public class CodeRunWebSocketSession {
 
     private final CodeRunService codeRunService;

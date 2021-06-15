@@ -15,6 +15,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private Button runButton;
     private Button tutorialButton;
+    private Button docButton;
 
     private volatile boolean backPressFirstClick=false;
 
@@ -26,11 +27,12 @@ public class MenuActivity extends AppCompatActivity {
         //Find Views
         runButton=findViewById(R.id.buttonRun);
         tutorialButton=findViewById(R.id.buttonTutorial);
+        docButton=findViewById(R.id.buttonDoc);
 
         //Set button click listeners
         runButton.setOnClickListener(this::onButtonRunClick);
         tutorialButton.setOnClickListener(this::onButtonTutorialClick);
-
+        docButton.setOnClickListener(this::onButtonDocClick);
     }
 
     private void onButtonRunClick(View view){
@@ -40,6 +42,11 @@ public class MenuActivity extends AppCompatActivity {
 
     private void onButtonTutorialClick(View view){
         Intent intent=new Intent(this,TutorialActivity.class);
+        startActivity(intent);
+    }
+
+    private void onButtonDocClick(View view){
+        Intent intent=new Intent(this,DocActivity.class);
         startActivity(intent);
     }
 

@@ -3,7 +3,7 @@ package com.semihbg.gorun.util;
 public class ThrowUtils {
 
     @SuppressWarnings("unchecked")
-    public static <T extends Exception> void sneakyThrow(Exception exception) throws T{
+    public static <T extends Exception, P> P sneakyThrow(Exception exception) throws T {
         throw (T) exception;
     }
 
