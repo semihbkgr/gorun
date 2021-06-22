@@ -5,7 +5,7 @@ Go codes on server machine through web socket.</p>
 - Android project is written in Native Java
 - Server project is built with Spring Boot and Netty
 
-GoRun includes
+GoRun app includes
 <ul>
 <li>Basic Go tutorials </li>
 <li>GoLang docs (require internet connection)</li>
@@ -13,21 +13,28 @@ GoRun includes
 <li>Code editor and console (require internet connection)</li>
 </ul>
 
+<p>This project is still under development</p>
 
-<h2> Examples </h2>
+<h2> Samples </h2>
 
-<h4>Hello World</h4>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/HelloWorld.png"/>
+<p>Simple code snippet executions and console outputs from app</p>
 
-<h4>Taking Input</h4>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/Input01.png"/><br>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/Input02.png"/><br>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/Input03.png"/>
+<h3>Hello World</h3>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/HelloWorld.png" alt="Code snippet and output" width="288" height="516"/>
 
-<h4>Error Message</h4>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/Error.png"/>
+<h3>Taking Input</h3>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/Input01.png" alt="Code snippet and output" width="288" height="516"/>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/Input02.png" alt="Code snippet and output" width="288" height="516"/>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/Input03.png" alt="Code snippet and output" width="288" height="516"/>
 
-<h4>Timed Executions</h4>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/Time01.png"/><br>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/Time02.png"/><br>
-<img src="https://github.com/SemihBG/GoRun/blob/master/images/Time03.png"/>
+<h3>Error Message</h3>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/Error.png" alt="Code snippet and output" width="288" height="516"/>
+
+<h3>Timed Executions</h3>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/Time01.png" alt="Code snippet and output" width="288" height="516"/>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/Time02.png" alt="Code snippet and output" width="288" height="516"/>
+<img src="https://github.com/SemihBG/GoRun/blob/master/images/Time03.png" alt="Code snippet and output" width="288" height="516"/>
+
+
+
+
