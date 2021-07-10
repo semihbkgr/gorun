@@ -22,5 +22,6 @@
     <string name="quote">\"…\"</string>
     <string name="tab">TAB</string>
     <string name="input">">>"</string>
+    <string name="setting">Setting</string>
 
 </resources>

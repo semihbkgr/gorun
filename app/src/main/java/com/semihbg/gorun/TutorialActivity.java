@@ -29,20 +29,21 @@ public class TutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
-        //Action bar
+        //MenuBar
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.setTitle("Tutorial");
-            actionBar.setDefaultDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //Find views
+        //Components
         tutorialListView =findViewById(R.id.tutorialListView);
 
         //Tutorial ListView adapter
         TutorialArrayAdapter arrayAdapter=new TutorialArrayAdapter(this,AppContext.tutorialService.getSections());
         tutorialListView.setAdapter(arrayAdapter);
         tutorialListView.setOnItemClickListener(this::onTutorialListViewItemClick);
+
     }
 
     private void onTutorialListViewItemClick(AdapterView<?> parent, View view, int position, long id){
@@ -70,5 +71,10 @@ public class TutorialActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 
 }

@@ -1,5 +1,6 @@
 <resources>
 
+    <!--App Main Style-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -8,7 +9,6 @@
     </style>
 
     <!--Slide Animation Style-->
-
     <style name="SlideActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
         <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
@@ -17,39 +17,30 @@
     </style>
 
     <!--Code Editor Highlight Styles-->
-
     <style name="PackageStyle">
         <item name="android:textColor">@color/Package</item>
     </style>
-
     <style name="FuncStyle">
         <item name="android:textColor">@color/Func</item>
     </style>
-
     <style name="ImportStyle">
         <item name="android:textColor">@color/Import</item>
     </style>
-
     <style name="ReturnStyle">
         <item name="android:textColor">@color/Return</item>
     </style>
-
     <style name="StringStyle">
         <item name="android:textColor">@color/String</item>
     </style>
-
     <style name="FunctionStyle">
         <item name="android:textColor">@color/Function</item>
     </style>
-
     <style name="CustomFunctionStyle">
         <item name="android:textColor">@color/CustomFunction</item>
     </style>
-
     <style name="VarStyle">
         <item name="android:textColor">@color/Var</item>
     </style>
-
     <style name="TypeStyle">
         <item name="android:textColor">@color/Type</item>
     </style>
