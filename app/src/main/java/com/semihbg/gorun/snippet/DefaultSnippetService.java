@@ -3,6 +3,7 @@ package com.semihbg.gorun.snippet;
 import android.os.Handler;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -31,7 +32,7 @@ public class DefaultSnippetService implements SnippetService {
     public void getSnippetsAsync(Consumer<? super List<Snippet>> snippetListConsumer) {
         if (isAvailable()) handler.post(() -> snippetListConsumer.accept(snippetCache.getCache()));
         else snippetClient.getSnippetAsync(snippets -> {
-                List<Snippet> snippetList=Arrays.asList(snippets);
+                List<Snippet> snippetList=snippets!=null?Arrays.asList(snippets): Collections.emptyList();
                 snippetCache.setCache(snippetList);
                 snippetListConsumer.accept(snippetList);
             });

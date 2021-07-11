@@ -23,5 +23,7 @@
     <string name="tab">TAB</string>
     <string name="input">">>"</string>
     <string name="setting">Setting</string>
+    <string name="internet_connection">Internet Connection</string>
+    <string name="server_state">Server State</string>
 
 </resources>
