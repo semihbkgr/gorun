@@ -3,14 +3,21 @@ package com.semihbg.gorun;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbg.gorun.setting.AppSetting;
+import com.semihbg.gorun.setting.ServerStateType;
 
 public class RunActivity extends AppCompatActivity {
+
+    private static final String TAG = RunActivity.class.getName();
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -26,8 +33,8 @@ public class RunActivity extends AppCompatActivity {
         }
 
         //Components
-        findViewById(R.id.buttonNew).setOnClickListener(v -> startActivity(new Intent(this, EditorActivity.class)));
-        findViewById(R.id.buttonSnippet).setOnClickListener(v -> startActivity(new Intent(this, SnippetActivity.class)));
+        findViewById(R.id.buttonNew).setOnClickListener(this::onButtonNewClickListener);
+        findViewById(R.id.buttonSnippet).setOnClickListener(this::onButtonSnippetClickListener);
 
     }
 
@@ -51,6 +58,22 @@ public class RunActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    private void onButtonNewClickListener(View v) {
+        Log.i(TAG, "onNewButtonClickListener: button clicked");
+        startActivity(new Intent(this, EditorActivity.class));
+    }
+
+    private void onButtonSnippetClickListener(View v) {
+        Log.i(TAG, "onButtonSnippetClickListener: button clicked");
+        if (!AppSetting.instance.appState.hasInternetConnection()){
+            AppSetting.instance.updateAllState();
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+        } else if (AppSetting.instance.appState.getServerStateType() == ServerStateType.DOWN){
+            AppSetting.instance.updateAllState();
+            Toast.makeText(this, "Server is down", Toast.LENGTH_LONG).show();
+        } else startActivity(new Intent(this, SnippetActivity.class));
     }
 
 }

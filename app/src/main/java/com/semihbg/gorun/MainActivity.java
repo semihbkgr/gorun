@@ -27,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }, 10);
 
-        ForkJoinPool.commonPool().execute(()-> AppSetting.instance.appState.setInternetConnection(StateUtils.hasInternetConnection()));
-        ForkJoinPool.commonPool().execute(()-> AppSetting.instance.appState.setServerStateType(StateUtils.serverStateType()));
+        AppSetting.instance.updateAllState();
 
     }
 

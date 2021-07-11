@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbg.gorun.setting.AppSetting;
+import com.semihbg.gorun.setting.ServerStateType;
 import com.semihbg.gorun.util.StateUtils;
 
 import java.util.concurrent.ForkJoinPool;
@@ -48,14 +49,8 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        ForkJoinPool.commonPool().execute(()-> {
-            AppSetting.instance.appState.setInternetConnection(StateUtils.hasInternetConnection());
-            this.runOnUiThread(this::updateStateComponentsText);
-        });
-        ForkJoinPool.commonPool().execute(()-> {
-            AppSetting.instance.appState.setServerStateType(StateUtils.serverStateType());
-            this.runOnUiThread(this::updateStateComponentsText);
-        });
+        AppSetting.instance.updateInternetConnection(this::updateInternetConnectionValueTextView);
+        AppSetting.instance.updateServerState(this::updateServerStateValueTextView);
     }
 
     @Override
@@ -81,9 +76,18 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void updateStateComponentsText(){
-        if(AppSetting.instance.appState.isInternetConnection()) internetConnectionValueTextView.setText("Online");
+        if(AppSetting.instance.appState.hasInternetConnection()) internetConnectionValueTextView.setText("Online");
         else internetConnectionValueTextView.setText("Offline");
         serverStateValueTextView.setText(AppSetting.instance.appState.getServerStateType().value);
+    }
+
+    private void updateInternetConnectionValueTextView(boolean hasInternetConnection){
+        if(hasInternetConnection) internetConnectionValueTextView.setText("Online");
+        else internetConnectionValueTextView.setText("Offline");
+    }
+
+    private void updateServerStateValueTextView(ServerStateType serverStateType){
+        serverStateValueTextView.setText(serverStateType.value);
     }
 
 }
