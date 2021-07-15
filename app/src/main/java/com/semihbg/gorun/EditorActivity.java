@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbg.gorun.core.AppConstants;
 import com.semihbg.gorun.message.Command;
 import com.semihbg.gorun.run.CodeRunContext;
 import com.semihbg.gorun.setting.AppSetting;

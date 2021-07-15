@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.core.AppConstants;
+import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.snippet.Snippet;
 import com.semihbg.gorun.view.adapter.SnippetArrayAdapter;
 
@@ -24,12 +26,12 @@ public class SnippetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snippet);
         snippetListView=findViewById(R.id.snippetListView);
-        if(AppContext.snippetService.isAvailable()){
-            List<Snippet> snippetList=AppContext.snippetService.getSnippets();
+        if(AppContext.instance().snippetService.isAvailable()){
+            List<Snippet> snippetList=AppContext.instance().snippetService.getSnippets();
             ArrayAdapter<Snippet> snippetArrayAdapter=new SnippetArrayAdapter(getApplicationContext(),snippetList);
             snippetListView.setAdapter(snippetArrayAdapter);
         }else{
-            AppContext.snippetService.getSnippetsAsync((snippetList)-> runOnUiThread(()->{
+            AppContext.instance().snippetService.getSnippetsAsync((snippetList)-> runOnUiThread(()->{
                 ArrayAdapter<Snippet> snippetArrayAdapter=new SnippetArrayAdapter(getApplicationContext(),snippetList);
                 snippetListView.setAdapter(snippetArrayAdapter);
             }));

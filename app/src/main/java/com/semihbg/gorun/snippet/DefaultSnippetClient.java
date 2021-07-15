@@ -3,7 +3,7 @@ package com.semihbg.gorun.snippet;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
-import com.semihbg.gorun.AppConstants;
+import com.semihbg.gorun.core.AppConstants;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 

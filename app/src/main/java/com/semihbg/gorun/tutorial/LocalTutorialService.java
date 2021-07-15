@@ -3,7 +3,7 @@ package com.semihbg.gorun.tutorial;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
-import com.semihbg.gorun.AppConstants;
+import com.semihbg.gorun.core.AppConstants;
 import com.semihbg.gorun.util.ThrowUtils;
 
 import java.io.IOException;

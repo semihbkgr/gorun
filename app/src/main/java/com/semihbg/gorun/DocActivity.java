@@ -17,6 +17,7 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbg.gorun.core.AppConstants;
 
 public class DocActivity extends AppCompatActivity {
 

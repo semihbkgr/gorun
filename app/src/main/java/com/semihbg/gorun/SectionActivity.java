@@ -3,6 +3,8 @@ package com.semihbg.gorun;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.core.AppConstants;
+import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.tutorial.Section;
 
 public class SectionActivity extends AppCompatActivity {
@@ -17,7 +19,7 @@ public class SectionActivity extends AppCompatActivity {
 
         //Get section by title
         String title=getIntent().getStringExtra(AppConstants.INTENT_EXTRA_SECTION_TITLE);
-        Section section=AppContext.tutorialService.getSection(title);
+        Section section= AppContext.instance().tutorialService.getSection(title);
 
         //Find Views
         titleTextView =findViewById(R.id.titleTextView);

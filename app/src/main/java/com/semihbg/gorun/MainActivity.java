@@ -1,15 +1,11 @@
 package com.semihbg.gorun;
 
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.setting.AppSetting;
-import com.semihbg.gorun.util.StateUtils;
-
-import java.net.InetAddress;
-import java.util.concurrent.ForkJoinPool;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }, 10);
 
+        AppContext.initialize(this);
         AppSetting.instance.updateAllState();
 
     }

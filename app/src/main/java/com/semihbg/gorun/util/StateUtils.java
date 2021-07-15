@@ -1,13 +1,10 @@
 package com.semihbg.gorun.util;
 
-import com.semihbg.gorun.AppConstants;
-import com.semihbg.gorun.AppContext;
-import com.semihbg.gorun.setting.AppSetting;
+import com.semihbg.gorun.core.AppConstants;
+import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.setting.ServerStateType;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
-
-import java.util.concurrent.ForkJoinPool;
 
 public class StateUtils {
 
@@ -29,7 +26,7 @@ public class StateUtils {
                 .method("GET", null)
                 .build();
         try {
-            ResponseBody responseBody = AppContext.httpClient.newCall(request).execute().body();
+            ResponseBody responseBody = AppContext.instance().httpClient.newCall(request).execute().body();
             String responseString = responseBody.string();
             return ServerStateType.of(responseString);
         } catch (Exception e) {

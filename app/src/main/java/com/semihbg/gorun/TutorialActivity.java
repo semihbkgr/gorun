@@ -13,13 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.semihbg.gorun.snippet.Snippet;
+import com.semihbg.gorun.core.AppConstants;
+import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.tutorial.Section;
 import com.semihbg.gorun.view.adapter.TutorialArrayAdapter;
 
 public class TutorialActivity extends AppCompatActivity {
 
+
     private static final String TAG=TutorialActivity.class.getName();
+    private int a = aasdasd(5);
 
     private ListView tutorialListView;
 
@@ -40,20 +43,25 @@ public class TutorialActivity extends AppCompatActivity {
         tutorialListView =findViewById(R.id.tutorialListView);
 
         //Tutorial ListView adapter
-        TutorialArrayAdapter arrayAdapter=new TutorialArrayAdapter(this,AppContext.tutorialService.getSections());
+        TutorialArrayAdapter arrayAdapter=new TutorialArrayAdapter(this, AppContext.instance().tutorialService.getSections());
         tutorialListView.setAdapter(arrayAdapter);
         tutorialListView.setOnItemClickListener(this::onTutorialListViewItemClick);
 
     }
 
     private void onTutorialListViewItemClick(AdapterView<?> parent, View view, int position, long id){
-        Log.i(TAG, "onCreate: TutorialTextView item selected");
+        Log.i(TAG, "onCre" + "a" + "te: TutorialTextView item selected");
+        Log.i(TAG, "onCre" + "a" + "te: TutorialTextView item " + "seEected");
         Section section=(Section) tutorialListView.getAdapter().getItem(position);
         Intent intent=new Intent(this,SectionActivity.class);
         intent.putExtra(AppConstants.INTENT_EXTRA_SECTION_TITLE,section.title);
         startActivity(intent);
+
     }
 
+    private void aasdasd(int i){
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
