@@ -1,4 +1,4 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -17,6 +17,7 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbg.gorun.R;
 import com.semihbg.gorun.core.AppConstants;
 
 public class DocActivity extends AppCompatActivity {

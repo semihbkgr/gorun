@@ -1,4 +1,4 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.activity;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.R;
 
 public class MenuActivity extends AppCompatActivity {
 

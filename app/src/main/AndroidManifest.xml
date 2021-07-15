@@ -11,31 +11,31 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".SectionActivity">
+        <activity android:name=".activity.SectionActivity">
         </activity>
-        <activity android:name=".DocActivity">
+        <activity android:name=".activity.DocActivity">
         </activity>
-        <activity android:name=".SnippetActivity">
+        <activity android:name=".activity.SnippetActivity">
         </activity>
         <activity
-                android:name=".EditorActivity"
+                android:name=".activity.EditorActivity"
                 android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
-                android:name=".SettingActivity"
-                android:parentActivityName=".MenuActivity">
+                android:name=".activity.SettingActivity"
+                android:parentActivityName=".activity.MenuActivity">
         </activity>
         <activity
-                android:name=".TutorialActivity"
-                android:parentActivityName=".MenuActivity">
+                android:name=".activity.TutorialActivity"
+                android:parentActivityName=".activity.MenuActivity">
         </activity>
         <activity
-                android:name=".RunActivity"
-                android:parentActivityName=".MenuActivity">
+                android:name=".activity.RunActivity"
+                android:parentActivityName=".activity.MenuActivity">
         </activity>
-        <activity android:name=".MenuActivity">
+        <activity android:name=".activity.MenuActivity">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

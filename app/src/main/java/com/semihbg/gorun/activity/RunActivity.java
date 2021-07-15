@@ -1,4 +1,4 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbg.gorun.R;
 import com.semihbg.gorun.setting.AppSetting;
 import com.semihbg.gorun.setting.ServerStateType;
 

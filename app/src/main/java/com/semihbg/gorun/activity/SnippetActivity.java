@@ -1,4 +1,4 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.activity;
 
 import android.content.Intent;
 import android.util.Log;
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.R;
 import com.semihbg.gorun.core.AppConstants;
 import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.snippet.Snippet;

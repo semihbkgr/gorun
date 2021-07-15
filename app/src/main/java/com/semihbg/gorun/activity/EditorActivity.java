@@ -1,4 +1,4 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbg.gorun.R;
 import com.semihbg.gorun.core.AppConstants;
 import com.semihbg.gorun.message.Command;
 import com.semihbg.gorun.run.CodeRunContext;

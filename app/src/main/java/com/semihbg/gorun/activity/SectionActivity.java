@@ -1,8 +1,9 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.activity;
 
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.R;
 import com.semihbg.gorun.core.AppConstants;
 import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.tutorial.Section;

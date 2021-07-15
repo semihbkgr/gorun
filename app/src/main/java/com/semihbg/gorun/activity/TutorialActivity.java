@@ -1,4 +1,4 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbg.gorun.R;
 import com.semihbg.gorun.core.AppConstants;
 import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.tutorial.Section;
@@ -22,7 +23,6 @@ public class TutorialActivity extends AppCompatActivity {
 
 
     private static final String TAG=TutorialActivity.class.getName();
-    private int a = aasdasd(5);
 
     private ListView tutorialListView;
 
@@ -56,10 +56,6 @@ public class TutorialActivity extends AppCompatActivity {
         Intent intent=new Intent(this,SectionActivity.class);
         intent.putExtra(AppConstants.INTENT_EXTRA_SECTION_TITLE,section.title);
         startActivity(intent);
-
-    }
-
-    private void aasdasd(int i){
 
     }
 
