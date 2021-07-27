@@ -11,10 +11,6 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".activity.SectionActivity">
-        </activity>
-        <activity android:name=".activity.DocActivity">
-        </activity>
         <activity android:name=".activity.SnippetActivity">
         </activity>
         <activity
@@ -23,10 +19,6 @@
         </activity>
         <activity
                 android:name=".activity.SettingActivity"
-                android:parentActivityName=".activity.MenuActivity">
-        </activity>
-        <activity
-                android:name=".activity.TutorialActivity"
                 android:parentActivityName=".activity.MenuActivity">
         </activity>
         <activity

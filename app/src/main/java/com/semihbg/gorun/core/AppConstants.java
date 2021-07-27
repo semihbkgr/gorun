@@ -4,8 +4,6 @@ public class AppConstants {
 
     //FILE
     public static final String EXTERNAL_DIR_NAME = "GoRun";
-    public static final String LOCAL_TUTORIAL_FILE_NAME="tutorial.json";
-
 
     //NET
     public static final String SERVER_HTTP_URI = "http://192.168.1.7:8080";

@@ -7,8 +7,6 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.semihbg.gorun.snippet.*;
-import com.semihbg.gorun.tutorial.LocalTutorialService;
-import com.semihbg.gorun.tutorial.TutorialService;
 import com.semihbg.gorun.util.ListenedThreadPoolWrapper;
 import okhttp3.OkHttpClient;
 
@@ -44,7 +42,6 @@ public class AppContext {
     public final File rootDir;
     public final SnippetClient snippetClient;
     public final SnippetService snippetService;
-    public final TutorialService tutorialService;
     //TODO thread pool termination
     public final ListenedThreadPoolWrapper listenedThreadPoolWrapper;
 
@@ -54,7 +51,6 @@ public class AppContext {
         this.rootDir=createAndGetExternalDir(context);
         this.snippetClient=new DefaultSnippetClient(httpClient,gson);
         this.snippetService=new DefaultSnippetService(snippetClient);
-        this.tutorialService=new LocalTutorialService(context,gson);
         this.listenedThreadPoolWrapper=new ListenedThreadPoolWrapper(5);
     }
 

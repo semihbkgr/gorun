@@ -32,8 +32,6 @@ public class MenuActivity extends AppCompatActivity {
 
         //Set button click listeners
         runButton.setOnClickListener(this::onButtonRunClick);
-        tutorialButton.setOnClickListener(this::onButtonTutorialClick);
-        docButton.setOnClickListener(this::onButtonDocClick);
     }
 
     private void onButtonRunClick(View view){
@@ -41,15 +39,6 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void onButtonTutorialClick(View view){
-        Intent intent=new Intent(this,TutorialActivity.class);
-        startActivity(intent);
-    }
-
-    private void onButtonDocClick(View view){
-        Intent intent=new Intent(this,DocActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     public void onBackPressed() {
