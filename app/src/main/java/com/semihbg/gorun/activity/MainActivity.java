@@ -38,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
         if(AppContext.instance().tutorialService.subjectCount()==0){
             try {
                 Subject[] subjects=AppContext.instance().appSourceHelper.readAsset(AppConstant.SUBJECT_ASSET_FILE_NAME,Subject[].class);
-                long count=AppContext.instance().tutorialService.saveAll(Arrays.asList(subjects));
-                Log.i(TAG, "onCreate: Subjects have see saved successfully, count: "+count);
+                boolean saved=AppContext.instance().tutorialService.saveAll(Arrays.asList(subjects));
+                if(saved) Log.i(TAG, "onCreate: Subjects have see saved successfully");
+                else Log.i(TAG, "onCreate: Subjects have not been saved");
             } catch (IOException e) {
                 e.printStackTrace();
             }

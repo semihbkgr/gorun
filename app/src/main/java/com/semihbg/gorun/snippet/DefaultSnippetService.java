@@ -5,18 +5,17 @@ import android.os.Handler;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Consumer;
 
 public class DefaultSnippetService implements SnippetService {
 
     private final SnippetCache snippetCache;
     private final SnippetClient snippetClient;
-    private final Handler handler;
 
     public DefaultSnippetService(SnippetClient snippetClient) {
         this.snippetClient = snippetClient;
         this.snippetCache = new ListSnippetCache();
-        this.handler = new Handler();
     }
 
     @Override
@@ -30,7 +29,7 @@ public class DefaultSnippetService implements SnippetService {
 
     @Override
     public void getSnippetsAsync(Consumer<? super List<Snippet>> snippetListConsumer) {
-        if (isAvailable()) handler.post(() -> snippetListConsumer.accept(snippetCache.getCache()));
+        if (isAvailable()) ForkJoinPool.commonPool().execute((() -> snippetListConsumer.accept(snippetCache.getCache())));
         else snippetClient.getSnippetAsync(snippets -> {
                 List<Snippet> snippetList=snippets!=null?Arrays.asList(snippets): Collections.emptyList();
                 snippetCache.setCache(snippetList);

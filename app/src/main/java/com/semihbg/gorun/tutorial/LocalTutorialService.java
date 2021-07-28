@@ -2,6 +2,7 @@ package com.semihbg.gorun.tutorial;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.NonNull;
@@ -20,37 +21,38 @@ public class LocalTutorialService implements TutorialService {
     }
 
     @Override
-    public long save(@NonNull Subject subject) {
+    public boolean save(@NonNull Subject subject) {
         try (SQLiteDatabase db = AppContext.instance().appDatabaseHelper.getWritableDatabase();) {
             ContentValues values = new ContentValues();
             values.put(TutorialContract.TutorialSubject.COLUMN_NAME_TITLE, subject.getTitle());
             values.put(TutorialContract.TutorialSubject.COLUMN_NAME_DESCRIPTION, subject.getDescription());
-            return db.insert(TutorialContract.TutorialSubject.TABLE_NAME, null, values);
+            db.insert(TutorialContract.TutorialSubject.TABLE_NAME, null, values);
+            return true;
         } catch (Throwable t) {
             t.printStackTrace();
-            return 0L;
+            return false;
         }
     }
 
     @Override
-    public long saveAll(@NonNull List<? extends Subject> subjectList) {
-        try ( SQLiteDatabase db = AppContext.instance().appDatabaseHelper.getWritableDatabase()) {
+    public boolean saveAll(@NonNull List<? extends Subject> subjectList) {
+        try (SQLiteDatabase db = AppContext.instance().appDatabaseHelper.getWritableDatabase()) {
             db.beginTransaction();
-            long insetCount=subjectList.stream()
+            subjectList.stream()
                     .map(subject -> {
                         ContentValues values = new ContentValues();
                         values.put(TutorialContract.TutorialSubject.COLUMN_NAME_TITLE, subject.getTitle());
                         values.put(TutorialContract.TutorialSubject.COLUMN_NAME_DESCRIPTION, subject.getDescription());
-                        return db.insert(TutorialContract.TutorialSubject.TABLE_NAME, null, values);
-                    })
-                    .mapToInt(count->(int)(long)count)
-                    .sum();
+                        return values;
+                    }).forEach(values -> {
+                db.insert(TutorialContract.TutorialSubject.TABLE_NAME, null, values);
+            });
             db.setTransactionSuccessful();
             db.endTransaction();
-            return insetCount;
+            return true;
         } catch (Throwable t) {
             t.printStackTrace();
-            return 0L;
+            return false;
         }
     }
 
@@ -84,11 +86,9 @@ public class LocalTutorialService implements TutorialService {
 
     @Override
     public long subjectCount() {
-        try(SQLiteDatabase db=dbOpenHelper.getReadableDatabase()){
-            Cursor  cursor=db.rawQuery("SELECT COUNT(*) FROM"+ TutorialContract.TutorialSubject.TABLE_NAME,null);
-            cursor.moveToFirst();
-            return cursor.getInt(0);
-        }catch (Throwable t){
+        try (SQLiteDatabase db = dbOpenHelper.getReadableDatabase()) {
+            return DatabaseUtils.queryNumEntries(db,TutorialContract.TutorialSubject.TABLE_NAME);
+        } catch (Throwable t) {
             t.printStackTrace();
             return 0L;
         }

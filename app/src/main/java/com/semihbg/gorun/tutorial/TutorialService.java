@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface TutorialService {
 
-    long save(Subject subject);
+    boolean save(Subject subject);
 
-    long saveAll(List<? extends Subject> subjectList);
+    boolean saveAll(List<? extends Subject> subjectList);
 
     List<Subject> findSubjects();
 
