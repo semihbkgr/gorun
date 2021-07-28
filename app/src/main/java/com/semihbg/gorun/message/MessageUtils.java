@@ -1,6 +1,6 @@
 package com.semihbg.gorun.message;
 
-import static com.semihbg.gorun.message.MessageConstants.*;
+import static com.semihbg.gorun.message.MessageConstant.*;
 
 public class MessageUtils {
 

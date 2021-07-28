@@ -9,7 +9,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbg.gorun.R;
-import com.semihbg.gorun.core.AppConstants;
+import com.semihbg.gorun.core.AppConstant;
 import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.snippet.Snippet;
 import com.semihbg.gorun.view.adapter.SnippetArrayAdapter;
@@ -44,7 +44,7 @@ public class SnippetActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate: SnippetTextView item selected");
         Snippet snippet=(Snippet)snippetListView.getAdapter().getItem(position);
         Intent intent=new Intent(this,EditorActivity.class);
-        intent.putExtra(AppConstants.INTENT_EXTRA_SNIPPET_CODE,snippet.code);
+        intent.putExtra(AppConstant.INTENT_EXTRA_SNIPPET_CODE,snippet.code);
         startActivity(intent);
     }
 

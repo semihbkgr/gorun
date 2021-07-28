@@ -3,7 +3,7 @@ package com.semihbg.gorun.snippet;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
-import com.semihbg.gorun.core.AppConstants;
+import com.semihbg.gorun.core.AppConstant;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +29,7 @@ public class DefaultSnippetClient implements SnippetClient {
     public Snippet[] getSnippetsBlock() {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Snippet[]> snippetArrayReference = new AtomicReference<>();
-        Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
+        Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
         Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -57,7 +57,7 @@ public class DefaultSnippetClient implements SnippetClient {
 
     @Override
     public void getSnippetAsync(Consumer<? super Snippet[]> snippetArrayConsumer) {
-        Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
+        Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
         Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -80,7 +80,7 @@ public class DefaultSnippetClient implements SnippetClient {
     public String getSnippetAsJsonBlock() {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<String> stringReference = new AtomicReference<>();
-        Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
+        Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
         Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -106,7 +106,7 @@ public class DefaultSnippetClient implements SnippetClient {
 
     @Override
     public void getSnippetAsJsonAsync(Consumer<? super String> stringConsumer) {
-        Request request = new Request.Builder().url(AppConstants.SERVER_SNIPPET_URI).build();
+        Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
         Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override

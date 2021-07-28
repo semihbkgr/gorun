@@ -1,6 +1,6 @@
 package com.semihbg.gorun.core;
 
-public class AppConstants {
+public class AppConstant {
 
     //FILE
     public static final String EXTERNAL_DIR_NAME = "GoRun";
@@ -19,6 +19,7 @@ public class AppConstants {
     public static final String INTENT_EXTRA_SECTION_TITLE="title";
 
     //VALUE
-    public static final Long LOGO_SCREEN_TIME_MS=2500L;
+    public static final long LOGO_SCREEN_TIME_MS=2500L;
+    public static final long BACK_BUTTON_TIME_MS=1000L;
 
 }

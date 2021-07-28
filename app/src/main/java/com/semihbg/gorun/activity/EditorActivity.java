@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbg.gorun.R;
-import com.semihbg.gorun.core.AppConstants;
+import com.semihbg.gorun.core.AppConstant;
 import com.semihbg.gorun.message.Command;
 import com.semihbg.gorun.run.CodeRunContext;
 import com.semihbg.gorun.setting.AppSetting;
@@ -97,7 +97,7 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String code = getIntent().getStringExtra(AppConstants.INTENT_EXTRA_SNIPPET_CODE);
+        String code = getIntent().getStringExtra(AppConstant.INTENT_EXTRA_SNIPPET_CODE);
         if (code != null) {
             Log.i(TAG, "onStart: Activity started with code");
             codeEditor.setText(code);

@@ -34,11 +34,8 @@ class ExpirationTimerTest {
         ExpirationTimer expirationTimer=new ExpirationTimer(100L);
         expirationTimer.reflesh();
         Thread.sleep(50L);
-        assertThrows(IllegalStateException.class,
-                ()->{
-                    expirationTimer.stop();
-                    expirationTimer.result();
-                });
+        expirationTimer.stop();
+        assertThrows(IllegalStateException.class, expirationTimer::result);
     }
 
 }

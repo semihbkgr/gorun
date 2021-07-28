@@ -1,7 +1,6 @@
 package com.semihbg.gorun.core;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +12,7 @@ import okhttp3.OkHttpClient;
 
 import java.io.File;
 
-import static com.semihbg.gorun.core.AppConstants.EXTERNAL_DIR_NAME;
+import static com.semihbg.gorun.core.AppConstant.EXTERNAL_DIR_NAME;
 
 public class AppContext {
 

@@ -25,6 +25,7 @@ public class ExpirationTimer {
         this.timeInterval = timeInterval;
         this.state = new AtomicInteger(0);
         this.thread = new Thread(() -> {
+            Log.i(TAG,"name thread has been started");
             while (!isStopped()) {
                 if (!isWaiting()) {
                     try {
@@ -34,6 +35,7 @@ public class ExpirationTimer {
                     }
                 } else Thread.yield();
             }
+            Log.i(TAG,"name thread has been terminated");
         }, name);
         thread.start();
     }
