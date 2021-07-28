@@ -4,7 +4,6 @@ import android.provider.BaseColumns;
 
 public class TutorialContract {
 
-    static final String SUBJECT_ASSET_FILE_NAME = "subject.json";
 
     public static class TutorialSubject implements BaseColumns {
 

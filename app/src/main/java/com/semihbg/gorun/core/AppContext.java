@@ -46,6 +46,7 @@ public class AppContext {
     public final SnippetService snippetService;
     public final AppDatabaseHelper appDatabaseHelper;
     public final TutorialService tutorialService;
+    public final  AppSourceHelper appSourceHelper;
     //TODO thread pool termination
     public final ListenedThreadPoolWrapper listenedThreadPoolWrapper;
 
@@ -57,7 +58,8 @@ public class AppContext {
         this.snippetClient=new DefaultSnippetClient(httpClient,gson);
         this.snippetService=new DefaultSnippetService(snippetClient);
         this.appDatabaseHelper=new AppDatabaseHelper(context);
-        tutorialService=new LocalTutorialService(appDatabaseHelper);
+        this.tutorialService=new LocalTutorialService(appDatabaseHelper);
+        this.appSourceHelper=new AppSourceHelper(context,gson);
         this.listenedThreadPoolWrapper=new ListenedThreadPoolWrapper(5);
     }
 

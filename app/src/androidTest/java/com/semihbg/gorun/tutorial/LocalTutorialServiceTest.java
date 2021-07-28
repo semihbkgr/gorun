@@ -1,25 +1,22 @@
-package com.semihbg.gorun;
+package com.semihbg.gorun.tutorial;
+
 
 import android.content.Context;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.semihbg.gorun.core.AppContext;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+class LocalTutorialServiceTest {
 
-    @Test
-    public void useAppContext() {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.semihbg.gorun", appContext.getPackageName());
-    }
-
-    @Test
-    public void initializeAppContext(){
+    @Before
+    void initialize(){
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         AppContext.initialize(context);
     }
