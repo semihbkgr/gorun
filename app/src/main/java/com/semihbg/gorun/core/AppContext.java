@@ -36,7 +36,6 @@ public class AppContext {
         return instance;
     }
 
-
     public final OkHttpClient httpClient;
     public final Gson gson;
     public final File rootDir;

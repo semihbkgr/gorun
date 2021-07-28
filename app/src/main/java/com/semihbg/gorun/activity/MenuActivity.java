@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbg.gorun.R;
 
+import java.io.*;
+
 public class MenuActivity extends AppCompatActivity {
 
     private Button runButton;
@@ -32,6 +34,7 @@ public class MenuActivity extends AppCompatActivity {
 
         //Set button click listeners
         runButton.setOnClickListener(this::onButtonRunClick);
+
     }
 
     private void onButtonRunClick(View view){

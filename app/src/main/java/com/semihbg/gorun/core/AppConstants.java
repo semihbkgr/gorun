@@ -18,4 +18,7 @@ public class AppConstants {
     public static final String INTENT_EXTRA_SNIPPET_CODE="code";
     public static final String INTENT_EXTRA_SECTION_TITLE="title";
 
+    //VALUE
+    public static final Long LOGO_SCREEN_TIME_MS=2500L;
+
 }

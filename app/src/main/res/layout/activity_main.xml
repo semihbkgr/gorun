@@ -12,7 +12,9 @@
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/logo_placeholder"
-            android:id="@+id/imageView"/>
+            android:padding="50dp"
+            app:srcCompat="@drawable/go"
+            android:id="@+id/imageView"
+            android:contentDescription="@string/golang_logo"/>
 
 </LinearLayout>

@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbg.gorun.R;
+import com.semihbg.gorun.core.AppConstants;
 import com.semihbg.gorun.core.AppContext;
 import com.semihbg.gorun.setting.AppSetting;
 
 public class MainActivity extends AppCompatActivity {
-
-    //TODO go logo gif
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, MenuActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                }, 10);
+                }, AppConstants.LOGO_SCREEN_TIME_MS);
 
     }
 
