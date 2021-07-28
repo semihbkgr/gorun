@@ -1,6 +1,7 @@
 package com.semihbg.gorun.core;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,20 +37,24 @@ public class AppContext {
         return instance;
     }
 
+    public final Context context;
     public final OkHttpClient httpClient;
     public final Gson gson;
     public final File rootDir;
     public final SnippetClient snippetClient;
     public final SnippetService snippetService;
+    public final AppDatabaseHelper appDatabaseHelper;
     //TODO thread pool termination
     public final ListenedThreadPoolWrapper listenedThreadPoolWrapper;
 
     private AppContext(Context context){
+        this.context=context;
         this.httpClient=new OkHttpClient();
         this.gson=new GsonBuilder().create();
         this.rootDir=createAndGetExternalDir(context);
         this.snippetClient=new DefaultSnippetClient(httpClient,gson);
         this.snippetService=new DefaultSnippetService(snippetClient);
+        this.appDatabaseHelper=new AppDatabaseHelper(context);
         this.listenedThreadPoolWrapper=new ListenedThreadPoolWrapper(5);
     }
 

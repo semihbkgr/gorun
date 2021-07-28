@@ -2,29 +2,28 @@ package com.semihbg.gorun.tutorial;
 
 public class Subject {
 
-    private String name;
+    private String title;
+    private String description;
 
-    private int count;
-
-    public Subject(String name, int count) {
-        this.name = name;
-        this.count = count;
+    public Subject(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public int getCount() {
-        return count;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }
