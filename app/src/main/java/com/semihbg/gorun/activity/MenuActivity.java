@@ -39,12 +39,12 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void onButtonEditorClicked(View view) {
-        Intent intent = new Intent(this, RunActivity.class);
+        Intent intent = new Intent(this, EditorActivity.class);
         startActivity(intent);
     }
 
     private void onButtonTutorialClicked(View view) {
-        Intent intent = new Intent(this, RunActivity.class);
+        Intent intent = new Intent(this, SubjectActivity.class);
         startActivity(intent);
     }
 

@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.semihbg.gorun.snippet.*;
+import com.semihbg.gorun.tutorial.LocalTutorialService;
+import com.semihbg.gorun.tutorial.TutorialService;
 import com.semihbg.gorun.util.ListenedThreadPoolWrapper;
 import okhttp3.OkHttpClient;
 
@@ -43,6 +45,7 @@ public class AppContext {
     public final SnippetClient snippetClient;
     public final SnippetService snippetService;
     public final AppDatabaseHelper appDatabaseHelper;
+    public final TutorialService tutorialService;
     //TODO thread pool termination
     public final ListenedThreadPoolWrapper listenedThreadPoolWrapper;
 
@@ -54,6 +57,7 @@ public class AppContext {
         this.snippetClient=new DefaultSnippetClient(httpClient,gson);
         this.snippetService=new DefaultSnippetService(snippetClient);
         this.appDatabaseHelper=new AppDatabaseHelper(context);
+        tutorialService=new LocalTutorialService(appDatabaseHelper);
         this.listenedThreadPoolWrapper=new ListenedThreadPoolWrapper(5);
     }
 

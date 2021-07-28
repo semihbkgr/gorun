@@ -9,24 +9,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbg.gorun.R;
-import com.semihbg.gorun.snippet.Snippet;
+import com.semihbg.gorun.tutorial.Subject;
 
 import java.util.List;
 
-public class SnippetArrayAdapter extends ArrayAdapter<Snippet> {
+public class SubjectArrayAdapter extends ArrayAdapter<Subject> {
 
-    public SnippetArrayAdapter(@NonNull Context context, @NonNull List<Snippet> objects) {
-        super(context, 0, objects);
+    public SubjectArrayAdapter(@NonNull Context context, @NonNull List<Subject> objects) {
+        super(context, 0,objects);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_snippet_list_view, parent, false);
-        Snippet snippet = getItem(position);
-        TextView titleTextView = convertView.findViewById(R.id.titleTextView);
-        titleTextView.setText(snippet.title);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_subject_list_view, parent, false);
+        Subject subject=getItem(position);
+        TextView textViewTitle=convertView.findViewById(R.id.textViewTitle);
+        textViewTitle.setText(subject.getTitle());
         return convertView;
     }
 

@@ -13,6 +13,9 @@ public class TutorialContract {
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_DESCRIPTION = "description";
 
+        public static final String[] COLUMN_NAMES=new String[]
+                {_ID,COLUMN_NAME_TITLE,COLUMN_NAME_DESCRIPTION};
+
         public static final String SQL_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" + _ID + " INTEGER PRIMARY KEY," +
                         COLUMN_NAME_TITLE + " TEXT," +
