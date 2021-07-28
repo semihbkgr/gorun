@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -23,14 +24,14 @@
             android:contentDescription="@string/golang_logo"/>
 
     <Button
-            android:text="@string/menu_button_run"
+            android:text="@string/menu_button_editor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
             android:layout_marginEnd="35dp"
             android:layout_marginBottom="15dp"
             android:textAllCaps="false"
-            android:id="@+id/buttonRun"
+            android:id="@+id/buttonEditor"
             android:stateListAnimator="@null"
             android:background="@drawable/background_button_default"
             android:textColor="@color/black"/>
@@ -48,17 +49,5 @@
             android:background="@drawable/background_button_default"
             android:textColor="@color/black"/>
 
-    <Button
-            android:text="@string/menu_button_doc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
-            android:layout_marginBottom="15dp"
-            android:textAllCaps="false"
-            android:id="@+id/buttonDoc"
-            android:stateListAnimator="@null"
-            android:background="@drawable/background_button_default"
-            android:textColor="@color/black"/>
 
 </LinearLayout>

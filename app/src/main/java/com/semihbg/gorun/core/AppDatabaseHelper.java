@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import android.util.Log;
 import com.semihbg.gorun.tutorial.TutorialContract;
 import com.semihbg.gorun.tutorial.TutorialContract.TutorialSubject;
 
@@ -16,18 +17,7 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     public AppDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null,DATABASE_VERSION);
     }
-
-    @Override
-    public void onOpen(SQLiteDatabase db) {
-        Cursor tutorialCursor= db.rawQuery(TutorialSubject.SQL_COUNT, null);
-        tutorialCursor.moveToFirst();
-        int tutorialCount= tutorialCursor.getInt(0);
-        if(tutorialCount==0){
-
-        }
-        tutorialCursor.close();
-    }
-
+    
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TutorialSubject.SQL_CREATE);

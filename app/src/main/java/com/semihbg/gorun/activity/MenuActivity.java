@@ -16,9 +16,8 @@ import java.io.*;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private Button runButton;
-    private Button tutorialButton;
-    private Button docButton;
+    private Button buttonEditor;
+    private Button buttonTutorial;
 
     private volatile boolean backPressFirstClick=false;
 
@@ -27,21 +26,22 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        //Find Views
-        runButton=findViewById(R.id.buttonRun);
-        tutorialButton=findViewById(R.id.buttonTutorial);
-        docButton=findViewById(R.id.buttonDoc);
-
-        //Set button click listeners
-        runButton.setOnClickListener(this::onButtonRunClick);
+        buttonEditor=findViewById(R.id.buttonEditor);
+        buttonEditor.setOnClickListener(this::onButtonEditorClicked);
+        buttonTutorial=findViewById(R.id.buttonTutorial);
+        buttonTutorial.setOnClickListener(this::onButtonTutorialClicked);
 
     }
 
-    private void onButtonRunClick(View view){
+    private void onButtonEditorClicked(View view){
         Intent intent=new Intent(this,RunActivity.class);
         startActivity(intent);
     }
 
+    private void onButtonTutorialClicked(View view){
+        Intent intent=new Intent(this,RunActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onBackPressed() {

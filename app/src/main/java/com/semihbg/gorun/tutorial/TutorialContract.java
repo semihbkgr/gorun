@@ -1,13 +1,6 @@
 package com.semihbg.gorun.tutorial;
 
 import android.provider.BaseColumns;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.semihbg.gorun.core.AppContext;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class TutorialContract {
 
@@ -31,30 +24,6 @@ public class TutorialContract {
         public static final String SQL_COUNT =
                 "SELECT COUNT(*) FROM" + TABLE_NAME;
 
-        @Nullable
-        public static String getSqlSave(@NonNull AppContext appContext) {
-            try (InputStream inputStream = appContext.context.getAssets().open(SUBJECT_ASSET_FILE_NAME);
-                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);) {
-                Subject[] subjects = appContext.gson.fromJson(inputStreamReader, Subject[].class);
-                StringBuilder stringBuilder = new StringBuilder("INSERT INTO " + TABLE_NAME + " (id,title,description) VALUES ");
-                int id = 0;
-                for (Subject subject : subjects) {
-                    stringBuilder.append("(")
-                            .append(++id)
-                            .append(",")
-                            .append(subject.getTitle())
-                            .append(",")
-                            .append(subject.getDescription())
-                            .append(")")
-                            .append(",");
-                }
-                stringBuilder.append("\b");
-                return stringBuilder.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
 
     }
 
