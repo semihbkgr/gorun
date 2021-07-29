@@ -1,5 +1,6 @@
 package com.semihbg.gorun.util;
 
+import android.util.Log;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
