@@ -1,5 +1,7 @@
 package com.semihbg.gorun.util;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -15,14 +17,14 @@ public class ListenedThreadPoolWrapper {
         this.threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadCount);
     }
 
-    public void listenedExecute(Runnable runnable, Consumer<Void> callback) {
+    public void listenedExecute(@NonNull Runnable runnable, @NonNull Consumer<Void> callback) {
         threadPoolExecutor.execute(() -> {
             runnable.run();
             callback.accept(null);
         });
     }
 
-    public <T> void listenedExecute(Callable<T> callable, Consumer<? super T> callback) {
+    public <T> void listenedExecute(@NonNull Callable<T> callable, @NonNull Consumer<? super T> callback) {
         threadPoolExecutor.execute(() -> {
             try {
                 T data = callable.call();
@@ -33,11 +35,15 @@ public class ListenedThreadPoolWrapper {
         });
     }
 
-    public Future<?> submit(Runnable task) {
+    public void execute(@NonNull Runnable runnable){
+        threadPoolExecutor.execute(runnable);
+    }
+
+    public Future<?> submit(@NonNull Runnable task) {
         return threadPoolExecutor.submit(task);
     }
 
-    public <T> Future<T> submit(Callable<T> task) {
+    public <T> Future<T> submit(@NonNull Callable<T> task) {
         return threadPoolExecutor.submit(task);
     }
 

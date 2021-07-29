@@ -14,6 +14,8 @@ public interface TutorialService {
 
     Lesson findLesson(String title);
 
+    int deleteAllSubjects();
+
     long subjectCount();
 
 }

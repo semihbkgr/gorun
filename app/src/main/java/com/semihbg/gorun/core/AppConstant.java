@@ -5,7 +5,7 @@ public class AppConstant {
     //FILE
     public static final String EXTERNAL_DIR_NAME = "GoRun";
     public static final String TEST_ASSET_FILE_NAME = "test.json";
-    public static final String SUBJECT_ASSET_FILE_NAME = "subject.json";
+    public static final String SUBJECT_ASSET_FILE_NAME = "subjects.json";
 
     //NET
     public static final String SERVER_HTTP_URI = "http://192.168.1.7:8080";

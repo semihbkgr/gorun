@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import com.semihbg.gorun.core.AppContext;
 
@@ -13,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class LocalTutorialService implements TutorialService {
+
+    private static final String TAG = LocalTutorialService.class.getName();
 
     private final SQLiteOpenHelper dbOpenHelper;
 
@@ -27,6 +30,7 @@ public class LocalTutorialService implements TutorialService {
             values.put(TutorialContract.TutorialSubject.COLUMN_NAME_TITLE, subject.getTitle());
             values.put(TutorialContract.TutorialSubject.COLUMN_NAME_DESCRIPTION, subject.getDescription());
             db.insert(TutorialContract.TutorialSubject.TABLE_NAME, null, values);
+            Log.i(TAG, "save: Subject has been saved successfully, subject: " + subject);
             return true;
         } catch (Throwable t) {
             t.printStackTrace();
@@ -44,11 +48,11 @@ public class LocalTutorialService implements TutorialService {
                         values.put(TutorialContract.TutorialSubject.COLUMN_NAME_TITLE, subject.getTitle());
                         values.put(TutorialContract.TutorialSubject.COLUMN_NAME_DESCRIPTION, subject.getDescription());
                         return values;
-                    }).forEach(values -> {
-                db.insert(TutorialContract.TutorialSubject.TABLE_NAME, null, values);
-            });
+                    })
+                    .forEach(values -> db.insert(TutorialContract.TutorialSubject.TABLE_NAME, null, values));
             db.setTransactionSuccessful();
             db.endTransaction();
+            Log.i(TAG, "saveAll: Subject list has been saved successfully, Subject list: " + subjectList);
             return true;
         } catch (Throwable t) {
             t.printStackTrace();
@@ -85,9 +89,16 @@ public class LocalTutorialService implements TutorialService {
     }
 
     @Override
+    public int deleteAllSubjects() {
+        try (SQLiteDatabase db = dbOpenHelper.getWritableDatabase()) {
+            return db.delete(TutorialContract.TutorialSubject.TABLE_NAME, null, null);
+        }
+    }
+
+    @Override
     public long subjectCount() {
         try (SQLiteDatabase db = dbOpenHelper.getReadableDatabase()) {
-            return DatabaseUtils.queryNumEntries(db,TutorialContract.TutorialSubject.TABLE_NAME);
+            return DatabaseUtils.queryNumEntries(db, TutorialContract.TutorialSubject.TABLE_NAME);
         } catch (Throwable t) {
             t.printStackTrace();
             return 0L;

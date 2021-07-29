@@ -5,8 +5,6 @@ import android.content.Context;
 import android.util.Log;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-import androidx.test.filters.MediumTest;
-import androidx.test.filters.SmallTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.semihbg.gorun.core.AppContext;
 import org.junit.After;
@@ -37,7 +35,7 @@ public class LocalTutorialServiceTest {
     @Before
     public void launch() {
         localTutorialService = (LocalTutorialService) AppContext.instance().tutorialService;
-        Log.i(TAG, "launch: Requires objects have been created successfully");
+        Log.i(TAG, "launch: Required objects have been created successfully");
     }
 
     @After

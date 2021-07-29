@@ -32,11 +32,6 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        backTimer.stop();
-    }
 
     private void onButtonEditorClicked(View view) {
         Intent intent = new Intent(this, EditorActivity.class);

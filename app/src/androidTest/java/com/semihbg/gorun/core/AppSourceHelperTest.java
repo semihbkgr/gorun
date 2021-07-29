@@ -11,61 +11,63 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.Objects;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AppSourceHelperTest {
 
-    private static final String TAG=AppSourceHelperTest.class.getName();
+    private static final String TAG = AppSourceHelperTest.class.getName();
     private static final TestModel TEST_MODEL_INSTANCE;
     private static final String TEST_MODEL_JSON;
 
-    static{
-        TEST_MODEL_INSTANCE=new TestModel();
+    static {
+        TEST_MODEL_INSTANCE = new TestModel();
         TEST_MODEL_INSTANCE.setField1("field1Value");
         TEST_MODEL_INSTANCE.setField2("field2Value");
         TEST_MODEL_INSTANCE.setField3("field3Value");
-        TEST_MODEL_JSON=
-                "{\n" +
-                "  \"field1\": \"filed1Value\",\n" +
-                "  \"field2\": \"filed2Value\",\n" +
-                "  \"field3\": \"filed3Value\"\n" +
-                "}";
+        TEST_MODEL_JSON =
+                "{\r\n" +
+                        "  \"field1\": \"field1Value\",\r\n" +
+                        "  \"field2\": \"field2Value\",\r\n" +
+                        "  \"field3\": \"field3Value\"\r\n" +
+                        "}";
     }
 
     private AppSourceHelper appSourceHelper;
 
     @BeforeClass
-    public static void initialize(){
-        if(!AppContext.initialized()){
+    public static void initialize() {
+        if (!AppContext.initialized()) {
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
             AppContext.initialize(context);
-        }
+            Log.i(TAG, "initialize: AppContext has been initialized");
+        } else Log.i(TAG, "initialize: AppContext has already been initialized");
     }
 
-
     @Before
-    public void launch(){
-        appSourceHelper=AppContext.instance().appSourceHelper;
-        Log.i(TAG, "launch: ");
+    public void launch() {
+        appSourceHelper = AppContext.instance().appSourceHelper;
+        Log.i(TAG, "launch: Required objects have been created successfully");
     }
 
     @Test
     public void readAssetAsString() throws IOException {
         String resource = appSourceHelper.readAsset(AppConstant.TEST_ASSET_FILE_NAME);
-        assertEquals(TEST_MODEL_JSON,resource);
-        Log.i(TAG, "readAssetAsString: Resource: "+resource);
+        assertEquals(TEST_MODEL_JSON, resource);
+        Log.i(TAG, "readAssetAsString: Resource: " + resource);
     }
 
-    public void readAssetAsType() throws IOException{
-        TestModel testModel=appSourceHelper.readAsset(AppConstant.TEST_ASSET_FILE_NAME,TestModel.class);
-        assertEquals(TEST_MODEL_INSTANCE,testModel);
-        Log.i(TAG, "readAssetAsType: Resource instance: "+testModel);
+    @Test
+    public void readAssetAsType() throws IOException {
+        TestModel testModel = appSourceHelper.readAsset(AppConstant.TEST_ASSET_FILE_NAME, TestModel.class);
+        assertEquals(TEST_MODEL_INSTANCE, testModel);
+        Log.i(TAG, "readAssetAsType: Resource instance: " + testModel);
     }
 
-    private static class TestModel{
+    private static class TestModel {
 
         private String field1;
         private String field2;
@@ -111,9 +113,9 @@ public class AppSourceHelperTest {
 
             TestModel testModel = (TestModel) o;
 
-            if (field1 != null ? !field1.equals(testModel.field1) : testModel.field1 != null) return false;
-            if (field2 != null ? !field2.equals(testModel.field2) : testModel.field2 != null) return false;
-            return field3 != null ? field3.equals(testModel.field3) : testModel.field3 == null;
+            if (!Objects.equals(field1, testModel.field1)) return false;
+            if (!Objects.equals(field2, testModel.field2)) return false;
+            return Objects.equals(field3, testModel.field3);
         }
 
         @Override

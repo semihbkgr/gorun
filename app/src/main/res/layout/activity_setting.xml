@@ -56,6 +56,10 @@
                 android:gravity="center_vertical"/>
 
     </LinearLayout>
+    <Button
+            android:text="Button Clear Subjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/buttonClearSubjects"/>
 
 
 </LinearLayout>
