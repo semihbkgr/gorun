@@ -76,6 +76,8 @@ public class AppContext {
         return dir;
     }
 
-
+    public static boolean initialized(){
+        return instance!=null;
+    }
 
 }

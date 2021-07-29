@@ -27,8 +27,6 @@ android {
         unitTests.all {
             useJUnitPlatform()
         }
-        //It is used for mocking Log class in test cases
-        unitTests.returnDefaultValues = true
     }
 }
 
