@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
@@ -15,33 +14,18 @@ import com.semihbkgr.gorun.util.ExpirationTimer;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private final ExpirationTimer backTimer =
-            new ExpirationTimer(AppConstant.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
-    private Button buttonEditor;
-    private Button buttonTutorial;
+    private final ExpirationTimer backTimer = new ExpirationTimer(AppConstant.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        buttonEditor = findViewById(R.id.buttonEditor);
-        buttonEditor.setOnClickListener(this::onButtonEditorClicked);
-        buttonTutorial = findViewById(R.id.buttonTutorial);
-        buttonTutorial.setOnClickListener(this::onButtonTutorialClicked);
+
 
     }
 
-
-    private void onButtonEditorClicked(View view) {
-        Intent intent = new Intent(this, EditorActivity.class);
-        startActivity(intent);
-    }
-
-    private void onButtonTutorialClicked(View view) {
-        Intent intent = new Intent(this, SubjectActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     public void onBackPressed() {

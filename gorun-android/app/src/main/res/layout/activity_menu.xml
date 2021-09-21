@@ -9,45 +9,66 @@
         android:orientation="vertical"
         android:gravity="center"
         tools:context=".activity.MenuActivity"
-        android:background="@color/white">
+        android:background="@color/blue">
 
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/golang"
-            android:id="@+id/imageViewLogo"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
-            android:layout_marginBottom="95dp"
-            android:layout_marginStart="45dp"
-            android:layout_marginEnd="45dp"
-            android:contentDescription="@string/golang_logo"/>
 
-    <Button
-            android:text="@string/menu_button_editor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
-            android:layout_marginBottom="15dp"
-            android:textAllCaps="false"
-            android:id="@+id/buttonEditor"
-            android:stateListAnimator="@null"
-            android:background="@drawable/background_button_default"
-            android:textColor="@color/black"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="300dp"
+                  android:id="@+id/logoLayout"
+                  android:background="@color/blue_bg1">
 
-    <Button
-            android:text="@string/menu_button_tutorial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
-            android:layout_marginBottom="15dp"
-            android:textAllCaps="false"
-            android:id="@+id/buttonTutorial"
-            android:stateListAnimator="@null"
-            android:background="@drawable/background_button_default"
-            android:textColor="@color/black"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/go_king"
+                android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="150dp"
+                  android:orientation="horizontal"
+                  android:gravity="left"
+                  android:id="@+id/editorLayout"
+                  android:background="@color/blue_bg2">
+
+        <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/go_runner"/>
+
+        <TextView
+                android:text="Editor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="25dp"
+                android:textSize="23sp"
+                android:textColor="@color/black"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="150dp"
+                  android:id="@+id/tutorialLayout"
+                  android:background="@color/blue_bg3">
+
+        <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/go_inspector"
+                android:id="@+id/imageView6"/>
+
+        <TextView
+                android:text="Tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="25dp"
+                android:textSize="23sp"
+                android:textColor="@color/black"/>
+
+
+    </LinearLayout>
 
 
 </LinearLayout>
