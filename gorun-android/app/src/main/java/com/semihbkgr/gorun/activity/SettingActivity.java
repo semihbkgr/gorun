@@ -25,40 +25,30 @@ public class SettingActivity extends AppCompatActivity {
 
     private static final String TAG=SettingActivity.class.getName();
 
-    private TextView internetConnectionValueTextView;
     private TextView serverStateValueTextView;
-    private Button buttonClearSubjects;
-
-    //TODO setting MenuBar remove setting button
-    //TODO MenuBar multiple click avoid
-    //TODO General thread pool instead of common pool
+    private Button deleteSubjectsButton;
 
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.setTitle("Setting");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        buttonClearSubjects=findViewById(R.id.buttonClearSubjects);
-        buttonClearSubjects.setOnClickListener(this::onButtonClearSubjectClicked);
-        internetConnectionValueTextView=findViewById(R.id.internetConnectionValueTextView);
         serverStateValueTextView=findViewById(R.id.serverStateValueTextView);
+        deleteSubjectsButton =findViewById(R.id.buttonDeleteSubjects);
 
-        updateStateComponentsText();
+        deleteSubjectsButton.setOnClickListener(this::onButtonClearSubjectClicked);
+
+        serverStateValueTextView.setText(AppSetting.instance.appState.getServerStateType().value);
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AppSetting.instance.updateInternetConnection(this::updateInternetConnectionValueTextView);
-        AppSetting.instance.updateServerState(this::updateServerStateValueTextView);
-    }
 
     private void onButtonClearSubjectClicked(View v){
         Log.i(TAG, "onButtonClearSubjectClicked: Button clicked");
@@ -68,22 +58,6 @@ public class SettingActivity extends AppCompatActivity {
                     Log.i(TAG, "onButtonClearSubjectClicked: Subjects table cleared, Deleted row count: "+count);
                     runOnUiThread(()-> Toast.makeText(this,"Subjects table cleared, Deleted row count: "+count,Toast.LENGTH_SHORT).show());
                 });
-    }
-
-
-    private void updateStateComponentsText(){
-        if(AppSetting.instance.appState.hasInternetConnection()) internetConnectionValueTextView.setText("Online");
-        else internetConnectionValueTextView.setText("Offline");
-        serverStateValueTextView.setText(AppSetting.instance.appState.getServerStateType().value);
-    }
-
-    private void updateInternetConnectionValueTextView(boolean hasInternetConnection){
-        if(hasInternetConnection) internetConnectionValueTextView.setText("Online");
-        else internetConnectionValueTextView.setText("Offline");
-    }
-
-    private void updateServerStateValueTextView(ServerStateType serverStateType){
-        serverStateValueTextView.setText(serverStateType.value);
     }
 
 
