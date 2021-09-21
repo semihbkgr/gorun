@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.semihbg.gorun">
+          package="com.semihbkgr.gorun">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -11,25 +11,25 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".activity.SubjectActivity">
+        <activity android:name="com.semihbkgr.gorun.activity.SubjectActivity">
         </activity>
-        <activity android:name=".activity.SnippetActivity">
+        <activity android:name="com.semihbkgr.gorun.activity.SnippetActivity">
         </activity>
         <activity
-                android:name=".activity.EditorActivity"
+                android:name="com.semihbkgr.gorun.activity.EditorActivity"
                 android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
-                android:name=".activity.SettingActivity"
-                android:parentActivityName=".activity.MenuActivity">
+                android:name="com.semihbkgr.gorun.activity.SettingActivity"
+                android:parentActivityName="com.semihbkgr.gorun.activity.MenuActivity">
         </activity>
         <activity
-                android:name=".activity.RunActivity"
-                android:parentActivityName=".activity.MenuActivity">
+                android:name="com.semihbkgr.gorun.activity.RunActivity"
+                android:parentActivityName="com.semihbkgr.gorun.activity.MenuActivity">
         </activity>
-        <activity android:name=".activity.MenuActivity">
+        <activity android:name="com.semihbkgr.gorun.activity.MenuActivity">
         </activity>
-        <activity android:name=".activity.MainActivity">
+        <activity android:name="com.semihbkgr.gorun.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
