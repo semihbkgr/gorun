@@ -24,7 +24,7 @@ public class SnippetApi {
     }
 
     @GetMapping("/{id}")
-    public Mono<Snippet> getSnippet(@PathVariable("id")int id){
+    public Mono<Snippet> getSnippet(@PathVariable("id") int id) {
         return snippetHolder.findById(id);
     }
 
