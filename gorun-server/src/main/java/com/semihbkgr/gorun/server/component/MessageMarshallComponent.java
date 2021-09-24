@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.server.component;
 
 import com.semihbkgr.gorun.server.exception.MessageMarshallException;
-import com.semihbkgr.gorun.server.message.Message;
+import com.semihbkgr.gorun.server.command.Message;
 
 public interface MessageMarshallComponent {
 

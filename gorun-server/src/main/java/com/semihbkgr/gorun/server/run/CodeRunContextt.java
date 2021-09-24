@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.socket;
+package com.semihbkgr.gorun.server.run;
 
 import lombok.Getter;
 
@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.UUID;
 
 @Getter
-public class CodeRunContext {
+public class CodeRunContextt {
 
     private String id;
     private long startTimestamp;
@@ -16,7 +16,7 @@ public class CodeRunContext {
     private Process process;
     private PrintWriter printWriter;
 
-    public CodeRunContext(String code) {
+    public CodeRunContextt(String code) {
         this.code = code;
         id= UUID.randomUUID().toString();
         state=State.READY;
@@ -28,7 +28,7 @@ public class CodeRunContext {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CodeRunContext that = (CodeRunContext) o;
+        CodeRunContextt that = (CodeRunContextt) o;
         return id.equals(that.id);
     }
 

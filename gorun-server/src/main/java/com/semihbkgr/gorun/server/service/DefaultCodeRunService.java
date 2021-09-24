@@ -2,9 +2,9 @@ package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.CodeRunHandler;
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
-import com.semihbkgr.gorun.server.message.Command;
-import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.socket.CodeRunContext;
+import com.semihbkgr.gorun.server.command.Command;
+import com.semihbkgr.gorun.server.command.Message;
+import com.semihbkgr.gorun.server.run.CodeRunContextt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -24,17 +24,17 @@ public class DefaultCodeRunService implements CodeRunService {
     private final FileService fileService;
 
     @Override
-    public Flux<Message> run(CodeRunContext codeRunContext) {
+    public Flux<Message> run(CodeRunContextt codeRunContextt) {
         Flux<Message> messageFlux= Flux.create(stringFluxSink -> {
             String fileName = fileNameGenerator.generate("go");
-            String filePath = fileService.createFile(fileName, codeRunContext.getCode());
+            String filePath = fileService.createFile(fileName, codeRunContextt.getCode());
             try {
                 Process process = new ProcessBuilder()
                         .command("go", "run", filePath)
                         .redirectErrorStream(true)
                         .start();
-                codeRunContext.start(process);
-                codeRunHandler.registerRunning(Thread.currentThread(),codeRunContext);
+                codeRunContextt.start(process);
+                codeRunHandler.registerRunning(Thread.currentThread(), codeRunContextt);
                 stringFluxSink.next(Message.of(Command.START));
                 try (InputStream inputStream = process.getInputStream();
                     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -49,7 +49,7 @@ public class DefaultCodeRunService implements CodeRunService {
             } finally {
                 fileService.deleteFile(fileName);
             }
-            codeRunContext.end();
+            codeRunContextt.end();
             stringFluxSink.next(Message.of(Command.END));
             stringFluxSink.complete();
         });

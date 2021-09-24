@@ -1,11 +1,11 @@
 package com.semihbkgr.gorun.server.component;
 
 import com.semihbkgr.gorun.server.exception.MessageMarshallException;
-import com.semihbkgr.gorun.server.message.Command;
-import com.semihbkgr.gorun.server.message.Message;
+import com.semihbkgr.gorun.server.command.Command;
+import com.semihbkgr.gorun.server.command.Message;
 import org.springframework.stereotype.Component;
 
-import static com.semihbkgr.gorun.server.message.MessageConstants.*;
+import static com.semihbkgr.gorun.server.command.MessageConstants.*;
 
 @Component
 public class DefaultMessageMarshallComponent implements MessageMarshallComponent {

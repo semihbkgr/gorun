@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.message;
+package com.semihbkgr.gorun.server.command;
 
 public enum Command {
 
