@@ -11,7 +11,7 @@ public class SnippetHolder {
 
     private final SnippetHoldingStrategy snippetHoldingStrategy;
 
-    public Flux<SnippetInfo> findAllBase() {
+    public Flux<SnippetInfo> findAllInfo() {
         return snippetHoldingStrategy.findAllInfo();
     }
 

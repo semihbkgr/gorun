@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "snippet.file-path",
+      "type": "java.lang.String",
+      "description": "Description for snippet.file-path."
+  }
+] }
