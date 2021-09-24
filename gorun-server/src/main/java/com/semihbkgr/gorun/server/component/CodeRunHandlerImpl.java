@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server.component;
 
-import com.semihbkgr.gorun.server.run.CodeRunContextt;
+import com.semihbkgr.gorun.server.run.RunContextImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CodeRunHandlerImpl implements CodeRunHandler {
 
     private final Thread thread;
-    private final ConcurrentHashMap<CodeRunContextt,Thread> codeRunContextThreadConcurrentHashMap;
+    private final ConcurrentHashMap<RunContextImpl,Thread> codeRunContextThreadConcurrentHashMap;
     private final long expireTimeIntervalMs;
 
     public CodeRunHandlerImpl(@Value("${code-run-service.max-time-second:25}") int maxTimeSecond) {
@@ -21,15 +21,15 @@ public class CodeRunHandlerImpl implements CodeRunHandler {
         this.thread=new Thread(()->{
             while(true){
                 long currentTimeMs=System.currentTimeMillis();
-                for(CodeRunContextt codeRunContextt :codeRunContextThreadConcurrentHashMap.keySet()){
-                    if(codeRunContextt.isRunning()){
-                        if(currentTimeMs- codeRunContextt.getStartTimestamp()>expireTimeIntervalMs){
-                            codeRunContextt.interrupt();
-                            codeRunContextThreadConcurrentHashMap.get(codeRunContextt).interrupt();
-                            log.info("CodeRunContextt has been interrupted, It exceed expire time interval, ExpireTimeIntervalMs: {}",expireTimeIntervalMs);
+                for(RunContextImpl runContextImpl :codeRunContextThreadConcurrentHashMap.keySet()){
+                    if(runContextImpl.isRunning()){
+                        if(currentTimeMs- runContextImpl.getStartTimestamp()>expireTimeIntervalMs){
+                            runContextImpl.interrupt();
+                            codeRunContextThreadConcurrentHashMap.get(runContextImpl).interrupt();
+                            log.info("RunContextImpl has been interrupted, It exceed expire time interval, ExpireTimeIntervalMs: {}",expireTimeIntervalMs);
                         }
                     }else{
-                        codeRunContextThreadConcurrentHashMap.remove(codeRunContextt);
+                        codeRunContextThreadConcurrentHashMap.remove(runContextImpl);
                     }
                 }
             }
@@ -40,12 +40,12 @@ public class CodeRunHandlerImpl implements CodeRunHandler {
     }
 
     @Override
-    public void registerRunning(Thread thread, CodeRunContextt codeRunContextt) {
-        codeRunContextThreadConcurrentHashMap.put(codeRunContextt,thread);
+    public void registerRunning(Thread thread, RunContextImpl runContextImpl) {
+        codeRunContextThreadConcurrentHashMap.put(runContextImpl,thread);
     }
 
-    public void registerRunning(CodeRunContextt codeRunContextt){
-        this.registerRunning(Thread.currentThread(), codeRunContextt);
+    public void registerRunning(RunContextImpl runContextImpl){
+        this.registerRunning(Thread.currentThread(), runContextImpl);
     }
 
 

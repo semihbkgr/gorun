@@ -6,45 +6,45 @@ import com.semihbkgr.gorun.server.service.CodeRunLogService;
 import com.semihbkgr.gorun.server.service.CodeRunService;
 import reactor.core.publisher.Flux;
 
-public class CodeRunWebSocketSession {
+public class RunWebSocketSession {
 
     private final CodeRunService codeRunService;
     private final CodeRunLogService codeRunLogService;
-    private volatile CodeRunContextt lastCodeRunContextt;
+    private volatile RunContextImpl lastRunContextImpl;
 
-    public CodeRunWebSocketSession(CodeRunService codeRunService, CodeRunLogService codeRunLogService) {
+    public RunWebSocketSession(CodeRunService codeRunService, CodeRunLogService codeRunLogService) {
         this.codeRunService = codeRunService;
         this.codeRunLogService = codeRunLogService;
-        lastCodeRunContextt = null;
+        lastRunContextImpl = null;
     }
 
     public Flux<Message> executeCommand(Message message) {
         if (message.command == Command.RUN) {
-            if (lastCodeRunContextt == null || !lastCodeRunContextt.isRunning()) {
-                lastCodeRunContextt = new CodeRunContextt(message.body);
-                return codeRunService.run(lastCodeRunContextt)
-                        .doOnComplete(() -> codeRunLogService.log(lastCodeRunContextt));
+            if (lastRunContextImpl == null || !lastRunContextImpl.isRunning()) {
+                lastRunContextImpl = new RunContextImpl(message.body);
+                return codeRunService.run(lastRunContextImpl)
+                        .doOnComplete(() -> codeRunLogService.log(lastRunContextImpl));
             } else {
                 return Flux.just(Message.of(Command.ERROR, "This session already has an on going process"));
             }
         } else if (message.command == Command.INPUT) {
-            if (lastCodeRunContextt != null && lastCodeRunContextt.isRunning()) {
+            if (lastRunContextImpl != null && lastRunContextImpl.isRunning()) {
                 return codeRunService.execute(() ->
-                        lastCodeRunContextt.sendInput(message.body)
+                        lastRunContextImpl.sendInput(message.body)
                 ).thenMany(Flux.just(Message.of(Command.OUTPUT, message.body.concat(System.lineSeparator()))));
             } else {
                 return Flux.just(Message.of(Command.ERROR, "This session has not an on going process"));
             }
         } else if (message.command == Command.INTERRUPT) {
-            if (lastCodeRunContextt != null && lastCodeRunContextt.isRunning()) {
-                lastCodeRunContextt.interrupt();
+            if (lastRunContextImpl != null && lastRunContextImpl.isRunning()) {
+                lastRunContextImpl.interrupt();
                 return Flux.just(Message.of(Command.INFO, "Interrupted"));
             } else {
                 return Flux.just(Message.of(Command.ERROR, "This session has not an on going process"));
             }
         } else if (message.command == Command.DISCONNECT) {
-            if (lastCodeRunContextt != null && lastCodeRunContextt.isRunning()) {
-                lastCodeRunContextt.interrupt();
+            if (lastRunContextImpl != null && lastRunContextImpl.isRunning()) {
+                lastRunContextImpl.interrupt();
                 return Flux.empty();
             }
         }

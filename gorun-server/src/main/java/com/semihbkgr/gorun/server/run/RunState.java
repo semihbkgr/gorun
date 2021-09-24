@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server.run;
 
-public interface CodeRunContext {
+public enum RunState {
 
 
 

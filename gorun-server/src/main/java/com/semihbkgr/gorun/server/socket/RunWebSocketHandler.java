@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.server.socket;
 
 import com.semihbkgr.gorun.server.component.MessageMarshallComponent;
-import com.semihbkgr.gorun.server.run.CodeRunWebSocketSession;
+import com.semihbkgr.gorun.server.run.RunWebSocketSession;
 import com.semihbkgr.gorun.server.service.CodeRunLogService;
 import com.semihbkgr.gorun.server.service.CodeRunService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 @Configuration
 @RequiredArgsConstructor
-public class CodeRunWebSocketHandler implements WebSocketHandler {
+public class RunWebSocketHandler implements WebSocketHandler {
 
     private final CodeRunService codeRunService;
     private final CodeRunLogService codeRunLogService;
@@ -21,13 +21,13 @@ public class CodeRunWebSocketHandler implements WebSocketHandler {
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
-        CodeRunWebSocketSession codeRunWebSocketSession =
-                new CodeRunWebSocketSession(codeRunService,codeRunLogService);
+        RunWebSocketSession runWebSocketSession =
+                new RunWebSocketSession(codeRunService,codeRunLogService);
         return session
                 .receive()
                 .map(WebSocketMessage::getPayloadAsText)
                 .map(messageMarshallComponent::unmarshall)
-                .flatMap(codeRunWebSocketSession::executeCommand)
+                .flatMap(runWebSocketSession::executeCommand)
                 .map(messageMarshallComponent::marshall)
                 .map(session::textMessage)
                 .flatMap(i -> session.send(Mono.just(i)))

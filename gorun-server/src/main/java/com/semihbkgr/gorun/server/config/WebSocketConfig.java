@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server.config;
 
-import com.semihbkgr.gorun.server.socket.CodeRunWebSocketHandler;
+import com.semihbkgr.gorun.server.socket.RunWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +20,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WebSocketConfig {
 
-    private final CodeRunWebSocketHandler codeRunWebSocketHandler;
+    private final RunWebSocketHandler runWebSocketHandler;
 
     @Bean
     public HandlerMapping handlerMapping() {
         Map<String, WebSocketHandler> map = new HashMap<>();
-        map.put("/run", codeRunWebSocketHandler);
+        map.put("/run", runWebSocketHandler);
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(map);
         mapping.setOrder(Ordered.HIGHEST_PRECEDENCE);

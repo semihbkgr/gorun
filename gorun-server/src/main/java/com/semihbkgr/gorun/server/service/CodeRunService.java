@@ -1,12 +1,12 @@
 package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.command.Message;
-import com.semihbkgr.gorun.server.run.CodeRunContextt;
+import com.semihbkgr.gorun.server.run.RunContextImpl;
 import reactor.core.publisher.Flux;
 
 public interface CodeRunService {
 
-    Flux<Message> run(CodeRunContextt codeRunContextt);
+    Flux<Message> run(RunContextImpl runContextImpl);
 
     Flux<Void> execute(Execution execution);
 

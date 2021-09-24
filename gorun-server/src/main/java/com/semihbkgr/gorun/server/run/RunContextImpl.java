@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.UUID;
 
 @Getter
-public class CodeRunContextt {
+public class RunContextImpl {
 
     private String id;
     private long startTimestamp;
@@ -16,7 +16,7 @@ public class CodeRunContextt {
     private Process process;
     private PrintWriter printWriter;
 
-    public CodeRunContextt(String code) {
+    public RunContextImpl(String code) {
         this.code = code;
         id= UUID.randomUUID().toString();
         state=State.READY;
@@ -28,7 +28,7 @@ public class CodeRunContextt {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CodeRunContextt that = (CodeRunContextt) o;
+        RunContextImpl that = (RunContextImpl) o;
         return id.equals(that.id);
     }
 
