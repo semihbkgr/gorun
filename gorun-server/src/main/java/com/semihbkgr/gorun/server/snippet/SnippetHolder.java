@@ -11,8 +11,8 @@ public class SnippetHolder {
 
     private final SnippetHoldingStrategy snippetHoldingStrategy;
 
-    public Flux<SnippetBase> findAllBase() {
-        return snippetHoldingStrategy.findAllBase();
+    public Flux<SnippetInfo> findAllBase() {
+        return snippetHoldingStrategy.findAllInfo();
     }
 
     public Mono<Snippet> findById(int id) {

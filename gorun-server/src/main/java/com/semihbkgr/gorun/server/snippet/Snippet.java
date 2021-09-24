@@ -6,11 +6,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Snippet extends SnippetBase {
+public class Snippet {
 
+    private int id;
+    private String title;
+    private String brief;
     private String explanation;
     private String code;
 

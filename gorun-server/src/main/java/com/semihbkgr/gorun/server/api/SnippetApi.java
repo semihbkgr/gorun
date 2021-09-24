@@ -15,9 +15,6 @@ public class SnippetApi {
 
     private final SnippetHolder snippetHolder;
 
-    @GetMapping
-    public Flux<Snippet> snippets() {
-        return Flux.just(snippetHolder.getSnippets());
-    }
+
 
 }

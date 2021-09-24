@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SnippetBase {
+public class SnippetInfo {
 
     private int id;
     private String title;
     private String brief;
 
-    public static SnippetBase of(Snippet snippet) {
-        return new SnippetBase(snippet.getId(), snippet.getTitle(), snippet.getBrief());
+    public static SnippetInfo of(Snippet snippet) {
+        return new SnippetInfo(snippet.getId(), snippet.getTitle(), snippet.getBrief());
     }
 
 }

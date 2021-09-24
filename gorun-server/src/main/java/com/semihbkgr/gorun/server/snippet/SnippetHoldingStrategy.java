@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 
 public interface SnippetHoldingStrategy {
 
-    Flux<SnippetBase> findAllBase();
+    Flux<SnippetInfo> findAllInfo();
 
     Mono<Snippet> findById(int id);
 

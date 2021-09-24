@@ -26,7 +26,7 @@ public class SnippetStartupInterceptor implements CommandLineRunner {
         String snippetsString=new String(bytes, StandardCharsets.UTF_8);
         Snippet[] snippets=objectMapper.readValue(snippetsString,Snippet[].class);
         log.info("Snippets has been read successfully, {} snippet found",snippets.length);
-        snippetHolder.setSnippets(snippets);
+
     }
 
 }

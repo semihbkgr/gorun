@@ -11,13 +11,21 @@ public class InMemorySnippetHoldingStrategy implements SnippetHoldingStrategy {
     private final Map<Integer, Snippet> snippetMap = new ConcurrentHashMap<>();
 
     @Override
-    public Flux<SnippetBase> findAllBase() {
-        return Flux.fromStream(snippetMap.entrySet().parallelStream().map(Map.Entry::getValue));
+    public Flux<SnippetInfo> findAllInfo() {
+        return Flux.fromStream(
+                snippetMap.entrySet()
+                        .parallelStream()
+                        .map(entry -> SnippetInfo.of(entry.getValue()))
+        );
     }
 
     @Override
     public Mono<Snippet> findById(int id) {
-        return Mono.just(snippetMap.get(0));
+        return Mono.just(snippetMap.get(id));
+    }
+
+    public Map<Integer, Snippet> getSnippetMap() {
+        return snippetMap;
     }
 
 }

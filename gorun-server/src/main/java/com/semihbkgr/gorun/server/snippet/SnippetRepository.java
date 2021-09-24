@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 
 public interface SnippetRepository {
 
-    Flux<SnippetBase> findAllInfo();
+    Flux<SnippetInfo> findAllInfo();
 
     Mono<Snippet> findById();
 
