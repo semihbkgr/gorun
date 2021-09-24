@@ -1,18 +1,22 @@
 package com.semihbkgr.gorun.server.snippet;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Component
+@RequiredArgsConstructor
 public class SnippetHolder {
 
-    private Snippet[] snippets;
+    private final SnippetHoldingStrategy snippetHoldingStrategy;
 
-    public Snippet[] getSnippets() {
-        return snippets;
+    public Flux<SnippetBase> findAllBase() {
+        return snippetHoldingStrategy.findAllBase();
     }
 
-    public void setSnippets(Snippet[] snippets) {
-        this.snippets = snippets;
+    public Mono<Snippet> findById(int id) {
+        return snippetHoldingStrategy.findById(id);
     }
 
 }

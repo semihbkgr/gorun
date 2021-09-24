@@ -1,6 +1,5 @@
 package com.semihbkgr.gorun.server.api;
 
-
 import com.semihbkgr.gorun.server.snippet.Snippet;
 import com.semihbkgr.gorun.server.snippet.SnippetHolder;
 import lombok.RequiredArgsConstructor;
