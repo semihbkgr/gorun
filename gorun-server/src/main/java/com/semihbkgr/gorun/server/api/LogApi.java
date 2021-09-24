@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.server.api;
 
+import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.service.CodeRunLogService;
-import com.semihbkgr.gorun.server.run.RunContextImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,7 @@ public class LogApi {
     private final CodeRunLogService codeRunLogService;
 
     @GetMapping
-    public Flux<RunContextImpl> logs(){
+    public Flux<DefaultRunContext> logs(){
         return Flux.fromIterable(codeRunLogService.getLogs());
     }
 

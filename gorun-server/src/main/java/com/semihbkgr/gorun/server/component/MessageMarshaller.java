@@ -1,9 +1,9 @@
 package com.semihbkgr.gorun.server.component;
 
 import com.semihbkgr.gorun.server.exception.MessageMarshallException;
-import com.semihbkgr.gorun.server.command.Message;
+import com.semihbkgr.gorun.server.message.Message;
 
-public interface MessageMarshallComponent {
+public interface MessageMarshaller {
 
     Message unmarshall(String data) throws MessageMarshallException;
 

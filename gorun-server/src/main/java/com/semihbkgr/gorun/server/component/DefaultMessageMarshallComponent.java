@@ -1,14 +1,14 @@
 package com.semihbkgr.gorun.server.component;
 
 import com.semihbkgr.gorun.server.exception.MessageMarshallException;
-import com.semihbkgr.gorun.server.command.Command;
-import com.semihbkgr.gorun.server.command.Message;
+import com.semihbkgr.gorun.server.message.Command;
+import com.semihbkgr.gorun.server.message.Message;
 import org.springframework.stereotype.Component;
 
-import static com.semihbkgr.gorun.server.command.MessageConstants.*;
+import static com.semihbkgr.gorun.server.message.MessageConstants.*;
 
 @Component
-public class DefaultMessageMarshallComponent implements MessageMarshallComponent {
+public class DefaultMessageMarshallComponent implements MessageMarshaller {
 
     public Message unmarshall(String data,boolean isInResponse) throws MessageMarshallException {
         data = data.strip();

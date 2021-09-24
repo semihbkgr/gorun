@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.UUID;
 
 @Getter
-public class RunContextImpl {
+public class DefaultRunContext {
 
     private String id;
     private long startTimestamp;
@@ -16,7 +16,7 @@ public class RunContextImpl {
     private Process process;
     private PrintWriter printWriter;
 
-    public RunContextImpl(String code) {
+    public DefaultRunContext(String code) {
         this.code = code;
         id= UUID.randomUUID().toString();
         state=State.READY;
@@ -28,7 +28,7 @@ public class RunContextImpl {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RunContextImpl that = (RunContextImpl) o;
+        DefaultRunContext that = (DefaultRunContext) o;
         return id.equals(that.id);
     }
 

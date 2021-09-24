@@ -1,9 +1,9 @@
 package com.semihbkgr.gorun.server.component;
 
-import com.semihbkgr.gorun.server.run.RunContextImpl;
+import com.semihbkgr.gorun.server.run.DefaultRunContext;
 
 public interface CodeRunHandler {
 
-    void registerRunning(Thread thread, RunContextImpl runContextImpl);
+    void registerRunning(Thread thread, DefaultRunContext defaultRunContext);
 
 }

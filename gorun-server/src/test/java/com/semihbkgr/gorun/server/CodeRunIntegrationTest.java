@@ -1,8 +1,8 @@
 package com.semihbkgr.gorun.server;
 
 import com.semihbkgr.gorun.server.component.DefaultMessageMarshallComponent;
-import com.semihbkgr.gorun.server.command.Command;
-import com.semihbkgr.gorun.server.command.Message;
+import com.semihbkgr.gorun.server.message.Command;
+import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.util.InputBuilder;
 import okhttp3.*;
 import okio.ByteString;

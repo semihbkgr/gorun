@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.server.util;
 
-import com.semihbkgr.gorun.server.command.Command;
-import com.semihbkgr.gorun.server.command.Message;
+import com.semihbkgr.gorun.server.message.Command;
+import com.semihbkgr.gorun.server.message.Message;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

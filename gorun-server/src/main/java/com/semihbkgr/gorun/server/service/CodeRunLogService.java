@@ -1,13 +1,13 @@
 package com.semihbkgr.gorun.server.service;
 
-import com.semihbkgr.gorun.server.run.RunContextImpl;
+import com.semihbkgr.gorun.server.run.DefaultRunContext;
 
 import java.util.List;
 
 public interface CodeRunLogService {
 
-    void log(RunContextImpl runContextImpl);
+    void log(DefaultRunContext defaultRunContext);
 
-    List<RunContextImpl> getLogs();
+    List<DefaultRunContext> getLogs();
 
 }

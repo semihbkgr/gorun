@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.command;
+package com.semihbkgr.gorun.server.message;
 
 import java.util.Objects;
 
