@@ -10,7 +10,7 @@ import static com.semihbkgr.gorun.server.message.MessageConstants.*;
 @Component
 public class MessageMarshallerImpl implements MessageMarshaller {
 
-    public Message unmarshall(String data,boolean isInResponse) throws MessageMarshallException {
+    public Message unmarshall(String data, boolean isInResponse) throws MessageMarshallException {
         data = data.strip();
         if (data.startsWith(MESSAGE_BEGIN_CHARACTER) && data.endsWith(MESSAGE_END_CHARACTER)) {
             data = data.substring(1, data.length() - 1);
@@ -38,11 +38,11 @@ public class MessageMarshallerImpl implements MessageMarshaller {
 
     @Override
     public Message unmarshall(String data) throws MessageMarshallException {
-        return this.unmarshall(data,false);
+        return this.unmarshall(data, false);
     }
 
-    public String marshall(Message message,boolean isInResponse) {
-        if(message.command.isInResponse!=isInResponse)
+    public String marshall(Message message, boolean isInResponse) {
+        if (message.command.isInResponse != isInResponse)
             throw new MessageMarshallException(String.format("Illegal command field, command : %s", message.command.name()));
         StringBuilder unmarshallStringBuilder = new StringBuilder();
         unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
@@ -56,7 +56,7 @@ public class MessageMarshallerImpl implements MessageMarshaller {
 
     @Override
     public String marshall(Message message) {
-        return this.marshall(message,true);
+        return this.marshall(message, true);
     }
 
 }

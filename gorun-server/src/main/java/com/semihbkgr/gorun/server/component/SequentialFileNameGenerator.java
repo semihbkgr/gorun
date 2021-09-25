@@ -1,5 +1,6 @@
 package com.semihbkgr.gorun.server.component;
 
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,7 +15,7 @@ public class SequentialFileNameGenerator implements FileNameGenerator {
     }
 
     @Override
-    public String generate(String extension) {
+    public String generate(@NonNull String extension) {
         return String.valueOf(sequence.getAndIncrement())
                 .concat(".")
                 .concat(extension);
