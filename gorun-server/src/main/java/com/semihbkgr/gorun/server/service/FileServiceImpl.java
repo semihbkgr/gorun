@@ -1,22 +1,25 @@
 package com.semihbkgr.gorun.server.service;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Service
 @Slf4j
-public class DefaultFileService implements FileService {
+public class FileServiceImpl implements FileService {
 
     private final Path rootPath;
 
-    public DefaultFileService(@Value("${file.root-path:files}") String rootFolderPath) {
+    public FileServiceImpl(@Value("${file.root-path:files}") String rootFolderPath) {
         this.rootPath = Path.of(rootFolderPath);
     }
 
@@ -31,12 +34,14 @@ public class DefaultFileService implements FileService {
     }
 
     @PreDestroy
-    void clearAllFilesAndDeleteRootDir() throws IOException {
-        Files.delete(rootPath);
+    void clearAllFilesAndDeleteRootDir() {
+        deleteRootDir();
     }
 
     @Override
     public String createFile(String fileName, String content) {
+
+        DataBufferUtils.write()
         try {
             Path filePath = rootPath.resolve(fileName);
             Files.createFile(filePath);
@@ -57,6 +62,12 @@ public class DefaultFileService implements FileService {
             e.printStackTrace();
             throw new RuntimeException("FileDeleteException");
         }
+    }
+
+    @Override
+    @SneakyThrows
+    public void deleteRootDir() {
+        Files.delete(rootPath);
     }
 
     @Override

@@ -1,23 +1,16 @@
 package com.semihbkgr.gorun.server.socket;
 
-import com.semihbkgr.gorun.server.message.Command;
-import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.run.*;
-import reactor.core.publisher.Flux;
+import com.semihbkgr.gorun.server.run.RunContext;
+import lombok.Getter;
+import lombok.Setter;
+
 
 public class RunWebSocketSession {
 
-    private volatile RunContext runContext = null;
-
-    public Flux<Message> executeMessage(Message message) {
-        switch (message.command) {
-            case RUN:
-                return executeCommandRun(message.body);
-
-        }
+    public volatile RunContext runContext;
 
 
-        if (message.command == Command.RUN) {
+        /*if (message.command == Command.RUN) {
             if (lastDefaultRunContext == null || !lastDefaultRunContext.isRunning()) {
                 lastDefaultRunContext = new DefaultRunContextt(message.body);
                 return codeRunService.run(lastDefaultRunContext)
@@ -46,16 +39,15 @@ public class RunWebSocketSession {
                 return Flux.empty();
             }
         }
-        return Flux.just(Message.of(Command.ERROR, "Illegal Command"));
-    }
+        return Flux.just(Message.of(Command.ERROR, "Illegal Command"));*/
 
-    private Flux<Message> executeCommandRun(String body) {
+   /* private Flux<Message> executeCommandRun(String body) {
         if (runContext != null && runContext.getStatus() != RunStatus.EXECUTING) {
             this.runContext=new DefaultRunContext(body);
         } else
             return Flux.just(Message.of(Command.ERROR, "This session already has an on going process"));
 
-    }
+    }*/
 
 
 }
