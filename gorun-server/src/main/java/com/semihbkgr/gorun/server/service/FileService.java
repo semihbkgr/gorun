@@ -6,9 +6,9 @@ import java.nio.file.Path;
 
 public interface FileService {
 
-    Mono<Void> createFile(String fileName, String content);
+    Mono<String> createFile(String fileName, String content);
 
-    Mono<Void> deleteFile(String fileName);
+    Mono<String> deleteFile(String fileName);
 
     Path getRootDirPath();
 

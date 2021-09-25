@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -61,28 +60,28 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Mono<Void> createFile(String fileName, String content) {
+    public Mono<String> createFile(String fileName, String content) {
         return Mono.create(sink -> {
             try {
                 var filePath = Files.createFile(rootPath.resolve(fileName));
                 Files.write(filePath, content.getBytes());
-                sink.success();
+                sink.success(fileName);
             } catch (IOException e) {
                 sink.error(e);
             }
-        }).subscribeOn(Schedulers.boundedElastic()).then();
+        });
     }
 
     @Override
-    public Mono<Void> deleteFile(String fileName) {
+    public Mono<String> deleteFile(String fileName) {
         return Mono.create(sink -> {
             try {
                 Files.delete(rootPath.resolve(fileName));
-                sink.success();
+                sink.success(fileName);
             } catch (IOException e) {
                 sink.error(e);
             }
-        }).subscribeOn(Schedulers.boundedElastic()).then();
+        });
     }
 
     @Override

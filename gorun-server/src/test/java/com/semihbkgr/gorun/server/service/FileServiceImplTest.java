@@ -12,24 +12,25 @@ class FileServiceImplTest {
 
     static final String ROOT_PATH = "test-files";
 
-    final FileServiceImpl fileServiceImpl = new FileServiceImpl(ROOT_PATH);
+    final FileServiceImpl fileService = new FileServiceImpl(ROOT_PATH);
 
     @BeforeEach
     void createRootDir() throws IOException {
-        fileServiceImpl.createRootDirIfNotExists();
+        fileService.createRootDirIfNotExists();
     }
 
     @AfterEach
     void deleteRootDir() throws IOException {
-        fileServiceImpl.clearAndDeleteRootDir();
+        fileService.clearAndDeleteRootDir();
     }
 
     @Test
     void createFile() {
         final var fileName = "test.txt";
         final var fileContent = "FileServiceImplTest#createFile()";
-        var mono = fileServiceImpl.createFile(fileName, fileContent).log();
+        var mono = fileService.createFile(fileName, fileContent).log();
         StepVerifier.create(mono)
+                .expectNext(fileName)
                 .verifyComplete();
     }
 
@@ -39,8 +40,9 @@ class FileServiceImplTest {
         final var fileContent = "FileServiceImplTest#createFile()";
         var filePath = Files.createFile(Path.of(ROOT_PATH).resolve(fileName));
         Files.write(filePath, fileContent.getBytes());
-        var mono = fileServiceImpl.deleteFile(fileName).log();
+        var mono = fileService.deleteFile(fileName).log();
         StepVerifier.create(mono)
+                .expectNext(fileName)
                 .verifyComplete();
     }
 

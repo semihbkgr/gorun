@@ -2,21 +2,24 @@ package com.semihbkgr.gorun.server.run;
 
 public abstract class AbstractRunContext implements RunContext{
 
-    protected RunStatus runStatus;
-    protected final RunInfo runInfo;
+    protected final Process process;
+    protected RunStatus status;
 
-    protected AbstractRunContext(String code) {
-        this.runInfo = new RunInfo(code);
+    protected AbstractRunContext(Process process) {
+        this.process=process;
+        this.status=RunStatus.EXECUTING;
     }
 
     @Override
-    public final RunStatus getStatus() {
-        return this.getStatus();
+    public final RunStatus status() {
+        return this.status;
     }
 
+
     @Override
-    public final RunInfo getRunInfo() {
-        return this.runInfo;
+    public final Process process(){
+        return this.process;
     }
+
 
 }
