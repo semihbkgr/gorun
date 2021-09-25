@@ -31,7 +31,7 @@ public class MessageProcessServiceImpl implements MessageProcessService {
             case INPUT:
                 return processInputCommand(session, message);
             case INTERRUPT:
-                return processInterruptCommand(session, message);
+                return processInterruptCommand(session);
             default:
                 return Flux.error(new IllegalStateException("Unhandled message command, command: " + message.command.name()));
         }
@@ -54,7 +54,9 @@ public class MessageProcessServiceImpl implements MessageProcessService {
                     })
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                     .map(messageBody -> Message.of(Command.OUTPUT, messageBody))
-                    .onErrorReturn(Message.of(Command.ERROR));
+                    .onErrorReturn(Message.of(Command.ERROR))
+                    .doOnComplete(()->session.runContext.setStatus(RunStatus.COMPLETED))
+                    .doOnError((e)->session.runContext.setStatus(RunStatus.ERROR));
         } else
             return Flux.just(Message.of(Command.ERROR, "This session has  already an on going process"));
     }
@@ -77,10 +79,11 @@ public class MessageProcessServiceImpl implements MessageProcessService {
             return Flux.just(Message.of(Command.ERROR, "This session has not any on going process"));
     }
 
-    private Flux<Message> processInterruptCommand(RunWebSocketSession session, Message message) {
+    private Flux<Message> processInterruptCommand(RunWebSocketSession session) {
         if (session.runContext != null && session.runContext.status() == RunStatus.EXECUTING) {
             return Flux.defer(() -> {
                 session.runContext.process().destroy();
+                session.runContext.setStatus(RunStatus.INTERRUPTED);
                 return Mono.just(Message.of(Command.INFO));
             });
         } else

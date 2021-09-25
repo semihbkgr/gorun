@@ -15,6 +15,10 @@ public abstract class AbstractRunContext implements RunContext{
         return this.status;
     }
 
+    @Override
+    public final void setStatus(RunStatus status) {
+        this.status=status;
+    }
 
     @Override
     public final Process process(){

@@ -5,6 +5,6 @@ public enum RunStatus {
     EXECUTING,
     COMPLETED,
     INTERRUPTED,
-    UNEXPECTED;
+    ERROR;
 
 }
