@@ -1,14 +1,13 @@
 package com.semihbkgr.gorun.server.service;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,46 +33,61 @@ public class FileServiceImpl implements FileService {
     }
 
     @PreDestroy
-    void clearAllFilesAndDeleteRootDir() {
-        deleteRootDir();
+    void clearAndDeleteRootDir() throws IOException {
+        clearAllFilesAndDeleteDir(rootPath);
     }
 
-    @Override
-    public String createFile(String fileName, String content) {
+    private void clearAllFilesAndDeleteDir(Path dir) throws IOException {
+        if (Files.isDirectory(dir)) {
+            Files.walk(dir).parallel().forEach(subPath -> {
+                if (subPath == dir) return;
+                if (Files.isDirectory(subPath)) {
+                    try {
+                        clearAllFilesAndDeleteDir(subPath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        Files.delete(subPath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-        DataBufferUtils.write()
-        try {
-            Path filePath = rootPath.resolve(fileName);
-            Files.createFile(filePath);
-            Files.write(filePath, content.getBytes());
-            return filePath.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("FileCreateException");
+            });
+            Files.delete(dir);
         }
     }
 
     @Override
-    public void deleteFile(String fileName) {
-        try {
-            Path filePath = rootPath.resolve(fileName);
-            Files.delete(filePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("FileDeleteException");
-        }
+    public Mono<Void> createFile(String fileName, String content) {
+        return Mono.create(sink -> {
+            try {
+                var filePath = Files.createFile(rootPath.resolve(fileName));
+                Files.write(filePath, content.getBytes());
+                sink.success();
+            } catch (IOException e) {
+                sink.error(e);
+            }
+        }).subscribeOn(Schedulers.boundedElastic()).then();
     }
 
     @Override
-    @SneakyThrows
-    public void deleteRootDir() {
-        Files.delete(rootPath);
+    public Mono<Void> deleteFile(String fileName) {
+        return Mono.create(sink -> {
+            try {
+                Files.delete(rootPath.resolve(fileName));
+                sink.success();
+            } catch (IOException e) {
+                sink.error(e);
+            }
+        }).subscribeOn(Schedulers.boundedElastic()).then();
     }
 
     @Override
     public Path getRootDirPath() {
         return this.rootPath;
     }
-
 
 }

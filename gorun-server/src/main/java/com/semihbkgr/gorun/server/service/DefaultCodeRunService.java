@@ -27,7 +27,7 @@ public class DefaultCodeRunService implements CodeRunService {
     public Flux<Message> run(DefaultRunContextt defaultRunContextt) {
         Flux<Message> messageFlux= Flux.create(stringFluxSink -> {
             String fileName = fileNameGenerator.generate("go");
-            String filePath = fileService.createFile(fileName, defaultRunContextt.getCode());
+            String filePath = "";//fileService.createFile(fileName, defaultRunContextt.getCode());
             try {
                 Process process = new ProcessBuilder()
                         .command("go", "run", filePath)

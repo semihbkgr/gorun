@@ -1,14 +1,14 @@
 package com.semihbkgr.gorun.server.service;
 
+import reactor.core.publisher.Mono;
+
 import java.nio.file.Path;
 
 public interface FileService {
 
-    String createFile(String fileName, String content);
+    Mono<Void> createFile(String fileName, String content);
 
-    void deleteFile(String fileName);
-
-    void deleteRootDir();
+    Mono<Void> deleteFile(String fileName);
 
     Path getRootDirPath();
 

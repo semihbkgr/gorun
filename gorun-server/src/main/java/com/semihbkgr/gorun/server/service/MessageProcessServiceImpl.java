@@ -17,19 +17,20 @@ public class MessageProcessServiceImpl implements MessageProcessService {
 
     @Override
     public Flux<Message> process(RunWebSocketSession session, Message message) {
-        switch (message.command){
+        /*switch (message.command){
             case RUN:
                 return processRunCommand(session,message);
 
-        }
+        }*/
+        return Flux.error((Throwable) null);
     }
 
-    private Flux<Message> processRunCommand(RunWebSocketSession session, Message message){
+    /*private Flux<Message> processRunCommand(RunWebSocketSession session, Message message){
         if(session.runContext!=null && session.runContext.getStatus()!=RunStatus.EXECUTING){
             return fileService.createFile(fileNameGenerator.generate("go"),)
         }else
             return Flux.just(Message.of(Command.ERROR, "This session already has an on going process"));
-    }
+    }*/
 
 
 }
