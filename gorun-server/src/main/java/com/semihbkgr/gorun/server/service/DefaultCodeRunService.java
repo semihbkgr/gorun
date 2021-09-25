@@ -4,7 +4,7 @@ import com.semihbkgr.gorun.server.component.CodeRunHandler;
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.run.DefaultRunContext;
+import com.semihbkgr.gorun.server.run.DefaultRunContextt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -24,17 +24,17 @@ public class DefaultCodeRunService implements CodeRunService {
     private final FileService fileService;
 
     @Override
-    public Flux<Message> run(DefaultRunContext defaultRunContext) {
+    public Flux<Message> run(DefaultRunContextt defaultRunContextt) {
         Flux<Message> messageFlux= Flux.create(stringFluxSink -> {
             String fileName = fileNameGenerator.generate("go");
-            String filePath = fileService.createFile(fileName, defaultRunContext.getCode());
+            String filePath = fileService.createFile(fileName, defaultRunContextt.getCode());
             try {
                 Process process = new ProcessBuilder()
                         .command("go", "run", filePath)
                         .redirectErrorStream(true)
                         .start();
-                defaultRunContext.start(process);
-                codeRunHandler.registerRunning(Thread.currentThread(), defaultRunContext);
+                defaultRunContextt.start(process);
+                codeRunHandler.registerRunning(Thread.currentThread(), defaultRunContextt);
                 stringFluxSink.next(Message.of(Command.START));
                 try (InputStream inputStream = process.getInputStream();
                     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -49,7 +49,7 @@ public class DefaultCodeRunService implements CodeRunService {
             } finally {
                 fileService.deleteFile(fileName);
             }
-            defaultRunContext.end();
+            defaultRunContextt.end();
             stringFluxSink.next(Message.of(Command.END));
             stringFluxSink.complete();
         });

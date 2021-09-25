@@ -2,13 +2,12 @@ package com.semihbkgr.gorun.server.socket;
 
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.run.DefaultRunContext;
-import com.semihbkgr.gorun.server.run.RunContext;
+import com.semihbkgr.gorun.server.run.*;
 import reactor.core.publisher.Flux;
 
 public class RunWebSocketSession {
 
-    private volatile RunContext runContext=null;
+    private volatile RunContext runContext = null;
 
     public Flux<Message> executeMessage(Message message) {
         switch (message.command) {
@@ -20,11 +19,11 @@ public class RunWebSocketSession {
 
         if (message.command == Command.RUN) {
             if (lastDefaultRunContext == null || !lastDefaultRunContext.isRunning()) {
-                lastDefaultRunContext = new DefaultRunContext(message.body);
+                lastDefaultRunContext = new DefaultRunContextt(message.body);
                 return codeRunService.run(lastDefaultRunContext)
                         .doOnComplete(() -> codeRunLogService.log(lastDefaultRunContext));
             } else {
-                return Flux.just(Message.of(Command.ERROR, "This session already has an on going process"));
+
             }
         } else if (message.command == Command.INPUT) {
             if (lastDefaultRunContext != null && lastDefaultRunContext.isRunning()) {
@@ -51,7 +50,11 @@ public class RunWebSocketSession {
     }
 
     private Flux<Message> executeCommandRun(String body) {
-        if(runContext!=null && runContext.)
+        if (runContext != null && runContext.getStatus() != RunStatus.EXECUTING) {
+            this.runContext=new DefaultRunContext(body);
+        } else
+            return Flux.just(Message.of(Command.ERROR, "This session already has an on going process"));
+
     }
 
 

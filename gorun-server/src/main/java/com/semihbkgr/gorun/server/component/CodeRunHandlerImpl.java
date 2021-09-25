@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server.component;
 
-import com.semihbkgr.gorun.server.run.DefaultRunContext;
+import com.semihbkgr.gorun.server.run.DefaultRunContextt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CodeRunHandlerImpl implements CodeRunHandler {
 
     private final Thread thread;
-    private final ConcurrentHashMap<DefaultRunContext,Thread> codeRunContextThreadConcurrentHashMap;
+    private final ConcurrentHashMap<DefaultRunContextt,Thread> codeRunContextThreadConcurrentHashMap;
     private final long expireTimeIntervalMs;
 
     public CodeRunHandlerImpl(@Value("${code-run-service.max-time-second:25}") int maxTimeSecond) {
@@ -21,15 +21,15 @@ public class CodeRunHandlerImpl implements CodeRunHandler {
         this.thread=new Thread(()->{
             while(true){
                 long currentTimeMs=System.currentTimeMillis();
-                for(DefaultRunContext defaultRunContext :codeRunContextThreadConcurrentHashMap.keySet()){
-                    if(defaultRunContext.isRunning()){
-                        if(currentTimeMs- defaultRunContext.getStartTimestamp()>expireTimeIntervalMs){
-                            defaultRunContext.interrupt();
-                            codeRunContextThreadConcurrentHashMap.get(defaultRunContext).interrupt();
-                            log.info("DefaultRunContext has been interrupted, It exceed expire time interval, ExpireTimeIntervalMs: {}",expireTimeIntervalMs);
+                for(DefaultRunContextt defaultRunContextt :codeRunContextThreadConcurrentHashMap.keySet()){
+                    if(defaultRunContextt.isRunning()){
+                        if(currentTimeMs- defaultRunContextt.getStartTimestamp()>expireTimeIntervalMs){
+                            defaultRunContextt.interrupt();
+                            codeRunContextThreadConcurrentHashMap.get(defaultRunContextt).interrupt();
+                            log.info("DefaultRunContextt has been interrupted, It exceed expire time interval, ExpireTimeIntervalMs: {}",expireTimeIntervalMs);
                         }
                     }else{
-                        codeRunContextThreadConcurrentHashMap.remove(defaultRunContext);
+                        codeRunContextThreadConcurrentHashMap.remove(defaultRunContextt);
                     }
                 }
             }
@@ -40,12 +40,12 @@ public class CodeRunHandlerImpl implements CodeRunHandler {
     }
 
     @Override
-    public void registerRunning(Thread thread, DefaultRunContext defaultRunContext) {
-        codeRunContextThreadConcurrentHashMap.put(defaultRunContext,thread);
+    public void registerRunning(Thread thread, DefaultRunContextt defaultRunContextt) {
+        codeRunContextThreadConcurrentHashMap.put(defaultRunContextt,thread);
     }
 
-    public void registerRunning(DefaultRunContext defaultRunContext){
-        this.registerRunning(Thread.currentThread(), defaultRunContext);
+    public void registerRunning(DefaultRunContextt defaultRunContextt){
+        this.registerRunning(Thread.currentThread(), defaultRunContextt);
     }
 
 
