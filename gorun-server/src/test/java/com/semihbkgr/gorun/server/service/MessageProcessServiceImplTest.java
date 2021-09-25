@@ -62,7 +62,7 @@ class MessageProcessServiceImplTest {
         var message = Message.of(Command.INPUT, "inputData");
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
-                .expectNextMatches(responseMessage -> responseMessage.command == Command.ERROR)
+                .expectNextMatches(responseMessage -> responseMessage.command == Command.WARN)
                 .verifyComplete();
     }
 
@@ -72,7 +72,7 @@ class MessageProcessServiceImplTest {
         var message = Message.of(Command.INTERRUPT);
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
-                .expectNextMatches(responseMessage -> responseMessage.command == Command.ERROR)
+                .expectNextMatches(responseMessage -> responseMessage.command == Command.WARN)
                 .verifyComplete();
     }
 
@@ -113,7 +113,7 @@ class MessageProcessServiceImplTest {
                 .doOnNext(responseMessage -> {
                     if(responseMessage.body.equals(line1)){
                         StepVerifier.create(messageProcessService.process(session,message).log())
-                                .expectNextMatches(errorMessage-> errorMessage.command==Command.ERROR)
+                                .expectNextMatches(errorMessage-> errorMessage.command==Command.WARN)
                                 .verifyComplete();
                     }
                 });
@@ -123,5 +123,8 @@ class MessageProcessServiceImplTest {
                 .thenCancel()
                 .verify();
     }
+
+    @Test
+    @DisplayName("")
 
 }
