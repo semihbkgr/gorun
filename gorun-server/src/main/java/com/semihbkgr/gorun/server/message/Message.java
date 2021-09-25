@@ -1,7 +1,11 @@
 package com.semihbkgr.gorun.server.message;
 
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
 
+@ToString
+@EqualsAndHashCode
 public class Message {
 
     public final Command command;
@@ -12,13 +16,12 @@ public class Message {
         this.body = body;
     }
 
-    public static Message of(Command command, String body) {
-        return new Message(Objects.requireNonNull(command), Objects.requireNonNull(body));
+    public static Message of(@NonNull Command command,@NonNull String body) {
+        return new Message(command,body);
     }
 
-    public static Message of(Command command) {
-        return new Message(Objects.requireNonNull(command), null);
+    public static Message of(@NonNull Command command) {
+        return new Message(command, null);
     }
-
 
 }

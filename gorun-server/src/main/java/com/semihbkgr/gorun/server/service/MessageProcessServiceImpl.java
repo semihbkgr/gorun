@@ -26,7 +26,7 @@ public class MessageProcessServiceImpl implements MessageProcessService {
             case RUN:
                 return processRunCommand(session, message);
             default:
-                return Flux.error(new IllegalStateException("Unhandled message command, command: "+message.command.name()));
+                return Flux.error(new IllegalStateException("Unhandled message command, command: " + message.command.name()));
         }
     }
 
@@ -35,12 +35,15 @@ public class MessageProcessServiceImpl implements MessageProcessService {
             return fileService.createFile(fileNameGenerator.generate("go"), message.body)
                     .flatMapMany(fileName ->
                             DataBufferUtils.readInputStream(
-                                    () -> new ProcessBuilder("go", "run", fileName)
+                                    () -> new ProcessBuilder()
+                                            .command("go", "run", fileName)
+                                            .redirectErrorStream(true)
                                             .start()
                                             .getInputStream(),
                                     new DefaultDataBufferFactory(), 256))
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
-                    .map(messageBody -> Message.of(Command.OUTPUT, messageBody));
+                    .map(messageBody -> Message.of(Command.OUTPUT, messageBody))
+                    .onErrorReturn(Message.of(Command.ERROR));
         } else
             return Flux.just(Message.of(Command.ERROR, "This session already has an on going process"));
     }

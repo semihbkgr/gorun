@@ -30,7 +30,7 @@ class FileServiceImplTest {
         final var fileContent = "FileServiceImplTest#createFile()";
         var mono = fileService.createFile(fileName, fileContent).log();
         StepVerifier.create(mono)
-                .expectNext(fileName)
+                .expectNext(Path.of(ROOT_PATH).resolve(fileName).toString())
                 .verifyComplete();
     }
 
@@ -42,7 +42,7 @@ class FileServiceImplTest {
         Files.write(filePath, fileContent.getBytes());
         var mono = fileService.deleteFile(fileName).log();
         StepVerifier.create(mono)
-                .expectNext(fileName)
+                .expectNext(filePath.toString())
                 .verifyComplete();
     }
 

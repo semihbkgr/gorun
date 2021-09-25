@@ -65,7 +65,7 @@ public class FileServiceImpl implements FileService {
             try {
                 var filePath = Files.createFile(rootPath.resolve(fileName));
                 Files.write(filePath, content.getBytes());
-                sink.success(fileName);
+                sink.success(filePath.toString());
             } catch (IOException e) {
                 sink.error(e);
             }
@@ -76,8 +76,9 @@ public class FileServiceImpl implements FileService {
     public Mono<String> deleteFile(String fileName) {
         return Mono.create(sink -> {
             try {
-                Files.delete(rootPath.resolve(fileName));
-                sink.success(fileName);
+                var filePath=rootPath.resolve(fileName);
+                Files.delete(filePath);
+                sink.success(filePath.toString());
             } catch (IOException e) {
                 sink.error(e);
             }
