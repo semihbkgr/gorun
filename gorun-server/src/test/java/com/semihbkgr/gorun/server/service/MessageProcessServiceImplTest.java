@@ -5,14 +5,17 @@ import com.semihbkgr.gorun.server.component.SequentialFileNameGenerator;
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.semihbkgr.gorun.server.test.ResourcesDir;
+import com.semihbkgr.gorun.server.test.ResourceExtension;
+import com.semihbkgr.gorun.server.test.Resources;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
 
+@ExtendWith(ResourceExtension.class)
+@ResourcesDir(path = "./src/test/resources")
 class MessageProcessServiceImplTest {
 
     static final String ROOT_DIR = "test-files";
@@ -36,28 +39,23 @@ class MessageProcessServiceImplTest {
         fileService.clearAndDeleteRootDir();
     }
 
-
-
     // Test methods below test only one message at a time.
 
     @Test
-    void commandRun() {
-        var messageBody = "package main\n" +
-                "\n" +
-                "func main(){\n" +
-                "\tprint(\"HelloWorld\")\n" +
-                "}\n";
+    @DisplayName("CommandRunWhenOnGoingProcessDoesNotExists")
+    void commandRunWhenOnGoingProcessDoesNotExists() {
+        var messageBody = Resources.getResourceAsString("hello.go");
         var session = new RunWebSocketSession();
         var message = Message.of(Command.RUN, messageBody);
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
-                .expectNext(Message.of(Command.OUTPUT, "HelloWorld"))
+                .expectNext(Message.of(Command.OUTPUT, "Hello"))
                 .verifyComplete();
     }
 
     @Test
-    @DisplayName("CommandInputWhenNoOnGoingProcess")
-    void commandInputWhenNoOnGoingProcess() {
+    @DisplayName("CommandInputWhenOnGoingProcessDoesNotExists")
+    void commandInputWhenOnGoingProcessDoesNotExists() {
         var message = Message.of(Command.INPUT, "inputData");
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
@@ -66,8 +64,8 @@ class MessageProcessServiceImplTest {
     }
 
     @Test
-    @DisplayName("CommandInterruptWhenNoOnGoingProcess")
-    void commandInterruptWhenNoOnGoingProcess() {
+    @DisplayName("CommandInterruptWhenOnGoingProcessDoesNotExists")
+    void commandInterruptWhenOnGoingProcessDoesNotExists() {
         var message = Message.of(Command.INTERRUPT);
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
@@ -79,5 +77,10 @@ class MessageProcessServiceImplTest {
 
     // Test methods below test a sequence of messages at a time.
 
+    @Test
+    @DisplayName("CommandRunWhenOnGoingProcessExists")
+    void commandRunWhenOnGoingProcessExists(){
+
+    }
 
 }
