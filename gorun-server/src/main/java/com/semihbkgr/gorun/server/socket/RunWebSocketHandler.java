@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server.socket;
 
-import com.semihbkgr.gorun.server.component.MessageMarshaller;
+import com.semihbkgr.gorun.server.message.MessageMarshaller;
 import com.semihbkgr.gorun.server.service.MessageProcessService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

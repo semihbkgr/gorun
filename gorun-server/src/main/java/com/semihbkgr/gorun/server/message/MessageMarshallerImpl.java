@@ -1,8 +1,5 @@
-package com.semihbkgr.gorun.server.component;
+package com.semihbkgr.gorun.server.message;
 
-import com.semihbkgr.gorun.server.exception.MessageMarshallException;
-import com.semihbkgr.gorun.server.message.Command;
-import com.semihbkgr.gorun.server.message.Message;
 import org.springframework.stereotype.Component;
 
 import static com.semihbkgr.gorun.server.message.MessageConstants.*;
@@ -10,7 +7,8 @@ import static com.semihbkgr.gorun.server.message.MessageConstants.*;
 @Component
 public class MessageMarshallerImpl implements MessageMarshaller {
 
-    public Message unmarshall(String data, boolean isInResponse) throws MessageMarshallException {
+    @Override
+    public Message unmarshall(String data) throws MessageMarshallException {
         data = data.strip();
         if (data.startsWith(MESSAGE_BEGIN_CHARACTER) && data.endsWith(MESSAGE_END_CHARACTER)) {
             data = data.substring(1, data.length() - 1);
@@ -19,7 +17,7 @@ public class MessageMarshallerImpl implements MessageMarshaller {
                 String commandString = data.substring(0, index);
                 String body = data.substring(index + 1);
                 try {
-                    Command command = Command.of(commandString, isInResponse);
+                    Command command = Command.of(commandString, false);
                     if (body.equalsIgnoreCase("null") || body.isEmpty())
                         return Message.of(command);
                     else
@@ -37,12 +35,8 @@ public class MessageMarshallerImpl implements MessageMarshaller {
     }
 
     @Override
-    public Message unmarshall(String data) throws MessageMarshallException {
-        return this.unmarshall(data, false);
-    }
-
-    public String marshall(Message message, boolean isInResponse) {
-        if (message.command.isInResponse != isInResponse)
+    public String marshall(Message message) throws IllegalArgumentException {
+        if (!message.command.isInResponse)
             throw new MessageMarshallException(String.format("Illegal command field, command : %s", message.command.name()));
         StringBuilder unmarshallStringBuilder = new StringBuilder();
         unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
@@ -52,11 +46,6 @@ public class MessageMarshallerImpl implements MessageMarshaller {
         unmarshallStringBuilder.append(message.body);
         unmarshallStringBuilder.append(MESSAGE_END_CHARACTER);
         return unmarshallStringBuilder.toString();
-    }
-
-    @Override
-    public String marshall(Message message) {
-        return this.marshall(message, true);
     }
 
 }
