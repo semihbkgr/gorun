@@ -3,15 +3,17 @@ package com.semihbkgr.gorun.server.service;
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
+import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.run.RunStatus;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.buffer.*;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service
@@ -27,7 +29,7 @@ public class MessageProcessServiceImpl implements MessageProcessService {
             case RUN:
                 return processRunCommand(session, message);
             case INPUT:
-                return processInputCommand(session,message);
+                return processInputCommand(session, message);
             case INTERRUPT:
                 return processInterruptCommand(session, message);
             default:
@@ -38,14 +40,18 @@ public class MessageProcessServiceImpl implements MessageProcessService {
     private Flux<Message> processRunCommand(RunWebSocketSession session, Message message) {
         if (session.runContext == null || (session.runContext != null && session.runContext.status() != RunStatus.EXECUTING)) {
             return fileService.createFile(fileNameGenerator.generate("go"), message.body)
-                    .flatMapMany(fileName ->
-                            DataBufferUtils.readInputStream(
-                                    () -> new ProcessBuilder()
-                                            .command("go", "run", fileName)
-                                            .redirectErrorStream(true)
-                                            .start()
-                                            .getInputStream(),
-                                    new DefaultDataBufferFactory(), 256))
+                    .flatMapMany(fileName -> {
+                        try {
+                            var process = new ProcessBuilder()
+                                    .command("go", "run", fileName)
+                                    .redirectErrorStream(true)
+                                    .start();
+                            session.runContext = new DefaultRunContext(process);
+                            return DataBufferUtils.readInputStream(process::getInputStream, new DefaultDataBufferFactory(), 256);
+                        } catch (Exception e) {
+                            return Flux.error(e);
+                        }
+                    })
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                     .map(messageBody -> Message.of(Command.OUTPUT, messageBody))
                     .onErrorReturn(Message.of(Command.ERROR));
@@ -55,14 +61,19 @@ public class MessageProcessServiceImpl implements MessageProcessService {
 
     private Flux<Message> processInputCommand(RunWebSocketSession session, Message message) {
         if (session.runContext != null && session.runContext.status() == RunStatus.EXECUTING) {
-            return DataBufferUtils.write(
-                    DataBufferUtils.readInputStream(
-                            ()->new ByteArrayInputStream(message.body.getBytes(StandardCharsets.UTF_8)),
-                            new DefaultDataBufferFactory(),256),
-                    session.runContext.process().getOutputStream()
-            )
-                    .thenMany(Mono.just(Message.of(Command.INFO)));
-        }else
+            return Flux.create(sink -> {
+                final var fos = session.runContext.process().getOutputStream();
+                try {
+                    var inputData = message.body.concat(System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
+                    fos.write(inputData);
+                    fos.flush();
+                    sink.next(Message.of(Command.INFO, message.body));
+                    sink.complete();
+                } catch (IOException e) {
+                    sink.error(e);
+                }
+            });
+        } else
             return Flux.just(Message.of(Command.ERROR, "This session has not any on going process"));
     }
 
