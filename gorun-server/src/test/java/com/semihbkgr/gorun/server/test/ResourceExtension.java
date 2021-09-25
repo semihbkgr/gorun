@@ -24,20 +24,21 @@ public class ResourceExtension implements BeforeAllCallback {
             }
         }
         log.info("Resources root dir path: {}", rootDirPath.toString());
+        final int rootDirPathLength=rootDirPath.toString().length();
         Files.walk(rootDirPath).parallel().forEach(path -> {
             if (!Files.isDirectory(path)) {
                 try {
-                    final var filename = path.getFileName().toString();
-                    if (Resources.nameContentResourceMap.containsKey(filename))
-                        throw new IllegalStateException("File already exists in resources, filename: " + filename);
-                    else
-                        Resources.nameContentResourceMap.put(filename, Files.readString(path));
+                    var filename=path.toString().substring(rootDirPathLength+1).replace('\\','/');
+                    Resources.nameContentResourceMap.put(filename, Files.readString(path));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
         log.info("Resources loaded successfully, size: {}", Resources.nameContentResourceMap.size());
+        for(var filename:Resources.nameContentResourceMap.keySet())
+            log.debug("Loaded resource filename: {}",filename);
+
     }
 
 

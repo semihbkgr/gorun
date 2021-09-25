@@ -3,6 +3,7 @@ package com.semihbkgr.gorun.server.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
@@ -33,30 +34,7 @@ public class FileServiceImpl implements FileService {
 
     @PreDestroy
     void clearAndDeleteRootDir() throws IOException {
-        clearAllFilesAndDeleteDir(rootPath);
-    }
-
-    private void clearAllFilesAndDeleteDir(Path dir) throws IOException {
-        if (Files.isDirectory(dir)) {
-            Files.walk(dir).parallel().forEach(subPath -> {
-                if (subPath == dir) return;
-                if (Files.isDirectory(subPath)) {
-                    try {
-                        clearAllFilesAndDeleteDir(subPath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        Files.delete(subPath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            });
-            Files.delete(dir);
-        }
+        FileSystemUtils.deleteRecursively(rootPath);
     }
 
     @Override
@@ -76,7 +54,7 @@ public class FileServiceImpl implements FileService {
     public Mono<String> deleteFile(String fileName) {
         return Mono.create(sink -> {
             try {
-                var filePath=rootPath.resolve(fileName);
+                var filePath = rootPath.resolve(fileName);
                 Files.delete(filePath);
                 sink.success(filePath.toString());
             } catch (IOException e) {
