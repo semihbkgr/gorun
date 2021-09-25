@@ -3,23 +3,21 @@ package com.semihbkgr.gorun.server.socket;
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
-import com.semihbkgr.gorun.server.service.CodeRunLogService;
-import com.semihbkgr.gorun.server.service.CodeRunService;
+import com.semihbkgr.gorun.server.run.RunContext;
 import reactor.core.publisher.Flux;
 
 public class RunWebSocketSession {
 
-    private final CodeRunService codeRunService;
-    private final CodeRunLogService codeRunLogService;
-    private volatile DefaultRunContext lastDefaultRunContext;
+    private volatile RunContext runContext=null;
 
-    public RunWebSocketSession(CodeRunService codeRunService, CodeRunLogService codeRunLogService) {
-        this.codeRunService = codeRunService;
-        this.codeRunLogService = codeRunLogService;
-        lastDefaultRunContext = null;
-    }
+    public Flux<Message> executeMessage(Message message) {
+        switch (message.command) {
+            case RUN:
+                return executeCommandRun(message.body);
 
-    public Flux<Message> executeCommand(Message message) {
+        }
+
+
         if (message.command == Command.RUN) {
             if (lastDefaultRunContext == null || !lastDefaultRunContext.isRunning()) {
                 lastDefaultRunContext = new DefaultRunContext(message.body);
@@ -51,5 +49,10 @@ public class RunWebSocketSession {
         }
         return Flux.just(Message.of(Command.ERROR, "Illegal Command"));
     }
+
+    private Flux<Message> executeCommandRun(String body) {
+        if(runContext!=null && runContext.)
+    }
+
 
 }

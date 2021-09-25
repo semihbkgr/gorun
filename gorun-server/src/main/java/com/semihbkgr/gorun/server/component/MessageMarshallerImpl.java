@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import static com.semihbkgr.gorun.server.message.MessageConstants.*;
 
 @Component
-public class DefaultMessageMarshallComponent implements MessageMarshaller {
+public class MessageMarshallerImpl implements MessageMarshaller {
 
     public Message unmarshall(String data,boolean isInResponse) throws MessageMarshallException {
         data = data.strip();

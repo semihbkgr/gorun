@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server;
 
-import com.semihbkgr.gorun.server.component.DefaultMessageMarshallComponent;
+import com.semihbkgr.gorun.server.component.MessageMarshallerImpl;
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.util.InputBuilder;
@@ -26,7 +26,7 @@ class CodeRunIntegrationTest {
         OkHttpClient client=new OkHttpClient();
         CountDownLatch closeCDL=new CountDownLatch(1);
 
-        DefaultMessageMarshallComponent messageMarshallComponent=new DefaultMessageMarshallComponent();
+        MessageMarshallerImpl messageMarshallComponent=new MessageMarshallerImpl();
         InputBuilder inputBuilder=new InputBuilder(100);
         inputBuilder.addConsumer(Command.OUTPUT,(s ->{
             System.out.println(">>"+s);

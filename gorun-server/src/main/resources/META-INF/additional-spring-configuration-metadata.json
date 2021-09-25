@@ -4,5 +4,11 @@
       "name": "snippet.file-path",
       "type": "java.lang.String",
       "description": "Description for snippet.file-path."
-  }
-] }
+    },
+    {
+      "name": "file.root-path",
+      "type": "java.lang.String",
+      "description": "Description for file.root-path."
+    }
+  ]
+}

@@ -8,6 +8,8 @@ public interface FileService {
 
     void deleteFile(String fileName);
 
-    Path getRootPath();
+    void deleteRootDir();
+
+    Path getRootDirPath();
 
 }

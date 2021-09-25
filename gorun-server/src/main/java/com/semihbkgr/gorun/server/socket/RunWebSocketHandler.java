@@ -1,8 +1,6 @@
 package com.semihbkgr.gorun.server.socket;
 
 import com.semihbkgr.gorun.server.component.MessageMarshaller;
-import com.semihbkgr.gorun.server.service.CodeRunLogService;
-import com.semihbkgr.gorun.server.service.CodeRunService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.socket.WebSocketHandler;
@@ -14,18 +12,16 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class RunWebSocketHandler implements WebSocketHandler {
 
-    private final CodeRunService codeRunService;
-    private final CodeRunLogService codeRunLogService;
     private final MessageMarshaller messageMarshaller;
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
-        RunWebSocketSession runWebSocketSession = new RunWebSocketSession(codeRunService, codeRunLogService);
+        RunWebSocketSession runWebSocketSession = new RunWebSocketSession();
         return session
                 .receive()
                 .map(WebSocketMessage::getPayloadAsText)
                 .map(messageMarshaller::unmarshall)
-                .flatMap(runWebSocketSession::executeCommand)
+                .flatMap(runWebSocketSession::executeMessage)
                 .map(messageMarshaller::marshall)
                 .map(session::textMessage)
                 .flatMap(i -> session.send(Mono.just(i)))

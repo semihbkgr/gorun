@@ -26,7 +26,7 @@ public class FileServiceRootPathClearInterceptor implements CommandLineRunner {
         AtomicInteger counter=new AtomicInteger(0);
         AtomicBoolean isContainsDirectory=new AtomicBoolean(false);
         AtomicBoolean ignoreRootDirectory=new AtomicBoolean(true);
-        Files.walk(fileService.getRootPath()).forEach(path->{
+        Files.walk(fileService.getRootDirPath()).forEach(path->{
             if(ignoreRootDirectory.get()){
                 ignoreRootDirectory.set(false);
                 return;
