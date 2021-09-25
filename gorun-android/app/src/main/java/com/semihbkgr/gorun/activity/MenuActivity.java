@@ -18,19 +18,22 @@ public class MenuActivity extends AppCompatActivity {
     private final ExpirationTimer backTimer = new ExpirationTimer(AppConstant.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
 
     private LinearLayout editorLayout;
-    private LinearLayout tutorialLayout;
-
+    private LinearLayout snippetLayout;
+    private LinearLayout docLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        // find views
         editorLayout = findViewById(R.id.editorLayout);
-        tutorialLayout = findViewById(R.id.tutorialLayout);
+        snippetLayout = findViewById(R.id.snippetLayout);
+        docLayout=findViewById(R.id.docLayout);
 
         editorLayout.setOnClickListener(this::onEditorLayoutClicked);
-        tutorialLayout.setOnClickListener(this::onTutorialLayoutClicked);
+        snippetLayout.setOnClickListener(this::onSnippetLayoutClicked);
+        docLayout.setOnClickListener(this::onDocLayoutClicked);
 
     }
 
@@ -39,9 +42,13 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void onTutorialLayoutClicked(View v) {
+    private void onSnippetLayoutClicked(View v) {
         Intent i=new Intent(this,SubjectActivity.class);
         startActivity(i);
+    }
+
+    private void onDocLayoutClicked(View v){
+
     }
 
     @Override

@@ -13,7 +13,7 @@
 
 
     <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="300dp"
+                  android:layout_height="200dp"
                   android:id="@+id/logoLayout"
                   android:background="@color/blue_bg1">
 
@@ -26,15 +26,15 @@
     </LinearLayout>
 
     <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="150dp"
+                  android:layout_height="100dp"
                   android:orientation="horizontal"
                   android:gravity="left"
                   android:id="@+id/editorLayout"
                   android:background="@color/blue_bg2">
 
         <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 app:srcCompat="@drawable/go_runner"/>
 
         <TextView
@@ -45,30 +45,53 @@
                 android:textSize="23sp"
                 android:textColor="@color/black"/>
 
-
     </LinearLayout>
 
     <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="150dp"
-                  android:id="@+id/tutorialLayout"
-                  android:background="@color/blue_bg3">
+                  android:layout_height="100dp"
+                  android:orientation="horizontal"
+                  android:gravity="left"
+                  android:id="@+id/snippetLayout"
+                  android:background="@color/blue_bg2">
 
         <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:srcCompat="@drawable/go_inspector"
-                android:id="@+id/imageView6"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/go_pilot"/>
 
         <TextView
-                android:text="Tutorial"
+                android:text="Snippet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="25dp"
                 android:textSize="23sp"
                 android:textColor="@color/black"/>
 
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="100dp"
+                  android:orientation="horizontal"
+                  android:gravity="left"
+                  android:id="@+id/docLayout"
+                  android:background="@color/blue_bg2">
+
+        <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/go_inspector"/>
+
+        <TextView
+                android:text="Doc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="25dp"
+                android:textSize="23sp"
+                android:textColor="@color/black"/>
 
     </LinearLayout>
+
+
 
 
 </LinearLayout>
