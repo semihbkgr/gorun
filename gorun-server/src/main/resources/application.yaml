@@ -1,3 +1,11 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+
+file:
+  root-path: ${user.dir}\\codes
+
 file-service:
   path:
 log-service:
@@ -7,5 +15,5 @@ code-run-service.max-time-second: 30
 snippet:
   file-path: snippets.json
 
-file:
-  root-path: ${user.dir}\\codes
+
+

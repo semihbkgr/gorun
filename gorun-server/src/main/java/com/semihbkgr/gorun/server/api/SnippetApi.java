@@ -1,9 +1,11 @@
 package com.semihbkgr.gorun.server.api;
 
+import com.semihbkgr.gorun.server.error.SimpleHttpStatusCodeException;
 import com.semihbkgr.gorun.server.snippet.Snippet;
 import com.semihbkgr.gorun.server.snippet.SnippetHolder;
 import com.semihbkgr.gorun.server.snippet.SnippetInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +27,10 @@ public class SnippetApi {
 
     @GetMapping("/{id}")
     public Mono<Snippet> getSnippet(@PathVariable("id") int id) {
-        return snippetHolder.findById(id);
+        return snippetHolder.findById(id)
+                .switchIfEmpty(
+                        Mono.error(() -> new SimpleHttpStatusCodeException(HttpStatus.BAD_REQUEST))
+                );
     }
 
 }
