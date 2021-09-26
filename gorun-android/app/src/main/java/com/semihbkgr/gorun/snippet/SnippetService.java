@@ -5,10 +5,12 @@ import java.util.function.Consumer;
 
 public interface SnippetService {
 
-    List<Snippet> getSnippets();
+    List<SnippetInfo> getAllSnippetInfo();
 
-    void getSnippetsAsync(Consumer<? super List<Snippet>> snippetListConsumer);
+    void getAllSnippetInfoAsync(Consumer<? super List<SnippetInfo>> callback);
 
-    boolean isAvailable();
+    Snippet getSnippet(int id);
+
+    void getSnippetAsync(int id,Consumer<? super List<SnippetInfo>> callback);
 
 }

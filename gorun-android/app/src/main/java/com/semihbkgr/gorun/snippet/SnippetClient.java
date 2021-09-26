@@ -1,15 +1,21 @@
 package com.semihbkgr.gorun.snippet;
 
+import java.io.IOException;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 public interface SnippetClient {
 
-    Snippet[] getSnippetsBlock();
+    SnippetInfo[] getAllSnippetInfos() throws IOException;
 
-    void getSnippetAsync(Consumer<? super Snippet[]> snippetArrayConsumer);
+    void getAllSnippetInfosAsync(Consumer<? super SnippetInfo[]> callback);
 
-    String getSnippetAsJsonBlock();
+    Future<SnippetInfo[]> getAllSnippetInfoFuture();
 
-    void getSnippetAsJsonAsync(Consumer<? super String> stringConsumer);
+    Snippet getSnippet(int id) throws IOException;
+
+    void getSnippetAsync(int id,Consumer<? super SnippetInfo> callback);
+
+    Future<Snippet> getSnippetFuture(int id);
 
 }

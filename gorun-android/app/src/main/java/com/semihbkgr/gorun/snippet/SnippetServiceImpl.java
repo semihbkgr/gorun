@@ -6,14 +6,12 @@ import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Consumer;
 
-public class DefaultSnippetService implements SnippetService {
+public class SnippetServiceImpl implements SnippetService {
 
-    private final SnippetCache snippetCache;
     private final SnippetClient snippetClient;
 
-    public DefaultSnippetService(SnippetClient snippetClient) {
+    public SnippetServiceImpl(SnippetClient snippetClient) {
         this.snippetClient = snippetClient;
-        this.snippetCache = new ListSnippetCache();
     }
 
     @Override

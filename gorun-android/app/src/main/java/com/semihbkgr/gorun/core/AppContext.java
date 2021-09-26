@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.semihbkgr.gorun.snippet.DefaultSnippetClient;
-import com.semihbkgr.gorun.snippet.DefaultSnippetService;
+import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
 import com.semihbkgr.gorun.snippet.SnippetClient;
 import com.semihbkgr.gorun.snippet.SnippetService;
 import com.semihbkgr.gorun.tutorial.LocalTutorialService;
@@ -41,7 +41,7 @@ public class AppContext {
         this.gson = new GsonBuilder().create();
         this.rootDir = createAndGetExternalDir(context);
         this.snippetClient = new DefaultSnippetClient(httpClient, gson);
-        this.snippetService = new DefaultSnippetService(snippetClient);
+        this.snippetService = new SnippetServiceImpl(snippetClient);
         this.appDatabaseHelper = new AppDatabaseHelper(context);
         this.tutorialService = new LocalTutorialService(appDatabaseHelper);
         this.appSourceHelper = new AppSourceHelper(context, gson);

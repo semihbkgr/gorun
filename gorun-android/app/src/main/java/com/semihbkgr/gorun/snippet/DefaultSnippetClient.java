@@ -8,7 +8,9 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -26,101 +28,85 @@ public class DefaultSnippetClient implements SnippetClient {
 
     @Nullable
     @Override
-    public Snippet[] getSnippetsBlock() {
-        CountDownLatch latch = new CountDownLatch(1);
-        AtomicReference<Snippet[]> snippetArrayReference = new AtomicReference<>();
-        Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
+    public SnippetInfo[] getAllSnippetInfos() throws IOException {
+        Request request = new Request.Builder()
+                .url(AppConstant.SERVER_SNIPPET_URI)
+                .build();
         Call call = httpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "onFailure: Snippet request is fail", e);
-                latch.countDown();
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.i(TAG, "onResponse: Snippet response is successful");
-                Snippet[] snippets = gson.fromJson(response.body().string(), Snippet[].class);
-                snippetArrayReference.set(snippets);
-                Log.i(TAG, "onResponse: Snippet response deserialized successfully");
-                latch.countDown();
-            }
-        });
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        Response response = call.execute();
+        try (ResponseBody body = response.body()) {
+            if (body != null)
+                return gson.fromJson(response.body().string(), SnippetInfo[].class);
+        }catch (Exception e){
+            Log.e(TAG, "getAllSnippetInfos: ",e);
+            return null;
         }
-        return snippetArrayReference.get();
     }
 
     @Override
-    public void getSnippetAsync(Consumer<? super Snippet[]> snippetArrayConsumer) {
+    public void getAllSnippetInfosAsync(Consumer<? super SnippetInfo[]> snippetArrayConsumer) {
         Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
         Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "onFailure: Snippet request is fail", e);
+                Log.e(TAG, "onFailure: AllSnippetInfos request failed", e);
                 snippetArrayConsumer.accept(null);
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.i(TAG, "onResponse: Snippet response deserialized successfully");
-                Snippet[] snippets = gson.fromJson(response.body().string(), Snippet[].class);
-                Log.i(TAG, "onResponse: Snippet response deserialized successfully");
-                snippetArrayConsumer.accept(snippets);
+                Log.i(TAG, "onResponse: AllSnippetInfos response received successfully");
+                try {
+                    SnippetInfo[] snippetInfos = gson.fromJson(response.body().string(), SnippetInfo[].class);
+                    Log.i(TAG, "onResponse: AllSnippetInfos response deserialized successfully");
+                    snippetArrayConsumer.accept(snippetInfos);
+                } catch (Throwable e) {
+                    Log.e(TAG, "onResponse: AllSnippetInfos response processing failed", e);
+                    snippetArrayConsumer.accept(null);
+                }
             }
         });
     }
 
     @Override
-    public String getSnippetAsJsonBlock() {
-        CountDownLatch latch = new CountDownLatch(1);
-        AtomicReference<String> stringReference = new AtomicReference<>();
-        Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
-        Call call = httpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "onFailure: Snippet request is fail", e);
-                latch.countDown();
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.i(TAG, "onResponse: Snippet response is successful");
-                stringReference.set(response.body().string());
-                latch.countDown();
+    public Future<SnippetInfo[]> getAllSnippetInfoFuture() {
+        return CompletableFuture.supplyAsync(()->{
+            try {
+                return getAllSnippetInfos();
+            } catch (IOException e) {
+                Log.e(TAG, "getAllSnippetInfoFuture: ", e);
+                return new SnippetInfo[0];
             }
         });
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    }
+
+    @Override
+    public Snippet getSnippet(int id) throws IOException {
+        String url=AppConstant.SERVER_SNIPPET_URI+'/'+id;
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Call call = httpClient.newCall(request);
+        Response response=call.execute();
+        try(ResponseBody body=response.body()){
+            if(body!=null)
+                return gson.fromJson(response.body().string(), Snippet.class);
+            return null;
+        }catch (Exception e){
+            return null;
         }
-        return stringReference.get();
     }
 
     @Override
-    public void getSnippetAsJsonAsync(Consumer<? super String> stringConsumer) {
-        Request request = new Request.Builder().url(AppConstant.SERVER_SNIPPET_URI).build();
-        Call call = httpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "onFailure: Snippet request is fail", e);
-                stringConsumer.accept(null);
-            }
+    public void getSnippetAsync(int id, Consumer<? super SnippetInfo> callback) {
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.i(TAG, "onResponse: Snippet response deserialized successfully");
-                stringConsumer.accept(response.body().string());
-            }
-        });
     }
+
+    @Override
+    public Future<Snippet> getSnippetFuture(int id) {
+        return null;
+    }
+
 
 }
