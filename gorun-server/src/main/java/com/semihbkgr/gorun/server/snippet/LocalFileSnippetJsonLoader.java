@@ -31,7 +31,7 @@ public class LocalFileSnippetJsonLoader implements CommandLineRunner {
                 .readAllBytes();
         String snippetsString = new String(bytes, StandardCharsets.UTF_8);
         Snippet[] snippets = objectMapper.readValue(snippetsString, Snippet[].class);
-        log.info("Snippets has been loaded successfully, {} snippets found", snippets.length);
+        log.info("Snippets have been loaded successfully, {} snippets found", snippets.length);
         for (var snippet : snippets)
             inMemorySnippetHoldingStrategy.getSnippetMap().put(snippet.getId(), snippet);
     }

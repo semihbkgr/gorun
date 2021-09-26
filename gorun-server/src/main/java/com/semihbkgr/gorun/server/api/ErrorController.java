@@ -1,10 +1,6 @@
 package com.semihbkgr.gorun.server.api;
 
 import com.semihbkgr.gorun.server.error.ErrorResponseModel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,6 +15,7 @@ public class ErrorController {
     public Mono<ErrorResponseModel> handle(Exception exception, ServerWebExchange exchange) {
         if (exception instanceof HttpStatusCodeException) {
             HttpStatusCodeException httpStatusCodeException = (HttpStatusCodeException) exception;
+            exchange.getResponse().setStatusCode(httpStatusCodeException.getStatusCode());
             return Mono.just(
                     ErrorResponseModel.builder()
                             .timestamp(System.currentTimeMillis())
@@ -27,7 +24,8 @@ public class ErrorController {
                             .message(exception.getMessage())
                             .build()
             );
-        } else
+        } else {
+            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
             return Mono.just(
                     ErrorResponseModel.builder()
                             .timestamp(System.currentTimeMillis())
@@ -36,6 +34,8 @@ public class ErrorController {
                             .message(exception.getMessage())
                             .build()
             );
+        }
+
     }
 
 }
