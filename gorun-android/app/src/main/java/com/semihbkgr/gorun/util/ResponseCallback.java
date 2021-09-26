@@ -6,7 +6,7 @@ public interface ResponseCallback <T>{
 
     void onResponse(T data);
 
-    void onFailure(Throwable t);
+    void onFailure(Exception e);
 
     default <N> ResponseCallback<N> convertResponseType(Function<N,T> converter){
         return new ResponseCallback<N>() {
@@ -16,8 +16,8 @@ public interface ResponseCallback <T>{
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                ResponseCallback.this.onFailure(t);
+            public void onFailure(Exception e) {
+                ResponseCallback.this.onFailure(e);
             }
         };
     }

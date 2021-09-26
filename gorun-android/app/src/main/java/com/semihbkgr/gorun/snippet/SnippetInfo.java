@@ -12,4 +12,12 @@ public class SnippetInfo {
         this.brief = brief;
     }
 
+    @Override
+    public String toString() {
+        return "SnippetInfo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", brief='" + brief + '\'' +
+                '}';
+    }
 }
