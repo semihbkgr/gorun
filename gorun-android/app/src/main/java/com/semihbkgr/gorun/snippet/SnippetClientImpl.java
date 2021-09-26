@@ -4,9 +4,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.semihbkgr.gorun.core.AppConstant;
-import com.semihbkgr.gorun.util.RequestException;
 import com.semihbkgr.gorun.util.ResponseCallback;
 import com.semihbkgr.gorun.util.ThrowUtils;
+import com.semihbkgr.gorun.util.excepiton.ErrorResponseModel;
+import com.semihbkgr.gorun.util.excepiton.RequestException;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,8 +36,14 @@ public class SnippetClientImpl implements SnippetClient {
         Call call = httpClient.newCall(request);
         try {
             Response response = call.execute();
-            try (ResponseBody body = response.body()) {
-                return gson.fromJson(response.body().string(), SnippetInfo[].class);
+            if (response.code() == 200) {
+                try (ResponseBody body = response.body()) {
+                    return gson.fromJson(response.body().string(), SnippetInfo[].class);
+                }
+            } else {
+                try (ResponseBody body = response.body()) {
+                    throw new RequestException(gson.fromJson(response.body().string(), ErrorResponseModel.class));
+                }
             }
         } catch (Exception e) {
             throw new RequestException(e);
@@ -58,12 +65,20 @@ public class SnippetClientImpl implements SnippetClient {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.i(TAG, "onResponse: AllSnippetInfos response received successfully");
                 try {
-                    SnippetInfo[] snippetInfos = gson.fromJson(response.body().string(), SnippetInfo[].class);
-                    Log.i(TAG, "onResponse: AllSnippetInfos response deserialized successfully");
-                    callback.onResponse(snippetInfos);
+                    if (response.code() == 200) {
+                        SnippetInfo[] snippetInfos = gson.fromJson(response.body().string(), SnippetInfo[].class);
+                        Log.i(TAG, "onResponse: AllSnippetInfos response deserialized successfully");
+                        callback.onResponse(snippetInfos);
+                    } else {
+                        RequestException exception = new RequestException(gson.fromJson(response.body().string(), ErrorResponseModel.class));
+                        Log.e(TAG, "onResponse: AllSnippetInfos response processing failed", exception);
+                        callback.onFailure(exception);
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, "onResponse: AllSnippetInfos response processing failed", e);
                     callback.onFailure(e);
+                } finally {
+                    response.close();
                 }
             }
         });
@@ -89,8 +104,14 @@ public class SnippetClientImpl implements SnippetClient {
         Call call = httpClient.newCall(request);
         try {
             Response response = call.execute();
-            try (ResponseBody body = response.body()) {
-                return gson.fromJson(response.body().string(), Snippet.class);
+            if (response.code() == 200) {
+                try (ResponseBody body = response.body()) {
+                    return gson.fromJson(response.body().string(), Snippet.class);
+                }
+            } else {
+                try (ResponseBody body = response.body()) {
+                    throw new RequestException(gson.fromJson(response.body().string(), ErrorResponseModel.class));
+                }
             }
         } catch (Exception e) {
             throw new RequestException(e);
@@ -115,12 +136,21 @@ public class SnippetClientImpl implements SnippetClient {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.i(TAG, "onResponse: Snippet response received successfully");
                 try {
-                    Snippet snippet = gson.fromJson(response.body().string(), Snippet.class);
-                    Log.i(TAG, "onResponse: Snippet response deserialized successfully");
-                    callback.onResponse(snippet);
+                    if (response.code() == 200) {
+                        Snippet snippet = gson.fromJson(response.body().string(), Snippet.class);
+                        Log.i(TAG, "onResponse: Snippet response deserialized successfully");
+                        callback.onResponse(snippet);
+                    } else {
+                        RequestException exception = new RequestException(gson.fromJson(response.body().string(), ErrorResponseModel.class));
+                        Log.e(TAG, "onResponse: AllSnippetInfos response processing failed", exception);
+                        callback.onFailure(exception);
+                    }
+
                 } catch (Exception e) {
                     Log.e(TAG, "onResponse: Snippet response processing failed", e);
                     callback.onFailure(e);
+                } finally {
+                    response.close();
                 }
             }
         });

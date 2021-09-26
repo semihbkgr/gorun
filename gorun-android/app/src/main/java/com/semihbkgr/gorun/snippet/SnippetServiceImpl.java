@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.snippet;
 
-import com.semihbkgr.gorun.util.RequestException;
+import com.semihbkgr.gorun.util.excepiton.RequestException;
 import com.semihbkgr.gorun.util.ResponseCallback;
 
 import java.util.Arrays;

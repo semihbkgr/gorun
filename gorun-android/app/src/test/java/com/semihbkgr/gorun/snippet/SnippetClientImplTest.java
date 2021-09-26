@@ -2,7 +2,7 @@ package com.semihbkgr.gorun.snippet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.semihbkgr.gorun.util.RequestException;
+import com.semihbkgr.gorun.util.excepiton.RequestException;
 import com.semihbkgr.gorun.util.ResponseCallback;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -76,8 +75,8 @@ class SnippetClientImplTest {
     }
 
     @Test
-    @DisplayName("GetSnippet")
-    void getSnippet() {
+    @DisplayName("GetSnippetId1")
+    void getSnippetId1() {
         try {
             Snippet snippet = snippetClient.getSnippet(1);
             assertNotNull(snippet);
@@ -88,8 +87,8 @@ class SnippetClientImplTest {
     }
 
     @Test
-    @DisplayName("GetSnippetAsync")
-    void getSnippetAsync() throws InterruptedException {
+    @DisplayName("GetSnippetAsyncId1")
+    void getSnippetAsyncId1() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         snippetClient.getSnippetAsync(1, new ResponseCallback<Snippet>() {
             @Override
@@ -108,10 +107,50 @@ class SnippetClientImplTest {
     }
 
     @Test
-    @DisplayName("GetSnippetFuture")
-    void getSnippetFuture() throws ExecutionException, InterruptedException {
-        Future<Snippet> snippetFuture= snippetClient.getSnippetFuture(1);
-        Snippet snippet=snippetFuture.get();
+    @DisplayName("GetSnippetFutureId1")
+    void getSnippetFutureId1() throws ExecutionException, InterruptedException {
+        Future<Snippet> snippetFuture = snippetClient.getSnippetFuture(1);
+        Snippet snippet = snippetFuture.get();
+        assertNotNull(snippet);
+        LOG.info(snippet.toString());
+    }
+
+
+    @Test
+    @DisplayName("GetSnippetId0")
+    void getSnippetId0() {
+        try {
+            Snippet snippet = snippetClient.getSnippet(0);
+        } catch (RequestException e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    @DisplayName("GetSnippetAsyncId0")
+    void getSnippetAsyncId0() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        snippetClient.getSnippetAsync(1, new ResponseCallback<Snippet>() {
+            @Override
+            public void onResponse(Snippet snippet) {
+                assertNotNull(snippet);
+                LOG.info(snippet.toString());
+                latch.countDown();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                fail(e);
+            }
+        });
+        latch.await();
+    }
+
+    @Test
+    @DisplayName("GetSnippetFutureId0")
+    void getSnippetFutureId0() throws ExecutionException, InterruptedException {
+        Future<Snippet> snippetFuture = snippetClient.getSnippetFuture(1);
+        Snippet snippet = snippetFuture.get();
         assertNotNull(snippet);
         LOG.info(snippet.toString());
     }
