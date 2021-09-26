@@ -1,10 +1,12 @@
 package com.semihbkgr.gorun.snippet;
 
+import com.semihbkgr.gorun.util.RequestException;
+import com.semihbkgr.gorun.util.ResponseCallback;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 public class SnippetServiceImpl implements SnippetService {
 
@@ -15,27 +17,34 @@ public class SnippetServiceImpl implements SnippetService {
     }
 
     @Override
-    public List<Snippet> getSnippets() {
-        if (isAvailable())
-            return snippetCache.getCache();
-        List<Snippet> snippetList= Arrays.asList(snippetClient.getSnippetsBlock());
-        snippetCache.setCache(snippetList);
-        return snippetList;
+    public List<SnippetInfo> getAllSnippetInfos() throws RequestException {
+        return Arrays.asList(snippetClient.getAllSnippetInfos());
     }
 
     @Override
-    public void getSnippetsAsync(Consumer<? super List<Snippet>> snippetListConsumer) {
-        if (isAvailable()) ForkJoinPool.commonPool().execute((() -> snippetListConsumer.accept(snippetCache.getCache())));
-        else snippetClient.getSnippetAsync(snippets -> {
-                List<Snippet> snippetList=snippets!=null?Arrays.asList(snippets): Collections.emptyList();
-                snippetCache.setCache(snippetList);
-                snippetListConsumer.accept(snippetList);
-            });
+    public void getAllSnippetInfosAsync(ResponseCallback<? super List<SnippetInfo>> callback) {
+        snippetClient.getAllSnippetInfosAsync(callback.convertResponseType(Arrays::asList));
     }
 
     @Override
-    public boolean isAvailable() {
-        return snippetCache.isCached();
+    public Future<List<SnippetInfo>> getAllSnippetInfosFuture() {
+        return ((CompletableFuture<SnippetInfo[]>) snippetClient.getAllSnippetInfoFuture())
+                .thenApplyAsync(Arrays::asList);
+    }
+
+    @Override
+    public Snippet getSnippet(int id) throws RequestException {
+        return snippetClient.getSnippet(id);
+    }
+
+    @Override
+    public void getSnippetAsync(int id, ResponseCallback<? super Snippet> callback) {
+        snippetClient.getSnippetAsync(id, callback);
+    }
+
+    @Override
+    public Future<Snippet> getSnippetFuture(int id) {
+        return snippetClient.getSnippetFuture(id);
     }
 
 }

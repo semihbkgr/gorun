@@ -1,16 +1,23 @@
 package com.semihbkgr.gorun.snippet;
 
+import com.semihbkgr.gorun.util.RequestException;
+import com.semihbkgr.gorun.util.ResponseCallback;
+
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.concurrent.Future;
 
 public interface SnippetService {
 
-    List<SnippetInfo> getAllSnippetInfo();
+    List<SnippetInfo> getAllSnippetInfos() throws RequestException;
 
-    void getAllSnippetInfoAsync(Consumer<? super List<SnippetInfo>> callback);
+    void getAllSnippetInfosAsync(ResponseCallback<? super List<SnippetInfo>> callback);
 
-    Snippet getSnippet(int id);
+    Future<List<SnippetInfo>> getAllSnippetInfosFuture();
 
-    void getSnippetAsync(int id,Consumer<? super List<SnippetInfo>> callback);
+    Snippet getSnippet(int id) throws RequestException;
+
+    void getSnippetAsync(int id, ResponseCallback<? super Snippet> callback);
+
+    Future<Snippet> getSnippetFuture(int id);
 
 }
