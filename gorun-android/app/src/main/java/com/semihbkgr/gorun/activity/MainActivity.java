@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.core.AppConstant;
+import com.semihbkgr.gorun.AppConstant;
 import com.semihbkgr.gorun.core.AppContext;
 import com.semihbkgr.gorun.setting.AppSetting;
 

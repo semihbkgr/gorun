@@ -4,17 +4,12 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.core.AppConstant;
-import com.semihbkgr.gorun.core.AppContext;
+import com.semihbkgr.gorun.AppConstant;
 import com.semihbkgr.gorun.snippet.Snippet;
-import com.semihbkgr.gorun.view.adapter.SnippetArrayAdapter;
-
-import java.util.List;
 
 public class SnippetActivity extends AppCompatActivity {
 

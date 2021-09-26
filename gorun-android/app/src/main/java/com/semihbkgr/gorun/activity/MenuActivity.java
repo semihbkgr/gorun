@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.core.AppConstant;
+import com.semihbkgr.gorun.AppConstant;
 import com.semihbkgr.gorun.util.ExpirationTimer;
 
 public class MenuActivity extends AppCompatActivity {

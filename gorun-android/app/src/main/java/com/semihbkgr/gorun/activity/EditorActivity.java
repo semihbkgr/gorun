@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.core.AppConstant;
+import com.semihbkgr.gorun.AppConstant;
 import com.semihbkgr.gorun.message.Command;
 import com.semihbkgr.gorun.run.CodeRunContext;
 import com.semihbkgr.gorun.setting.AppSetting;

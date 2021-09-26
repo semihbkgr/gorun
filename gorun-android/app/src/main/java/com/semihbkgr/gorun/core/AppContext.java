@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient;
 
 import java.io.File;
 
-import static com.semihbkgr.gorun.core.AppConstant.EXTERNAL_DIR_NAME;
+import static com.semihbkgr.gorun.AppConstant.File.EXTERNAL_DIR_NAME;
 
 public class AppContext {
 
