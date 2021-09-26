@@ -6,12 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.semihbkgr.gorun.snippet.SnippetClientImpl;
-import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
 import com.semihbkgr.gorun.snippet.SnippetClient;
+import com.semihbkgr.gorun.snippet.SnippetClientImpl;
 import com.semihbkgr.gorun.snippet.SnippetService;
-import com.semihbkgr.gorun.tutorial.LocalTutorialService;
-import com.semihbkgr.gorun.tutorial.TutorialService;
+import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
 import com.semihbkgr.gorun.util.ListenedThreadPoolWrapper;
 import okhttp3.OkHttpClient;
 
@@ -31,10 +29,10 @@ public class AppContext {
     public final SnippetClient snippetClient;
     public final SnippetService snippetService;
     public final AppDatabaseHelper appDatabaseHelper;
-    public final TutorialService tutorialService;
     public final AppSourceHelper appSourceHelper;
     //TODO thread pool termination
     public final ListenedThreadPoolWrapper listenedThreadPoolWrapper;
+
     private AppContext(Context context) {
         this.context = context;
         this.httpClient = new OkHttpClient();
@@ -43,7 +41,6 @@ public class AppContext {
         this.snippetClient = new SnippetClientImpl(httpClient, gson);
         this.snippetService = new SnippetServiceImpl(snippetClient);
         this.appDatabaseHelper = new AppDatabaseHelper(context);
-        this.tutorialService = new LocalTutorialService(appDatabaseHelper);
         this.appSourceHelper = new AppSourceHelper(context, gson);
         this.listenedThreadPoolWrapper = new ListenedThreadPoolWrapper(5);
     }

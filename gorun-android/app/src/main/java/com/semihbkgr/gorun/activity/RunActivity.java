@@ -74,7 +74,7 @@ public class RunActivity extends AppCompatActivity {
         } else if (AppSetting.instance.appState.getServerStateType() == ServerStateType.DOWN){
             AppSetting.instance.updateAllState();
             Toast.makeText(this, "Server is down", Toast.LENGTH_LONG).show();
-        } else startActivity(new Intent(this, SnippetActivity.class));
+        }
     }
 
 }

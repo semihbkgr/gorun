@@ -27,7 +27,7 @@ public class SnippetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snippet);
         snippetListView=findViewById(R.id.snippetListView);
-        if(AppContext.instance().snippetService.isAvailable()){
+        /*if(AppContext.instance().snippetService.isAvailable()){
             List<Snippet> snippetList=AppContext.instance().snippetService.getSnippets();
             ArrayAdapter<Snippet> snippetArrayAdapter=new SnippetArrayAdapter(getApplicationContext(),snippetList);
             snippetListView.setAdapter(snippetArrayAdapter);
@@ -37,7 +37,7 @@ public class SnippetActivity extends AppCompatActivity {
                 snippetListView.setAdapter(snippetArrayAdapter);
             }));
         }
-        snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
+        snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);*/
     }
 
     private void onSnippetListViewItemClick(AdapterView<?> parent, View view, int position, long id){

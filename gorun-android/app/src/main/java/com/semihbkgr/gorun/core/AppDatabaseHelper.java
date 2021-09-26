@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.semihbkgr.gorun.tutorial.TutorialContract.TutorialSubject;
 
 public class AppDatabaseHelper extends SQLiteOpenHelper {
 
@@ -17,13 +16,12 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(TutorialSubject.SQL_CREATE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(TutorialSubject.SQL_DELETE);
-        onCreate(db);
+
     }
 
     @Override

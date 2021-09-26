@@ -43,8 +43,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void onSnippetLayoutClicked(View v) {
-        Intent i=new Intent(this,SubjectActivity.class);
-        startActivity(i);
+
     }
 
     private void onDocLayoutClicked(View v){

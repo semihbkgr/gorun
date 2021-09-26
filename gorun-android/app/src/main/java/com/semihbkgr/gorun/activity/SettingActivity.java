@@ -51,13 +51,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
     private void onButtonClearSubjectClicked(View v){
-        Log.i(TAG, "onButtonClearSubjectClicked: Button clicked");
-        AppContext.instance().listenedThreadPoolWrapper.listenedExecute(
-                (Callable<Integer>) AppContext.instance().tutorialService::deleteAllSubjects,
-                count->{
-                    Log.i(TAG, "onButtonClearSubjectClicked: Subjects table cleared, Deleted row count: "+count);
-                    runOnUiThread(()-> Toast.makeText(this,"Subjects table cleared, Deleted row count: "+count,Toast.LENGTH_SHORT).show());
-                });
+
     }
 
 
