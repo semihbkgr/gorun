@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.util.excepiton;
+package com.semihbkgr.gorun.util.exception;
 
 public class ErrorResponseModel {
 

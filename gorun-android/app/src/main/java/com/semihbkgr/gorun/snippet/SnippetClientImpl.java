@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 import com.semihbkgr.gorun.core.AppConstant;
 import com.semihbkgr.gorun.util.ResponseCallback;
 import com.semihbkgr.gorun.util.ThrowUtils;
-import com.semihbkgr.gorun.util.excepiton.ErrorResponseModel;
-import com.semihbkgr.gorun.util.excepiton.RequestException;
+import com.semihbkgr.gorun.util.exception.ErrorResponseModel;
+import com.semihbkgr.gorun.util.exception.RequestException;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 

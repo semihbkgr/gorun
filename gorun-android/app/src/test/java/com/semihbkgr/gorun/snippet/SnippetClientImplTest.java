@@ -2,7 +2,7 @@ package com.semihbkgr.gorun.snippet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.semihbkgr.gorun.util.excepiton.RequestException;
+import com.semihbkgr.gorun.util.exception.RequestException;
 import com.semihbkgr.gorun.util.ResponseCallback;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +15,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SnippetClientImplTest {
 
@@ -122,7 +121,7 @@ class SnippetClientImplTest {
         try {
             Snippet snippet = snippetClient.getSnippet(0);
         } catch (RequestException e) {
-            fail(e);
+            assertTrue(e.errorResponseModelOptional().isPresent());
         }
     }
 
@@ -130,17 +129,21 @@ class SnippetClientImplTest {
     @DisplayName("GetSnippetAsyncId0")
     void getSnippetAsyncId0() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
-        snippetClient.getSnippetAsync(1, new ResponseCallback<Snippet>() {
+        snippetClient.getSnippetAsync(0, new ResponseCallback<Snippet>() {
             @Override
             public void onResponse(Snippet snippet) {
-                assertNotNull(snippet);
-                LOG.info(snippet.toString());
-                latch.countDown();
+                fail();
             }
 
             @Override
             public void onFailure(Exception e) {
-                fail(e);
+                if(e instanceof RequestException){
+                    assertTrue(((RequestException)e).errorResponseModelOptional().isPresent());
+                    latch.countDown();
+                }
+                else
+                    fail();
+
             }
         });
         latch.await();
@@ -149,7 +152,7 @@ class SnippetClientImplTest {
     @Test
     @DisplayName("GetSnippetFutureId0")
     void getSnippetFutureId0() throws ExecutionException, InterruptedException {
-        Future<Snippet> snippetFuture = snippetClient.getSnippetFuture(1);
+        Future<Snippet> snippetFuture = snippetClient.getSnippetFuture(0);
         Snippet snippet = snippetFuture.get();
         assertNotNull(snippet);
         LOG.info(snippet.toString());

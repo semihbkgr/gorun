@@ -8,7 +8,7 @@ public class AppConstant {
     public static final String SUBJECT_ASSET_FILE_NAME = "subjects.json";
 
     //NET
-    public static final String SERVER_HTTP_URI = "http://192.168.1.5:8080";
+    public static final String SERVER_HTTP_URI = "http://192.168.1.4:8080";
     public static final String SERVER_SOCKET_URI = "ws://192.168.1.7:8080";
     public static final String SERVER_SNIPPET_URI = SERVER_HTTP_URI + "/snippet";
     public static final String SERVER_CODE_RUN_URI = SERVER_SOCKET_URI + "/run";

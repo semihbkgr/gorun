@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.util.excepiton;
+package com.semihbkgr.gorun.util.exception;
 
 import java.util.Optional;
 

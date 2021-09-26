@@ -16,4 +16,15 @@ public class Snippet {
         this.code = code;
     }
 
+    @Override
+    public String toString() {
+        return "Snippet{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", brief='" + brief + '\'' +
+                ", explanation='" + explanation + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
+
 }
