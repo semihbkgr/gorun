@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.run;
 
 import com.semihbkgr.gorun.AppConstant;
-import com.semihbkgr.gorun.core.AppContext;
+import com.semihbkgr.gorun.AppContext;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 

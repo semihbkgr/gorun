@@ -2,24 +2,18 @@ package com.semihbkgr.gorun.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.core.AppContext;
 import com.semihbkgr.gorun.setting.AppSetting;
-import com.semihbkgr.gorun.setting.ServerStateType;
-
-import java.util.concurrent.Callable;
 
 public class SettingActivity extends AppCompatActivity {
 

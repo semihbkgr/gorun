@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
-import com.semihbkgr.gorun.core.AppContext;
+import com.semihbkgr.gorun.AppContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,7 +40,7 @@ public class LocalTutorialServiceTest {
 
     @After
     public void destroy() {
-        int count = AppContext.instance().appDatabaseHelper.getWritableDatabase()
+        int count = AppContext.instance().databaseHelper.getWritableDatabase()
                 .delete(TutorialContract.TutorialSubject.TABLE_NAME, null, null);
         Log.i(TAG, String.format("destroy: %s table has been cleared", TutorialContract.TutorialSubject.TABLE_NAME));
     }

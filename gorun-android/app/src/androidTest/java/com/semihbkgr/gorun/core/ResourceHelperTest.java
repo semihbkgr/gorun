@@ -1,19 +1,28 @@
 package com.semihbkgr.gorun.core;
 
+import android.content.Context;
 import android.util.Log;
-import com.google.gson.GsonBuilder;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
+import com.semihbkgr.gorun.AppConstant;
+import com.semihbkgr.gorun.AppContext;
+import com.semihbkgr.gorun.util.ResourceHelper;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class AppSourceHelperTest {
+@RunWith(AndroidJUnit4.class)
+@LargeTest
+public class ResourceHelperTest {
 
-    private static final String TAG = AppSourceHelperTest.class.getName();
-    private static final String TEST_RESOURCE_FILE_NAME = "test.json";
+    private static final String TAG = ResourceHelperTest.class.getName();
     private static final TestModel TEST_MODEL_INSTANCE;
     private static final String TEST_MODEL_JSON;
 
@@ -30,54 +39,35 @@ class AppSourceHelperTest {
                         "}";
     }
 
-    private AppSourceHelper appSourceHelper;
+    private ResourceHelper resourceHelper;
 
-    @BeforeEach
+    @BeforeClass
+    public static void initialize() {
+        if (!AppContext.initialized()) {
+            Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            AppContext.initialize(context);
+            Log.i(TAG, "initialize: AppContext has been initialized");
+        } else Log.i(TAG, "initialize: AppContext has already been initialized");
+    }
+
+    @Before
     public void launch() {
-        appSourceHelper = new AppSourceHelper(null, new GsonBuilder().create());
+        resourceHelper = AppContext.instance().resourceHelper;
+        Log.i(TAG, "launch: Required objects have been created successfully");
     }
 
     @Test
-    void checkIfLocalResourceFileExistsAndNotEmpty() {
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(TEST_RESOURCE_FILE_NAME)) {
-            assertNotNull(is);
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder resourceContent = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null)
-                resourceContent.append(line)
-                        .append(System.lineSeparator());
-            assertTrue(resourceContent.length() > 0);
-            Log.i(TAG, "checkIfLocalResourceFileExistsAndNotEmpty: Resource content: " + resourceContent.toString());
-            br.close();
-            isr.close();
-        } catch (IOException e) {
-            fail(e);
-        }
+    public void readAssetAsString() throws IOException {
+        String resource = resourceHelper.readAsset(AppConstant.File.TEST_ASSET_FILE_NAME);
+        assertEquals(TEST_MODEL_JSON, resource);
+        Log.i(TAG, "readAssetAsString: Resource: " + resource);
     }
 
     @Test
-    void readStringFromStreamAndCheckIfEqual() {
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(TEST_RESOURCE_FILE_NAME)) {
-            String resourceContent = appSourceHelper.readStringFromStream(is);
-            assertEquals(TEST_MODEL_JSON, resourceContent);
-            Log.i(TAG, "readStringFromStreamAndCheckIfEqual: Resource content: " + resourceContent.toString());
-        } catch (IOException e) {
-            fail(e);
-        }
-    }
-
-    @Test
-    void readTypeFromReaderAndCheckIfEquals() {
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(TEST_RESOURCE_FILE_NAME);
-             Reader r = new InputStreamReader(is)) {
-            TestModel testModel=appSourceHelper.readTypeFromReader(r,TestModel.class);
-            assertEquals(TEST_MODEL_INSTANCE,testModel);
-            Log.i(TAG, "readTypeFromReaderAndCheckIfEquals: TestModel content: "+testModel);
-        } catch (IOException e) {
-            fail(e);
-        }
+    public void readAssetAsType() throws IOException {
+        TestModel testModel = resourceHelper.readAsset(AppConstant.File.TEST_ASSET_FILE_NAME, TestModel.class);
+        assertEquals(TEST_MODEL_INSTANCE, testModel);
+        Log.i(TAG, "readAssetAsType: Resource instance: " + testModel);
     }
 
     private static class TestModel {
@@ -149,6 +139,5 @@ class AppSourceHelperTest {
         }
 
     }
-
 
 }

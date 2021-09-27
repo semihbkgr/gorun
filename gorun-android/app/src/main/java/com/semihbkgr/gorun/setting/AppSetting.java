@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.setting;
 
-import com.semihbkgr.gorun.core.AppContext;
+import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.util.StateUtils;
 
 import java.util.function.Consumer;

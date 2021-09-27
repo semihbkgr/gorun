@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.core;
+package com.semihbkgr.gorun;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,10 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.semihbkgr.gorun.util.DatabaseHelper;
 import com.semihbkgr.gorun.snippet.SnippetClient;
 import com.semihbkgr.gorun.snippet.SnippetClientImpl;
 import com.semihbkgr.gorun.snippet.SnippetService;
 import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
+import com.semihbkgr.gorun.util.ResourceHelper;
 import com.semihbkgr.gorun.util.ListenedThreadPoolWrapper;
 import okhttp3.OkHttpClient;
 
@@ -22,14 +24,14 @@ public class AppContext {
     private static final String TAG = AppContext.class.getName();
 
     private static AppContext instance;
-    public final Context context;
+
     public final OkHttpClient httpClient;
     public final Gson gson;
     public final File rootDir;
     public final SnippetClient snippetClient;
     public final SnippetService snippetService;
-    public final AppDatabaseHelper appDatabaseHelper;
-    public final AppSourceHelper appSourceHelper;
+    public final DatabaseHelper databaseHelper;
+    public final ResourceHelper resourceHelper;
     //TODO thread pool termination
     public final ListenedThreadPoolWrapper listenedThreadPoolWrapper;
 
@@ -40,8 +42,8 @@ public class AppContext {
         this.rootDir = createAndGetExternalDir(context);
         this.snippetClient = new SnippetClientImpl(httpClient, gson);
         this.snippetService = new SnippetServiceImpl(snippetClient);
-        this.appDatabaseHelper = new AppDatabaseHelper(context);
-        this.appSourceHelper = new AppSourceHelper(context, gson);
+        this.databaseHelper = new DatabaseHelper(context);
+        this.resourceHelper = new ResourceHelper(context, gson);
         this.listenedThreadPoolWrapper = new ListenedThreadPoolWrapper(5);
     }
 

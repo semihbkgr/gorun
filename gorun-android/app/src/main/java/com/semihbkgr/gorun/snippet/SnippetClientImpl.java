@@ -4,10 +4,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.semihbkgr.gorun.AppConstant;
-import com.semihbkgr.gorun.util.ResponseCallback;
+import com.semihbkgr.gorun.util.http.ResponseCallback;
 import com.semihbkgr.gorun.util.ThrowUtils;
-import com.semihbkgr.gorun.util.exception.ErrorResponseModel;
-import com.semihbkgr.gorun.util.exception.RequestException;
+import com.semihbkgr.gorun.util.http.ErrorResponseModel;
+import com.semihbkgr.gorun.util.http.RequestException;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.core;
+package com.semihbkgr.gorun.util;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -10,20 +10,18 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
-public class AppSourceHelper {
+public class ResourceHelper {
 
     private final Context context;
     private final Gson gson;
 
-
-    public AppSourceHelper(Context context, Gson gson) {
+    public ResourceHelper(@NonNull Context context, @NonNull Gson gson) {
         this.context = context;
         this.gson = gson;
     }
 
     @NonNull
     public String readAsset(@NonNull String fileName) throws IOException {
-        if(context==null) throw new IllegalStateException();
         try (InputStream is = context.getAssets().open(fileName)) {
             return readStringFromStream(is);
         }
@@ -41,16 +39,15 @@ public class AppSourceHelper {
     }
 
     @NonNull
-    public <T> T readAsset(@NonNull String fileName,@NonNull Class<T> type) throws IOException {
-        if(context==null) throw new IllegalStateException();
+    public <T> T readAsset(@NonNull String fileName, @NonNull Class<T> type) throws IOException {
         try (InputStream is = context.getAssets().open(fileName);
              Reader reader = new InputStreamReader(is)) {
-            return readTypeFromReader(reader,type);
+            return readTypeFromReader(reader, type);
         }
     }
 
     @NonNull
-    public <T> T readTypeFromReader(@NonNull Reader reader,@NonNull Class<T> type){
+    public <T> T readTypeFromReader(@NonNull Reader reader, @NonNull Class<T> type) {
         return gson.fromJson(reader, type);
     }
 

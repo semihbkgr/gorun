@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.snippet;
 
-import com.semihbkgr.gorun.util.exception.RequestException;
-import com.semihbkgr.gorun.util.ResponseCallback;
+import com.semihbkgr.gorun.util.http.RequestException;
+import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.Arrays;
 import java.util.List;

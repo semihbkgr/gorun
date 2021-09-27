@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.util;
 
 import com.semihbkgr.gorun.AppConstant;
-import com.semihbkgr.gorun.core.AppContext;
+import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.setting.ServerStateType;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -17,6 +17,7 @@ public class StateUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return false;
     }
 

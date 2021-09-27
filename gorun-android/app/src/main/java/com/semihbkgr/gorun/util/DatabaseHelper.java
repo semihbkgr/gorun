@@ -1,16 +1,16 @@
-package com.semihbkgr.gorun.core;
+package com.semihbkgr.gorun.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-public class AppDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     static final int DATABASE_VERSION=1;
     static final String DATABASE_NAME="gorun.db";
 
-    public AppDatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null,DATABASE_VERSION);
     }
     

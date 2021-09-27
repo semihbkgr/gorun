@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.util.exception;
+package com.semihbkgr.gorun.util.http;
 
 import java.util.Optional;
 
