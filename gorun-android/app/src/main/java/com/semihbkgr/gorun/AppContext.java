@@ -32,11 +32,8 @@ public class AppContext {
     public final SnippetService snippetService;
     public final DatabaseHelper databaseHelper;
     public final ResourceHelper resourceHelper;
-    //TODO thread pool termination
-    public final ListenedThreadPoolWrapper listenedThreadPoolWrapper;
 
     private AppContext(Context context) {
-        this.context = context;
         this.httpClient = new OkHttpClient();
         this.gson = new GsonBuilder().create();
         this.rootDir = createAndGetExternalDir(context);
@@ -44,14 +41,11 @@ public class AppContext {
         this.snippetService = new SnippetServiceImpl(snippetClient);
         this.databaseHelper = new DatabaseHelper(context);
         this.resourceHelper = new ResourceHelper(context, gson);
-        this.listenedThreadPoolWrapper = new ListenedThreadPoolWrapper(5);
     }
 
-    public static void initialize(Context context) {
+    public static void initialize(@NonNull Context context) {
         if (instance != null)
             throw new IllegalStateException("AppContext instance has already been initialized before");
-        if (context == null)
-            throw new IllegalArgumentException("Context parameter cannot be null");
         Log.i(TAG, "initialize: AppContext initialization is being started");
         instance = new AppContext(context);
         Log.i(TAG, "initialize: AppContext has been initialized");
