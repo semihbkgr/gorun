@@ -11,26 +11,28 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
-        <activity android:name="com.semihbkgr.gorun.activity.SnippetActivity">
+        <activity android:name=".activity.SnippetActivity">
+        </activity>
+        <activity android:name=".activity.SnippetListActivity">
         </activity>
         <activity
-                android:name="com.semihbkgr.gorun.activity.EditorActivity"
+                android:name=".activity.EditorActivity"
                 android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
-                android:name="com.semihbkgr.gorun.activity.SettingActivity"
-                android:parentActivityName="com.semihbkgr.gorun.activity.MenuActivity">
+                android:name=".activity.SettingActivity"
+                android:parentActivityName=".activity.MenuActivity">
         </activity>
         <activity
-                android:name="com.semihbkgr.gorun.activity.RunActivity"
-                android:parentActivityName="com.semihbkgr.gorun.activity.MenuActivity">
+                android:name=".activity.RunActivity"
+                android:parentActivityName=".activity.MenuActivity">
         </activity>
-        <activity android:name="com.semihbkgr.gorun.activity.MenuActivity">
+        <activity android:name=".activity.MenuActivity">
         </activity>
-        <activity android:name="com.semihbkgr.gorun.activity.MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

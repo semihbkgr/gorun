@@ -1,56 +1,13 @@
 package com.semihbkgr.gorun.activity;
 
-import android.content.Intent;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.semihbkgr.gorun.AppContext;
-import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.AppConstant;
-import com.semihbkgr.gorun.snippet.Snippet;
-import com.semihbkgr.gorun.snippet.SnippetInfo;
-import com.semihbkgr.gorun.util.SnippetInfoArrayAdapter;
-import com.semihbkgr.gorun.util.http.ResponseCallback;
-
-import java.util.List;
 
 public class SnippetActivity extends AppCompatActivity {
-
-    private static final String TAG=SnippetActivity.class.getName();
-
-    private ListView snippetListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_snippet);
-        snippetListView=findViewById(R.id.snippetListView);
-
-        AppContext.instance().snippetService.getAllSnippetInfosAsync(new ResponseCallback<List<SnippetInfo>>() {
-            @Override
-            public void onResponse(List<SnippetInfo> data) {
-                ArrayAdapter<SnippetInfo> snippetArrayAdapter= new SnippetInfoArrayAdapter(getApplicationContext(),data);
-                snippetListView.setAdapter(snippetArrayAdapter);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
-        snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
+        setContentView(R.layout.activity_snippet2);
     }
-
-    private void onSnippetListViewItemClick(AdapterView<?> parent, View view, int position, long id){
-        Log.i(TAG, "onCreate: SnippetTextView item selected");
-        Snippet snippet=(Snippet)snippetListView.getAdapter().getItem(position);
-        Intent intent=new Intent(this,EditorActivity.class);
-        intent.putExtra(AppConstant.INTENT_EXTRA_SNIPPET_CODE,snippet.code);
-        startActivity(intent);
-    }
-
 }
