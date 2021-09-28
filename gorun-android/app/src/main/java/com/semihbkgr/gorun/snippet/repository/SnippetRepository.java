@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface SnippetRepository {
 
-    List<SnippetInfo> getSnippetInfos();
+    List<SnippetInfo> findAll();
 
-    Snippet getSnippet(int id);
+    Snippet findById(int id);
 
-    void saveSnippet(Snippet snippet);
+    void save(Snippet snippet);
 
-    void updateSnippet(int id,Snippet snippet);
+    void update(Snippet snippet);
 
-    void deleteSnippet(int id);
+    void deleteById(int id);
 
 }
