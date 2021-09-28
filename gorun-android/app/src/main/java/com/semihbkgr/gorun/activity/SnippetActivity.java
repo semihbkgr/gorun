@@ -4,12 +4,19 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.AppConstant;
 import com.semihbkgr.gorun.snippet.Snippet;
+import com.semihbkgr.gorun.snippet.SnippetInfo;
+import com.semihbkgr.gorun.util.SnippetInfoArrayAdapter;
+import com.semihbkgr.gorun.util.http.ResponseCallback;
+
+import java.util.List;
 
 public class SnippetActivity extends AppCompatActivity {
 
@@ -22,17 +29,20 @@ public class SnippetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snippet);
         snippetListView=findViewById(R.id.snippetListView);
-        /*if(AppContext.instance().snippetService.isAvailable()){
-            List<Snippet> snippetList=AppContext.instance().snippetService.getSnippets();
-            ArrayAdapter<Snippet> snippetArrayAdapter=new SnippetArrayAdapter(getApplicationContext(),snippetList);
-            snippetListView.setAdapter(snippetArrayAdapter);
-        }else{
-            AppContext.instance().snippetService.getSnippetsAsync((snippetList)-> runOnUiThread(()->{
-                ArrayAdapter<Snippet> snippetArrayAdapter=new SnippetArrayAdapter(getApplicationContext(),snippetList);
+
+        AppContext.instance().snippetService.getAllSnippetInfosAsync(new ResponseCallback<List<SnippetInfo>>() {
+            @Override
+            public void onResponse(List<SnippetInfo> data) {
+                ArrayAdapter<SnippetInfo> snippetArrayAdapter= new SnippetInfoArrayAdapter(getApplicationContext(),data);
                 snippetListView.setAdapter(snippetArrayAdapter);
-            }));
-        }
-        snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);*/
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+        snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
     }
 
     private void onSnippetListViewItemClick(AdapterView<?> parent, View view, int position, long id){
@@ -42,6 +52,5 @@ public class SnippetActivity extends AppCompatActivity {
         intent.putExtra(AppConstant.INTENT_EXTRA_SNIPPET_CODE,snippet.code);
         startActivity(intent);
     }
-
 
 }
