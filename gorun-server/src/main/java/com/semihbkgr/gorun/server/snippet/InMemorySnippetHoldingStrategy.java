@@ -16,6 +16,7 @@ public class InMemorySnippetHoldingStrategy implements SnippetHoldingStrategy {
 
     @Override
     public Flux<SnippetInfo> findAllInfo() {
+        InheritableThreadLocal
         return Flux.fromStream(
                 snippetMap.entrySet()
                         .parallelStream()

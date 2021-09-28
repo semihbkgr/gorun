@@ -12,7 +12,6 @@ import com.semihbkgr.gorun.snippet.SnippetClientImpl;
 import com.semihbkgr.gorun.snippet.SnippetService;
 import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
 import com.semihbkgr.gorun.util.ResourceHelper;
-import com.semihbkgr.gorun.util.ListenedThreadPoolWrapper;
 import okhttp3.OkHttpClient;
 
 import java.io.File;
@@ -25,20 +24,34 @@ public class AppContext {
 
     private static AppContext instance;
 
-    public final OkHttpClient httpClient;
-    public final Gson gson;
+
     public final File rootDir;
-    public final SnippetClient snippetClient;
+    public final Gson gson;
+    public final OkHttpClient httpClient;
     public final SnippetService snippetService;
     public final DatabaseHelper databaseHelper;
     public final ResourceHelper resourceHelper;
 
     private AppContext(Context context) {
-        this.httpClient = new OkHttpClient();
+
+        //Root Dir
+        this.rootDir = context.getExternalFilesDir(EXTERNAL_DIR_NAME);
+        if()
+        if (!rootDir.exists()) {
+            Log.i(TAG, "createAndGetExternalDir: Root dir is not exist");
+            boolean isCreated = dir.mkdirs();
+            if (!isCreated) throw new IllegalStateException("Root dir cannot be created");
+            Log.i(TAG, "createAndGetExternalDir: Root dir has been created");
+        } else Log.i(TAG, "createAndGetExternalDir: Root dir has been already created");
+        return dir;
+
+
         this.gson = new GsonBuilder().create();
-        this.rootDir = createAndGetExternalDir(context);
-        this.snippetClient = new SnippetClientImpl(httpClient, gson);
+        this.httpClient = new OkHttpClient();
+
+        SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
         this.snippetService = new SnippetServiceImpl(snippetClient);
+
         this.databaseHelper = new DatabaseHelper(context);
         this.resourceHelper = new ResourceHelper(context, gson);
     }
@@ -59,19 +72,6 @@ public class AppContext {
 
     public static boolean initialized() {
         return instance != null;
-    }
-
-    @Nullable
-    private File createAndGetExternalDir(@NonNull Context context) {
-        File dir = context.getExternalFilesDir(EXTERNAL_DIR_NAME);
-        if (dir == null) return null;
-        if (!dir.exists()) {
-            Log.i(TAG, "createAndGetExternalDir: Root dir is not exist");
-            boolean isCreated = dir.mkdirs();
-            if (!isCreated) throw new IllegalStateException("Root dir cannot be created");
-            Log.i(TAG, "createAndGetExternalDir: Root dir has been created");
-        } else Log.i(TAG, "createAndGetExternalDir: Root dir has been already created");
-        return dir;
     }
 
 }
