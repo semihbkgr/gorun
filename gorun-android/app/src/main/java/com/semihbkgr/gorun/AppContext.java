@@ -3,14 +3,13 @@ package com.semihbkgr.gorun;
 import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.semihbkgr.gorun.util.DatabaseHelper;
 import com.semihbkgr.gorun.snippet.SnippetClient;
 import com.semihbkgr.gorun.snippet.SnippetClientImpl;
 import com.semihbkgr.gorun.snippet.SnippetService;
 import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
+import com.semihbkgr.gorun.util.DatabaseHelper;
 import com.semihbkgr.gorun.util.ResourceHelper;
 import okhttp3.OkHttpClient;
 
@@ -34,17 +33,13 @@ public class AppContext {
 
     private AppContext(Context context) {
 
-        //Root Dir
         this.rootDir = context.getExternalFilesDir(EXTERNAL_DIR_NAME);
-        if()
-        if (!rootDir.exists()) {
+        if (rootDir!=null && !rootDir.exists()) {
             Log.i(TAG, "createAndGetExternalDir: Root dir is not exist");
-            boolean isCreated = dir.mkdirs();
+            boolean isCreated = rootDir.mkdirs();
             if (!isCreated) throw new IllegalStateException("Root dir cannot be created");
             Log.i(TAG, "createAndGetExternalDir: Root dir has been created");
         } else Log.i(TAG, "createAndGetExternalDir: Root dir has been already created");
-        return dir;
-
 
         this.gson = new GsonBuilder().create();
         this.httpClient = new OkHttpClient();

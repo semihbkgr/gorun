@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.view.code.highlight;
+package com.semihbkgr.gorun.editor;
 
 import com.semihbkgr.gorun.R;
 

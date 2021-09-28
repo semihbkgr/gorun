@@ -5,7 +5,13 @@ public class SnippetDatabaseConstants {
     public static final String TABLE_NAME = "snippets";
 
     public static final String SQL_CREATE_TABLE_IF_NOT_EXISTS =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_NAME;
+            "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
+                    Columns.ID_NAME + " INTEGER NOT NULL PRIMARY KEY, " +
+                    Columns.TITLE_NAME + " TEXT NOT NULL, " +
+                    Columns.BRIEF_NAME + " TEXT NOT NULL, " +
+                    Columns.EXPLANATION_NAME + " TEXT NOT NULL, " +
+                    Columns.CODE_NAME + " TEXT NOT NULL " +
+                    " )";
 
     public static final String SQL_DROP_TABLE_IF_EXISTS =
             "DROP TABLE IF EXISTS " + TABLE_NAME;

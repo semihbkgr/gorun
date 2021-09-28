@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.view.adapter;
+package com.semihbkgr.gorun.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;

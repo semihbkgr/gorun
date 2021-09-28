@@ -18,7 +18,7 @@ import com.semihbkgr.gorun.setting.AppSetting;
 import com.semihbkgr.gorun.setting.ServerStateType;
 import com.semihbkgr.gorun.util.TextChangeHandler;
 import com.semihbkgr.gorun.util.TextChangeListener;
-import com.semihbkgr.gorun.view.code.CodeEditor;
+import com.semihbkgr.gorun.editor.CodeEditor;
 
 public class EditorActivity extends AppCompatActivity {
 

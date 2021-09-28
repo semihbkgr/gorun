@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.view.code;
+package com.semihbkgr.gorun.editor;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbkgr.gorun.util.TextWatcherAdapter;
-import com.semihbkgr.gorun.view.code.highlight.CodeHighlighter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
