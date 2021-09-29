@@ -2,6 +2,7 @@ package com.semihbkgr.gorun.activity;
 
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbkgr.gorun.AppConstant;
@@ -14,6 +15,11 @@ public class SnippetActivity extends AppCompatActivity {
 
     private static final String TAG=SnippetActivity.class.getName();
 
+    private TextView titleTextView;
+    private TextView briefTextView;
+    private TextView explanationTextView;
+    private TextView codeTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +31,7 @@ public class SnippetActivity extends AppCompatActivity {
             AppContext.instance().snippetService.getSnippetAsync(snippetId, new ResponseCallback<Snippet>() {
                 @Override
                 public void onResponse(Snippet data) {
-
+                    loadSnippet(data);
                 }
 
                 @Override
@@ -36,6 +42,13 @@ public class SnippetActivity extends AppCompatActivity {
         } else
             startActivity(new Intent(this,MenuActivity.class));
 
+    }
+
+    private void loadSnippet(Snippet snippet){
+        titleTextView.setText(snippet.title);
+        briefTextView.setText(snippet.brief);
+        explanationTextView.setText(snippet.explanation);
+        codeTextView.setText(snippet.code);
     }
 
 }
