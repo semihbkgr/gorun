@@ -15,7 +15,7 @@ import com.semihbkgr.gorun.util.ExpirationTimer;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private final ExpirationTimer backTimer = new ExpirationTimer(AppConstant.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
+    private final ExpirationTimer backTimer = new ExpirationTimer(AppConstant.Value.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
 
     private LinearLayout editorLayout;
     private LinearLayout snippetLayout;

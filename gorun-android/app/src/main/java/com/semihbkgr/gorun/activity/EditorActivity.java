@@ -97,7 +97,7 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String code = getIntent().getStringExtra(AppConstant.INTENT_EXTRA_SNIPPET_CODE);
+        String code = getIntent().getStringExtra(AppConstant.Value.INTENT_EXTRA_SNIPPET_CODE);
         if (code != null) {
             Log.i(TAG, "onStart: Activity started with code");
             codeEditor.setText(code);

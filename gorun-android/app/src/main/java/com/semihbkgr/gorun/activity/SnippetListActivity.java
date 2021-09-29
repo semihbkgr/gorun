@@ -47,9 +47,9 @@ public class SnippetListActivity extends AppCompatActivity {
 
     private void onSnippetListViewItemClick(AdapterView<?> parent, View view, int position, long id){
         Log.i(TAG, "onCreate: SnippetTextView item selected");
-        Snippet snippet=(Snippet)snippetListView.getAdapter().getItem(position);
-        Intent intent=new Intent(this,EditorActivity.class);
-        intent.putExtra(AppConstant.INTENT_EXTRA_SNIPPET_CODE,snippet.code);
+        SnippetInfo snippetInfo=(SnippetInfo)snippetListView.getAdapter().getItem(position);
+        Intent intent=new Intent(this,SnippetActivity.class);
+        intent.putExtra(AppConstant.Value.INTENT_SNIPPET_ID_NAME,snippetInfo.id);
         startActivity(intent);
     }
 

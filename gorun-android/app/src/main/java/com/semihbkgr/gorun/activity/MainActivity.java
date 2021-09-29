@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, MenuActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                }, AppConstant.LOGO_SCREEN_TIME_MS);
+                }, AppConstant.Value.LOGO_SCREEN_TIME_MS);
 
     }
 
