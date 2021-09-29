@@ -1,5 +1,7 @@
 package com.semihbkgr.gorun.snippet;
 
+import androidx.annotation.NonNull;
+import com.semihbkgr.gorun.snippet.repository.SnippetRepository;
 import com.semihbkgr.gorun.util.http.RequestException;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
@@ -11,9 +13,11 @@ import java.util.concurrent.Future;
 public class SnippetServiceImpl implements SnippetService {
 
     private final SnippetClient snippetClient;
+    private final SnippetRepository snippetRepository;
 
-    public SnippetServiceImpl(SnippetClient snippetClient) {
+    public SnippetServiceImpl(@NonNull SnippetClient snippetClient,@NonNull SnippetRepository snippetRepository) {
         this.snippetClient = snippetClient;
+        this.snippetRepository = snippetRepository;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.semihbkgr.gorun;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.gson.Gson;
@@ -9,6 +11,8 @@ import com.semihbkgr.gorun.snippet.SnippetClient;
 import com.semihbkgr.gorun.snippet.SnippetClientImpl;
 import com.semihbkgr.gorun.snippet.SnippetService;
 import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
+import com.semihbkgr.gorun.snippet.repository.SnippetRepository;
+import com.semihbkgr.gorun.snippet.repository.SnippetRepositoryImpl;
 import com.semihbkgr.gorun.util.DatabaseHelper;
 import com.semihbkgr.gorun.util.ResourceHelper;
 import okhttp3.OkHttpClient;
@@ -23,31 +27,20 @@ public class AppContext {
 
     private static AppContext instance;
 
-
-    public final File rootDir;
-    public final Gson gson;
-    public final OkHttpClient httpClient;
     public final SnippetService snippetService;
-    public final DatabaseHelper databaseHelper;
     public final ResourceHelper resourceHelper;
 
     private AppContext(Context context) {
 
-        this.rootDir = context.getExternalFilesDir(EXTERNAL_DIR_NAME);
-        if (rootDir!=null && !rootDir.exists()) {
-            Log.i(TAG, "createAndGetExternalDir: Root dir is not exist");
-            boolean isCreated = rootDir.mkdirs();
-            if (!isCreated) throw new IllegalStateException("Root dir cannot be created");
-            Log.i(TAG, "createAndGetExternalDir: Root dir has been created");
-        } else Log.i(TAG, "createAndGetExternalDir: Root dir has been already created");
-
-        this.gson = new GsonBuilder().create();
-        this.httpClient = new OkHttpClient();
-
+        Gson gson = new GsonBuilder().create();
+        OkHttpClient httpClient = new OkHttpClient();
         SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
-        this.snippetService = new SnippetServiceImpl(snippetClient);
 
-        this.databaseHelper = new DatabaseHelper(context);
+        SQLiteOpenHelper databaseOpenHelper=new DatabaseHelper(context);
+        SnippetRepository snippetRepository=new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
+
+        this.snippetService = new SnippetServiceImpl(snippetClient,snippetRepository);
+
         this.resourceHelper = new ResourceHelper(context, gson);
     }
 
