@@ -1,7 +1,6 @@
 package com.semihbkgr.gorun;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -16,10 +15,6 @@ import com.semihbkgr.gorun.snippet.repository.SnippetRepositoryImpl;
 import com.semihbkgr.gorun.util.DatabaseHelper;
 import com.semihbkgr.gorun.util.ResourceHelper;
 import okhttp3.OkHttpClient;
-
-import java.io.File;
-
-import static com.semihbkgr.gorun.AppConstant.File.EXTERNAL_DIR_NAME;
 
 public class AppContext {
 
@@ -36,10 +31,10 @@ public class AppContext {
         OkHttpClient httpClient = new OkHttpClient();
         SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
 
-        SQLiteOpenHelper databaseOpenHelper=new DatabaseHelper(context);
-        SnippetRepository snippetRepository=new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
+        SQLiteOpenHelper databaseOpenHelper = new DatabaseHelper(context);
+        SnippetRepository snippetRepository = new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
 
-        this.snippetService = new SnippetServiceImpl(snippetClient,snippetRepository);
+        this.snippetService = new SnippetServiceImpl(snippetClient, snippetRepository);
 
         this.resourceHelper = new ResourceHelper(context, gson);
     }
