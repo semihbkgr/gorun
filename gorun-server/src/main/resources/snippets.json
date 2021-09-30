@@ -1,6 +1,8 @@
 [
   {
     "id": 1,
+    "versionId": 1,
+    "order": -1,
     "title": "Hello World",
     "brief": "brief",
     "explanation": "explanation",
@@ -8,6 +10,8 @@
   },
   {
     "id": 2,
+    "versionId": 1,
+    "order": -1,
     "title": "Input Test",
     "brief": "brief",
     "explanation": "explanation",
@@ -15,6 +19,8 @@
   },
   {
     "id": 3,
+    "versionId": 1,
+    "order": -1,
     "title": "For Loop",
     "brief": "brief",
     "explanation": "explanation",
@@ -22,6 +28,8 @@
   },
   {
     "id": 4,
+    "versionId": 1,
+    "order": -1,
     "title": "For Loop",
     "brief": "brief",
     "explanation": "explanation",
@@ -29,6 +37,8 @@
   },
   {
     "id": 5,
+    "versionId": 1,
+    "order": -1,
     "title": "Sleep",
     "brief": "brief",
     "explanation": "explanation",
@@ -36,6 +46,8 @@
   },
   {
     "id": 6,
+    "versionId": 1,
+    "order": -1,
     "title": "Name input",
     "brief": "brief",
     "explanation": "explanation",
