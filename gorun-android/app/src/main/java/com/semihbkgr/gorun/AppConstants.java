@@ -3,9 +3,7 @@ package com.semihbkgr.gorun;
 public class AppConstants {
 
     public static class Files {
-        public static final String EXTERNAL_DIR_NAME = "GoRun";
         public static final String TEST_ASSET_FILE_NAME = "test.json";
-        public static final String SUBJECT_ASSET_FILE_NAME = "subjects.json";
     }
 
     public static class Nets {
