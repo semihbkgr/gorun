@@ -20,4 +20,8 @@ public interface SnippetService {
 
     Optional<Snippet> getSavedSnippet(int id);
 
+    void save(Snippet snippet);
+
+    void update(Snippet snippet);
+
 }

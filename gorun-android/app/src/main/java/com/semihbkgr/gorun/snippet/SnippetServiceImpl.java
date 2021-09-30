@@ -50,4 +50,14 @@ public class SnippetServiceImpl implements SnippetService {
         return Optional.ofNullable(snippetRepository.findById(id));
     }
 
+    @Override
+    public void save(Snippet snippet) {
+        snippetRepository.save(snippet);
+    }
+
+    @Override
+    public void update(Snippet snippet) {
+        snippetRepository.update(snippet);
+    }
+
 }
