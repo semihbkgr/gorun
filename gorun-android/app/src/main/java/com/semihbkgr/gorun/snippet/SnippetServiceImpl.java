@@ -1,21 +1,21 @@
 package com.semihbkgr.gorun.snippet;
 
 import androidx.annotation.NonNull;
+import com.semihbkgr.gorun.snippet.client.SnippetClient;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepository;
 import com.semihbkgr.gorun.util.http.RequestException;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import java.util.Optional;
 
 public class SnippetServiceImpl implements SnippetService {
 
-    private final SnippetClient snippetClient;
-    private final SnippetRepository snippetRepository;
+    protected final SnippetClient snippetClient;
+    protected final SnippetRepository snippetRepository;
 
-    public SnippetServiceImpl(@NonNull SnippetClient snippetClient,@NonNull SnippetRepository snippetRepository) {
+    public SnippetServiceImpl(@NonNull SnippetClient snippetClient, @NonNull SnippetRepository snippetRepository) {
         this.snippetClient = snippetClient;
         this.snippetRepository = snippetRepository;
     }
@@ -31,12 +31,6 @@ public class SnippetServiceImpl implements SnippetService {
     }
 
     @Override
-    public Future<List<SnippetInfo>> getAllSnippetInfosFuture() {
-        return ((CompletableFuture<SnippetInfo[]>) snippetClient.getAllSnippetInfoFuture())
-                .thenApplyAsync(Arrays::asList);
-    }
-
-    @Override
     public Snippet getSnippet(int id) throws RequestException {
         return snippetClient.getSnippet(id);
     }
@@ -47,8 +41,13 @@ public class SnippetServiceImpl implements SnippetService {
     }
 
     @Override
-    public Future<Snippet> getSnippetFuture(int id) {
-        return snippetClient.getSnippetFuture(id);
+    public List<SnippetInfo> getAllSavedSnippetInfos() {
+        return snippetRepository.findAll();
+    }
+
+    @Override
+    public Optional<Snippet> getSavedSnippet(int id) {
+        return Optional.ofNullable(snippetRepository.findById(id));
     }
 
 }

@@ -2,6 +2,7 @@ package com.semihbkgr.gorun.snippet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.semihbkgr.gorun.snippet.client.SnippetClientImpl;
 import com.semihbkgr.gorun.util.http.RequestException;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 import okhttp3.OkHttpClient;

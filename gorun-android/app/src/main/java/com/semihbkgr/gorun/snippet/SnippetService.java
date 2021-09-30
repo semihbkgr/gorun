@@ -4,7 +4,7 @@ import com.semihbkgr.gorun.util.http.RequestException;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.List;
-import java.util.concurrent.Future;
+import java.util.Optional;
 
 public interface SnippetService {
 
@@ -12,12 +12,12 @@ public interface SnippetService {
 
     void getAllSnippetInfosAsync(ResponseCallback<? super List<SnippetInfo>> callback);
 
-    Future<List<SnippetInfo>> getAllSnippetInfosFuture();
-
     Snippet getSnippet(int id) throws RequestException;
 
     void getSnippetAsync(int id, ResponseCallback<? super Snippet> callback);
 
-    Future<Snippet> getSnippetFuture(int id);
+    List<SnippetInfo> getAllSavedSnippetInfos();
+
+    Optional<Snippet> getSavedSnippet(int id);
 
 }

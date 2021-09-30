@@ -1,9 +1,11 @@
-package com.semihbkgr.gorun.snippet;
+package com.semihbkgr.gorun.snippet.client;
 
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.semihbkgr.gorun.AppConstants;
+import com.semihbkgr.gorun.snippet.Snippet;
+import com.semihbkgr.gorun.snippet.SnippetInfo;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 import com.semihbkgr.gorun.util.ThrowUtils;
 import com.semihbkgr.gorun.util.http.ErrorResponseModel;
@@ -85,17 +87,6 @@ public class SnippetClientImpl implements SnippetClient {
     }
 
     @Override
-    public Future<SnippetInfo[]> getAllSnippetInfoFuture() {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return getAllSnippetInfos();
-            } catch (Exception e) {
-                return ThrowUtils.sneakyThrow(new RequestException(e));
-            }
-        });
-    }
-
-    @Override
     public Snippet getSnippet(int id) throws RequestException {
         String url = AppConstants.Nets.SERVER_SNIPPET_URI + '/' + id;
         Request request = new Request.Builder()
@@ -152,17 +143,6 @@ public class SnippetClientImpl implements SnippetClient {
                 } finally {
                     response.close();
                 }
-            }
-        });
-    }
-
-    @Override
-    public Future<Snippet> getSnippetFuture(int id) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return getSnippet(id);
-            } catch (Exception e) {
-                return ThrowUtils.sneakyThrow(new RequestException(e));
             }
         });
     }
