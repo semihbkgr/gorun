@@ -46,6 +46,11 @@ public class SnippetServiceImpl implements SnippetService {
     }
 
     @Override
+    public List<Integer> getAllSavedId() {
+        return snippetRepository.findAllId();
+    }
+
+    @Override
     public Optional<Snippet> getSavedSnippet(int id) {
         return Optional.ofNullable(snippetRepository.findById(id));
     }

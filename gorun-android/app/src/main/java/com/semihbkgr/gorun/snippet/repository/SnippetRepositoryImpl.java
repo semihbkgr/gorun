@@ -40,6 +40,18 @@ public class SnippetRepositoryImpl implements SnippetRepository {
         }
     }
 
+    @Override
+    public List<Integer> findAllId() {
+        try(Cursor cursor = database.query(
+                TABLE_NAME, new String[]{Columns.ID},
+                null, null, null, null, null, null)){
+            List<Integer> idList = new ArrayList<>();
+            while (cursor.moveToNext())
+                idList.add(cursor.getInt(cursor.getColumnIndex(Columns.ID)));
+            return idList;
+        }
+    }
+
     @Nullable
     @Override
     public Snippet findById(int id) {

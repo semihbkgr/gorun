@@ -6,24 +6,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.snippet.Snippet;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
 import com.semihbkgr.gorun.snippet.view.SnippetInfoArrayAdapter;
+import com.semihbkgr.gorun.snippet.view.SnippetInfoViewModelHolder;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class SnippetInfoActivity extends AppCompatActivity {
 
     private static final String TAG = SnippetInfoActivity.class.getName();
-    private final Map<Integer, SnippetInfo> idSnippetInfoMap = new ConcurrentHashMap<>();
+
     private ListView snippetListView;
 
     @Override
@@ -33,65 +32,35 @@ public class SnippetInfoActivity extends AppCompatActivity {
 
         snippetListView = findViewById(R.id.snippetListView);
 
-        AppContext.instance().executorService.execute(() -> {
-            List<SnippetInfo> savedSnippetInfoList = AppContext.instance().snippetService.getAllSavedSnippetInfos();
-            savedSnippetInfoList.removeIf(snippetInfo -> {
-                if (idSnippetInfoMap.containsKey(snippetInfo.id)) {
-                    if (!snippetInfo.equals(idSnippetInfoMap.get(snippetInfo.id)))
-                        AppContext.instance().snippetService.getSnippetAsync(snippetInfo.id, new ResponseCallback<Snippet>() {
-                            @Override
-                            public void onResponse(Snippet data) {
-                                AppContext.instance().snippetService.save(data);
-                            }
-
-                            @Override
-                            public void onFailure(Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    return true;
-                }
-                return false;
-            });
-            runOnUiThread(() -> {
-
-                SnippetInfoArrayAdapter arrayAdapter = new SnippetInfoArrayAdapter(getApplicationContext(), new ArrayList<>(idSnippetInfoMap.values()));
-                snippetListView.setAdapter(arrayAdapter);
-            });
-        });
-
 
         AppContext.instance().snippetService.getAllSnippetInfosAsync(new ResponseCallback<List<SnippetInfo>>() {
             @Override
             public void onResponse(List<SnippetInfo> data) {
-                data.forEach(snippetInfo -> {
-                    if (idSnippetInfoMap.containsKey(snippetInfo.id) && !idSnippetInfoMap.get(snippetInfo.id).equals(snippetInfo)) {
-                        AppContext.instance().snippetService.getSnippetAsync(snippetInfo.id, new ResponseCallback<Snippet>() {
-                            @Override
-                            public void onResponse(Snippet data) {
-                                AppContext.instance().snippetService.save(data);
-                            }
-
-                            @Override
-                            public void onFailure(Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }else
-                        idSnippetInfoMap.put(snippetInfo.id,snippetInfo);
-                });
-                runOnUiThread(() -> {
-                    SnippetInfoArrayAdapter arrayAdapter = new SnippetInfoArrayAdapter(getApplicationContext(), new ArrayList<>(idSnippetInfoMap.values()));
-                    snippetListView.setAdapter(arrayAdapter);
+                AppContext.instance().executorService.execute(() -> {
+                    List<Integer> savedIdList = AppContext.instance().snippetService.getAllSavedId();
+                    List<SnippetInfoViewModelHolder> snippetInfoViewModelHolderList = data.parallelStream().map(snippetInfo -> {
+                        if (savedIdList.contains(snippetInfo.id))
+                            return SnippetInfoViewModelHolder.downloadedOf(snippetInfo);
+                        else
+                            return SnippetInfoViewModelHolder.nonDownloadedOf(snippetInfo);
+                    }).sorted().collect(Collectors.toList());
+                    runOnUiThread(() -> snippetListView.setAdapter(new SnippetInfoArrayAdapter(getApplicationContext(), snippetInfoViewModelHolderList)));
                 });
             }
 
             @Override
             public void onFailure(Exception e) {
-                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(SnippetInfoActivity.this, "Connection error", Toast.LENGTH_SHORT).show());
+                AppContext.instance().executorService.execute(() -> {
+                    List<SnippetInfo> savedSnippetInfoList = AppContext.instance().snippetService.getAllSavedSnippetInfos();
+                    List<SnippetInfoViewModelHolder> snippetInfoViewModelHolderList = savedSnippetInfoList.parallelStream()
+                            .map(SnippetInfoViewModelHolder::downloadedOf)
+                            .sorted()
+                            .collect(Collectors.toList());
+                    runOnUiThread(() -> snippetListView.setAdapter(new SnippetInfoArrayAdapter(getApplicationContext(), snippetInfoViewModelHolderList)));
+                });
             }
         });
-
         snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
     }
 

@@ -9,6 +9,8 @@ public interface SnippetRepository {
 
     List<SnippetInfo> findAll();
 
+    List<Integer> findAllId();
+
     Snippet findById(int id);
 
     void save(Snippet snippet);

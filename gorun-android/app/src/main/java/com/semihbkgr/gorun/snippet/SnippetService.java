@@ -18,6 +18,8 @@ public interface SnippetService {
 
     List<SnippetInfo> getAllSavedSnippetInfos();
 
+    List<Integer> getAllSavedId();
+
     Optional<Snippet> getSavedSnippet(int id);
 
     void save(Snippet snippet);
