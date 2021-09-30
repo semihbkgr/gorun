@@ -12,7 +12,7 @@ import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.snippet.Snippet;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
-import com.semihbkgr.gorun.snippet.SnippetInfoArrayAdapter;
+import com.semihbkgr.gorun.snippet.view.SnippetInfoArrayAdapter;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.ArrayList;
@@ -20,16 +20,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SnippetListActivity extends AppCompatActivity {
+public class SnippetInfoActivity extends AppCompatActivity {
 
-    private static final String TAG = SnippetListActivity.class.getName();
+    private static final String TAG = SnippetInfoActivity.class.getName();
     private final Map<Integer, SnippetInfo> idSnippetInfoMap = new ConcurrentHashMap<>();
     private ListView snippetListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_snippet_list);
+        setContentView(R.layout.activity_snippet_info);
 
         snippetListView = findViewById(R.id.snippetListView);
 

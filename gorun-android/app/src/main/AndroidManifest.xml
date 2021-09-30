@@ -14,7 +14,7 @@
             android:theme="@style/AppTheme">
         <activity android:name=".activity.SnippetActivity">
         </activity>
-        <activity android:name=".activity.SnippetListActivity">
+        <activity android:name=".activity.SnippetInfoActivity">
         </activity>
         <activity
                 android:name=".activity.EditorActivity"

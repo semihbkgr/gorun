@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.snippet;
+package com.semihbkgr.gorun.snippet.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.snippet.Snippet;
+import com.semihbkgr.gorun.snippet.SnippetInfo;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfo> {
         TextView briefTextView = convertView.findViewById(R.id.briefTextView);
         briefTextView.setText(snippetInfo.brief);
         ImageButton saveButton = convertView.findViewById(R.id.saveButton);
+        saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
         saveButton.setOnClickListener(v -> {
             AppContext.instance().snippetService.getSnippetAsync(snippetInfo.id, new ResponseCallback<Snippet>() {
                 @Override
