@@ -16,6 +16,11 @@ import com.semihbkgr.gorun.util.DatabaseHelper;
 import com.semihbkgr.gorun.util.ResourceHelper;
 import okhttp3.OkHttpClient;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+
 public class AppContext {
 
     private static final String TAG = AppContext.class.getName();
@@ -23,19 +28,19 @@ public class AppContext {
     private static AppContext instance;
 
     public final SnippetService snippetService;
+    public final ExecutorService executorService;
+    public final ScheduledExecutorService scheduledExecutorService;
     public final ResourceHelper resourceHelper;
 
     private AppContext(Context context) {
-
         Gson gson = new GsonBuilder().create();
         OkHttpClient httpClient = new OkHttpClient();
         SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
-
         SQLiteOpenHelper databaseOpenHelper = new DatabaseHelper(context);
         SnippetRepository snippetRepository = new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
-
         this.snippetService = new SnippetServiceImpl(snippetClient, snippetRepository);
-
+        this.executorService= Executors.newCachedThreadPool(r -> new Thread(r,"AppContextExecutorWorkerThread"));
+        this.scheduledExecutorService=Executors.newSingleThreadScheduledExecutor();
         this.resourceHelper = new ResourceHelper(context, gson);
     }
 

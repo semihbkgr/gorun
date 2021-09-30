@@ -5,15 +5,31 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.SnippetListActivity"
-        android:background="@color/white"
         android:orientation="vertical"
-        android:padding="20dp">
+        tools:context=".activity.SnippetActivity">
 
-    <ListView
+    <TextView
+            android:text="TextView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/snippetListView"
-            android:background="@drawable/border_line_default"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/snippetTitle"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/snippetBrief"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/snippetExplanation"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/snippetCode"/>
 
 </LinearLayout>

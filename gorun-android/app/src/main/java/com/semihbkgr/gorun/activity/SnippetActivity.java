@@ -23,7 +23,7 @@ public class SnippetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.snippetActivity);
+        setContentView(R.layout.activity_snippet);
 
         int snippetId=getIntent().getIntExtra(AppConstants.Values.INTENT_SNIPPET_ID_NAME,Integer.MIN_VALUE);
         Log.i(TAG, "onCreate: snippetId: "+snippetId);

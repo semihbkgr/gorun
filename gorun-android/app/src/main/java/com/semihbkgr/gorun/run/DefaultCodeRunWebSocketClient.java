@@ -15,10 +15,11 @@ public class DefaultCodeRunWebSocketClient implements CodeRunWebSocketClient {
 
     @Override
     public CodeRunWebSocketSession connect() {
-        Request req = new Request.Builder().url(AppConstants.Nets.SERVER_CODE_RUN_URI).build();
-        MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener = MessageConsumeCodeRunWebSocketListener.empty();
-        WebSocket webSocket = AppContext.instance().httpClient.newWebSocket(req, messageConsumeCodeRunWebSocketListener);
-        return new ListenedRunWebSocketSession(webSocket, messageConsumeCodeRunWebSocketListener);
+//        Request req = new Request.Builder().url(AppConstants.Nets.SERVER_CODE_RUN_URI).build();
+//        MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener = MessageConsumeCodeRunWebSocketListener.empty();
+//        WebSocket webSocket = AppContext.instance().httpClient.newWebSocket(req, messageConsumeCodeRunWebSocketListener);
+//        return new ListenedRunWebSocketSession(webSocket, messageConsumeCodeRunWebSocketListener);
+        return null;
     }
 
 }

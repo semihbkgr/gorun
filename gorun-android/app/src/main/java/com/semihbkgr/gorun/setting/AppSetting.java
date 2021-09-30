@@ -1,8 +1,5 @@
 package com.semihbkgr.gorun.setting;
 
-import com.semihbkgr.gorun.AppContext;
-import com.semihbkgr.gorun.util.StateUtils;
-
 import java.util.function.Consumer;
 
 public class AppSetting {
@@ -39,9 +36,6 @@ public class AppSetting {
     public void updateServerState(Consumer<? super ServerStateType> callback) {
 
     }
-
-
-
 
 
 }
