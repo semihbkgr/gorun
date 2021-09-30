@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbkgr.gorun.AppContext;
@@ -43,11 +44,16 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
         ImageButton saveButton = convertView.findViewById(R.id.saveButton);
         saveButton.setImageDrawable(getContext().getDrawable(snippetInfoViewModelHolder.isDownloaded() ? R.drawable.delete : R.drawable.download));
         saveButton.setOnClickListener(v -> {
+            saveButton.setClickable(false);
             if (snippetInfoViewModelHolder.isDownloaded()) {
                 snippetInfoViewModelHolder.setDownloaded(false);
                 AppContext.instance().executorService.execute(() -> {
                     AppContext.instance().snippetService.delete(snippetInfo.id);
-                    new Handler(getContext().getMainLooper()).post(()->saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download)));
+                    new Handler(getContext().getMainLooper()).post(()->{
+                        saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
+                        Toast.makeText(getContext(), String.format("Snippet '%s' deleted",snippetInfo.title), Toast.LENGTH_SHORT).show();
+                        saveButton.setClickable(true);
+                    });
                     Log.i(TAG, "getView: snippet has been deleted, snippetId: " + snippetInfo.id);
                 });
             } else {
@@ -56,7 +62,11 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
                     @Override
                     public void onResponse(Snippet data) {
                         AppContext.instance().snippetService.save(data);
-                        new Handler(getContext().getMainLooper()).post(()->saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete)));
+                        new Handler(getContext().getMainLooper()).post(()->{
+                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
+                            Toast.makeText(getContext(), String.format("Snippet '%s' downloaded",snippetInfo.title), Toast.LENGTH_SHORT).show();
+                            saveButton.setClickable(true);
+                        });
                         Log.i(TAG, "getView: snippet has been downloaded, snippetId: " + snippetInfo.id);
                     }
 
