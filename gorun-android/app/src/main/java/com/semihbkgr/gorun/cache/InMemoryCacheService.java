@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class CacheServiceImpl<I, R> implements CacheService<I, R> {
+public class InMemoryCacheService<I, R> implements CacheService<I, R> {
 
     private final Map<I, R> recordMap;
 
-    public CacheServiceImpl() {
+    public InMemoryCacheService() {
         this.recordMap=new HashMap<>();
     }
 

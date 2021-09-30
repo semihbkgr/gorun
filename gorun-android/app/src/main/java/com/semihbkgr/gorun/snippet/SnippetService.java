@@ -24,4 +24,6 @@ public interface SnippetService {
 
     void update(Snippet snippet);
 
+    void delete(int id);
+
 }

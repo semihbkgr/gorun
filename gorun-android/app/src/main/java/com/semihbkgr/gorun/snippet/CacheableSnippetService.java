@@ -13,6 +13,7 @@ public class CacheableSnippetService extends SnippetServiceImpl {
 
     private final TimedCacheService<Integer, Snippet> snippetTimedCacheService;
 
+
     public CacheableSnippetService(@NonNull SnippetClient snippetClient,
                                    @NonNull SnippetRepository snippetRepository,
                                    @NonNull TimedCacheService<Integer, Snippet> snippetTimedCacheService) {

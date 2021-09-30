@@ -22,7 +22,7 @@ public class SnippetDatabaseConstants {
 
         public static final String ID = "id";
         public static final String VERSION_ID = "version_id";
-        public static final String ORDER = "order";
+        public static final String ORDER = "order_value";
         public static final String TITLE = "title";
         public static final String BRIEF = "brief";
         public static final String EXPLANATION = "explanation";

@@ -60,4 +60,9 @@ public class SnippetServiceImpl implements SnippetService {
         snippetRepository.update(snippet);
     }
 
+    @Override
+    public void delete(int id) {
+        snippetRepository.deleteById(id);
+    }
+
 }

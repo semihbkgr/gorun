@@ -44,7 +44,7 @@ public class SnippetRepositoryImpl implements SnippetRepository {
     @Override
     public Snippet findById(int id) {
         try (Cursor cursor = database.query(
-                TABLE_NAME, new String[]{Columns.TITLE, Columns.BRIEF, Columns.EXPLANATION, Columns.CODE}, Columns.ID + "=?", new String[]{String.valueOf(id)},
+                TABLE_NAME, new String[]{Columns.VERSION_ID,Columns.ORDER,Columns.TITLE, Columns.BRIEF, Columns.EXPLANATION, Columns.CODE}, Columns.ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null)) {
             if (cursor.moveToNext()) {
                 int versionId = cursor.getInt(cursor.getColumnIndex(Columns.VERSION_ID));
