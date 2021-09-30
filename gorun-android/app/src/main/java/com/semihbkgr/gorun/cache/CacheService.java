@@ -2,15 +2,15 @@ package com.semihbkgr.gorun.cache;
 
 import java.util.Optional;
 
-public interface CacheService<ID,T> {
+public interface CacheService<I, R> {
 
-    boolean isAvailable(ID id);
+    boolean isAvailable(I id);
 
-    Optional<T> get(ID id);
+    Optional<R> get(I id);
 
-    T get(ID id,T def);
+    R get(I id, R def);
 
-    boolean invalidate(ID id);
+    boolean invalidate(I id);
 
     void invalidateAll();
 
