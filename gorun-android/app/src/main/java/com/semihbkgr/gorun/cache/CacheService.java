@@ -10,6 +10,8 @@ public interface CacheService<I, R> {
 
     R get(I id, R def);
 
+    void cache(I id,R record);
+
     boolean invalidate(I id);
 
     void invalidateAll();

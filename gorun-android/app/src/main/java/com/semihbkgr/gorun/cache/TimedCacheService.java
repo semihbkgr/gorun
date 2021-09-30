@@ -1,8 +1,6 @@
 package com.semihbkgr.gorun.cache;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Optional;
 
 public class TimedCacheService<I, R> implements CacheService<I, R> {
@@ -36,8 +34,13 @@ public class TimedCacheService<I, R> implements CacheService<I, R> {
     }
 
     @Override
+    public void cache(I id, R record) {
+        timedRecordMap.put(id, new TimedCacheRecordHolder<>(record));
+    }
+
+    @Override
     public boolean invalidate(I id) {
-        return timedRecordMap.remove(id)!=null;
+        return timedRecordMap.remove(id) != null;
     }
 
     @Override
@@ -45,8 +48,8 @@ public class TimedCacheService<I, R> implements CacheService<I, R> {
         timedRecordMap.clear();
     }
 
-    public void checkExpiration(){
-        final long currentTime=System.currentTimeMillis();
+    public void checkExpirations() {
+        final long currentTime = System.currentTimeMillis();
         timedRecordMap.entrySet().removeIf(entry ->
                 (currentTime - entry.getValue().time) > expirationTime);
     }

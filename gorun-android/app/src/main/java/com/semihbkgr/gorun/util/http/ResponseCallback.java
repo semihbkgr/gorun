@@ -1,5 +1,6 @@
 package com.semihbkgr.gorun.util.http;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface ResponseCallback <T>{
@@ -13,6 +14,21 @@ public interface ResponseCallback <T>{
             @Override
             public void onResponse(N data) {
                 ResponseCallback.this.onResponse(converter.apply(data));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ResponseCallback.this.onFailure(e);
+            }
+        };
+    }
+
+    default ResponseCallback<T> after(Consumer<T> afterConsumer){
+        return new ResponseCallback<T>() {
+            @Override
+            public void onResponse(T data) {
+                ResponseCallback.this.onResponse(data);
+                afterConsumer.accept(data);
             }
 
             @Override

@@ -28,6 +28,11 @@ public class CacheServiceImpl<I, R> implements CacheService<I, R> {
     }
 
     @Override
+    public void cache(I id, R record) {
+        recordMap.put(id,record);
+    }
+
+    @Override
     public boolean invalidate(I id) {
         return recordMap.remove(id)!=null;
     }
