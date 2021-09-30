@@ -5,7 +5,7 @@ import android.util.Log;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.semihbkgr.gorun.AppConstant;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.snippet.Snippet;
@@ -25,7 +25,7 @@ public class SnippetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.snippetActivity);
 
-        int snippetId=getIntent().getIntExtra(AppConstant.Value.INTENT_SNIPPET_ID_NAME,Integer.MIN_VALUE);
+        int snippetId=getIntent().getIntExtra(AppConstants.Values.INTENT_SNIPPET_ID_NAME,Integer.MIN_VALUE);
         Log.i(TAG, "onCreate: snippetId: "+snippetId);
         if(snippetId!=Integer.MIN_VALUE){
             AppContext.instance().snippetService.getSnippetAsync(snippetId, new ResponseCallback<Snippet>() {

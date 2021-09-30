@@ -3,7 +3,7 @@ package com.semihbkgr.gorun.snippet;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
-import com.semihbkgr.gorun.AppConstant;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 import com.semihbkgr.gorun.util.ThrowUtils;
 import com.semihbkgr.gorun.util.http.ErrorResponseModel;
@@ -31,7 +31,7 @@ public class SnippetClientImpl implements SnippetClient {
     @Override
     public SnippetInfo[] getAllSnippetInfos() throws RequestException {
         Request request = new Request.Builder()
-                .url(AppConstant.Net.SERVER_SNIPPET_URI)
+                .url(AppConstants.Nets.SERVER_SNIPPET_URI)
                 .build();
         Call call = httpClient.newCall(request);
         try {
@@ -52,7 +52,7 @@ public class SnippetClientImpl implements SnippetClient {
 
     @Override
     public void getAllSnippetInfosAsync(ResponseCallback<? super SnippetInfo[]> callback) {
-        Request request = new Request.Builder().url(AppConstant.Net.SERVER_SNIPPET_URI).build();
+        Request request = new Request.Builder().url(AppConstants.Nets.SERVER_SNIPPET_URI).build();
         Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -97,7 +97,7 @@ public class SnippetClientImpl implements SnippetClient {
 
     @Override
     public Snippet getSnippet(int id) throws RequestException {
-        String url = AppConstant.Net.SERVER_SNIPPET_URI + '/' + id;
+        String url = AppConstants.Nets.SERVER_SNIPPET_URI + '/' + id;
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -120,7 +120,7 @@ public class SnippetClientImpl implements SnippetClient {
 
     @Override
     public void getSnippetAsync(int id, ResponseCallback<? super Snippet> callback) {
-        String url = AppConstant.Net.SERVER_SNIPPET_URI + '/' + id;
+        String url = AppConstants.Nets.SERVER_SNIPPET_URI + '/' + id;
         Request request = new Request.Builder()
                 .url(url)
                 .build();

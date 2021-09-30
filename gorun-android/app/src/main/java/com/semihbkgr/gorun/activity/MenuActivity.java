@@ -10,12 +10,12 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.AppConstant;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.util.ExpirationTimer;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private final ExpirationTimer backTimer = new ExpirationTimer(AppConstant.Value.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
+    private final ExpirationTimer backTimer = new ExpirationTimer(AppConstants.Values.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
 
     private LinearLayout editorLayout;
     private LinearLayout snippetLayout;

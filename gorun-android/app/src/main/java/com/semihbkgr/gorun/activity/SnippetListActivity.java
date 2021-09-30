@@ -10,8 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.AppConstant;
-import com.semihbkgr.gorun.snippet.Snippet;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
 import com.semihbkgr.gorun.util.SnippetInfoArrayAdapter;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
@@ -49,7 +48,7 @@ public class SnippetListActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate: SnippetTextView item selected");
         SnippetInfo snippetInfo=(SnippetInfo)snippetListView.getAdapter().getItem(position);
         Intent intent=new Intent(this,SnippetActivity.class);
-        intent.putExtra(AppConstant.Value.INTENT_SNIPPET_ID_NAME,snippetInfo.id);
+        intent.putExtra(AppConstants.Values.INTENT_SNIPPET_ID_NAME,snippetInfo.id);
         startActivity(intent);
     }
 

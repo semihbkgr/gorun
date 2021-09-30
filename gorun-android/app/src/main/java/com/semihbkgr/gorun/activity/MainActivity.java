@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.AppConstant;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.setting.AppSetting;
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, MenuActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                }, AppConstant.Value.LOGO_SCREEN_TIME_MS);
+                }, AppConstants.Values.LOGO_SCREEN_TIME_MS);
 
     }
 

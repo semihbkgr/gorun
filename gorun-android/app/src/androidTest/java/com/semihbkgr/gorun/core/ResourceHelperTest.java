@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
-import com.semihbkgr.gorun.AppConstant;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.util.ResourceHelper;
 import org.junit.Before;
@@ -58,14 +58,14 @@ public class ResourceHelperTest {
 
     @Test
     public void readAssetAsString() throws IOException {
-        String resource = resourceHelper.readAsset(AppConstant.File.TEST_ASSET_FILE_NAME);
+        String resource = resourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME);
         assertEquals(TEST_MODEL_JSON, resource);
         Log.i(TAG, "readAssetAsString: Resource: " + resource);
     }
 
     @Test
     public void readAssetAsType() throws IOException {
-        TestModel testModel = resourceHelper.readAsset(AppConstant.File.TEST_ASSET_FILE_NAME, TestModel.class);
+        TestModel testModel = resourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME, TestModel.class);
         assertEquals(TEST_MODEL_INSTANCE, testModel);
         Log.i(TAG, "readAssetAsType: Resource instance: " + testModel);
     }

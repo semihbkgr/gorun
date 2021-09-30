@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.util;
 
-import com.semihbkgr.gorun.AppConstant;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.setting.ServerStateType;
 import okhttp3.Request;
@@ -23,7 +23,7 @@ public class StateUtils {
 
     public static ServerStateType serverStateType() {
         Request request = new Request.Builder()
-                .url(AppConstant.Net.SERVER_CODE_STATE_URI)
+                .url(AppConstants.Nets.SERVER_CODE_STATE_URI)
                 .method("GET", null)
                 .build();
         try {
