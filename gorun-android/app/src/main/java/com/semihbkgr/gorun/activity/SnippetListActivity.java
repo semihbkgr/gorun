@@ -12,7 +12,7 @@ import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.snippet.Snippet;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
-import com.semihbkgr.gorun.util.SnippetInfoArrayAdapter;
+import com.semihbkgr.gorun.snippet.SnippetInfoArrayAdapter;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.ArrayList;
@@ -77,7 +77,8 @@ public class SnippetListActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         });
-                    }
+                    }else
+                        idSnippetInfoMap.put(snippetInfo.id,snippetInfo);
                 });
                 runOnUiThread(() -> {
                     SnippetInfoArrayAdapter arrayAdapter = new SnippetInfoArrayAdapter(getApplicationContext(), new ArrayList<>(idSnippetInfoMap.values()));

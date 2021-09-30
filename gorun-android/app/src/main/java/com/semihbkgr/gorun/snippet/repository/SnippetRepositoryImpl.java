@@ -32,7 +32,7 @@ public class SnippetRepositoryImpl implements SnippetRepository {
                 int id = cursor.getInt(cursor.getColumnIndex(Columns.ID_NAME));
                 String title = cursor.getString(cursor.getColumnIndex(Columns.TITLE_NAME));
                 String brief = cursor.getString(cursor.getColumnIndex(Columns.BRIEF_NAME));
-                snippetInfoList.add(new SnippetInfo(id, title, brief));
+                snippetInfoList.add(new SnippetInfo(id, versionId, order, title, brief));
             }
             return snippetInfoList;
         }
@@ -49,7 +49,7 @@ public class SnippetRepositoryImpl implements SnippetRepository {
                 String brief = cursor.getString(cursor.getColumnIndex(Columns.BRIEF_NAME));
                 String explanation = cursor.getString(cursor.getColumnIndex(Columns.EXPLANATION_NAME));
                 String code = cursor.getString(cursor.getColumnIndex(Columns.CODE_NAME));
-                return new Snippet(id, title, brief, explanation, code);
+                return new Snippet(id, versionId, order, title, brief, explanation, code);
             } else
                 return null;
         }
