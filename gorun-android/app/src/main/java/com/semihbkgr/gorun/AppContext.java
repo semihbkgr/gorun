@@ -12,14 +12,11 @@ import com.semihbkgr.gorun.snippet.SnippetService;
 import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepository;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepositoryImpl;
-import com.semihbkgr.gorun.util.DatabaseHelper;
-import com.semihbkgr.gorun.util.ResourceHelper;
 import okhttp3.OkHttpClient;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 
 public class AppContext {
 
@@ -28,20 +25,21 @@ public class AppContext {
     private static AppContext instance;
 
     public final SnippetService snippetService;
+    public final AppDatabaseOpenHelper databaseOpenHelper;
+    public final AppResourceHelper resourceHelper;
     public final ExecutorService executorService;
     public final ScheduledExecutorService scheduledExecutorService;
-    public final ResourceHelper resourceHelper;
 
     private AppContext(Context context) {
         Gson gson = new GsonBuilder().create();
         OkHttpClient httpClient = new OkHttpClient();
+        this.databaseOpenHelper = new AppDatabaseOpenHelper(context);
+        this.resourceHelper = new AppResourceHelper(context, gson);
         SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
-        SQLiteOpenHelper databaseOpenHelper = new DatabaseHelper(context);
         SnippetRepository snippetRepository = new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
         this.snippetService = new SnippetServiceImpl(snippetClient, snippetRepository);
         this.executorService= Executors.newCachedThreadPool(r -> new Thread(r,"AppContextExecutorWorkerThread"));
         this.scheduledExecutorService=Executors.newSingleThreadScheduledExecutor();
-        this.resourceHelper = new ResourceHelper(context, gson);
     }
 
     public static void initialize(@NonNull Context context) {

@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.util;
+package com.semihbkgr.gorun;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,14 +7,14 @@ import android.util.Log;
 
 import static com.semihbkgr.gorun.snippet.repository.SnippetDatabaseConstants.*;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class AppDatabaseOpenHelper extends SQLiteOpenHelper {
 
-    private static final String TAG=DatabaseHelper.class.getName();
+    private static final String TAG= AppDatabaseOpenHelper.class.getName();
 
     static final int DATABASE_VERSION=1;
     static final String DATABASE_NAME="gorun.db";
 
-    public DatabaseHelper(Context context) {
+    public AppDatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null,DATABASE_VERSION);
     }
 

@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.util;
+package com.semihbkgr.gorun;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -10,12 +10,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
-public class ResourceHelper {
+public class AppResourceHelper {
 
     private final Context context;
     private final Gson gson;
 
-    public ResourceHelper(@NonNull Context context, @NonNull Gson gson) {
+    public AppResourceHelper(@NonNull Context context, @NonNull Gson gson) {
         this.context = context;
         this.gson = gson;
     }

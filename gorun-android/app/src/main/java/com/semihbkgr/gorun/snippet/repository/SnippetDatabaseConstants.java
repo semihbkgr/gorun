@@ -6,11 +6,13 @@ public class SnippetDatabaseConstants {
 
     public static final String SQL_CREATE_TABLE_IF_NOT_EXISTS =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
-                    Columns.ID_NAME + " INTEGER NOT NULL PRIMARY KEY, " +
-                    Columns.TITLE_NAME + " TEXT NOT NULL, " +
-                    Columns.BRIEF_NAME + " TEXT NOT NULL, " +
-                    Columns.EXPLANATION_NAME + " TEXT NOT NULL, " +
-                    Columns.CODE_NAME + " TEXT NOT NULL " +
+                    Columns.ID + " INTEGER NOT NULL PRIMARY KEY, " +
+                    Columns.VERSION_ID + " INTEGER, " +
+                    Columns.ORDER + " INTEGER, " +
+                    Columns.TITLE + " TEXT, " +
+                    Columns.BRIEF + " TEXT, " +
+                    Columns.EXPLANATION + " TEXT, " +
+                    Columns.CODE + " TEXT" +
                     " )";
 
     public static final String SQL_DROP_TABLE_IF_EXISTS =
@@ -18,11 +20,13 @@ public class SnippetDatabaseConstants {
 
     public static class Columns {
 
-        public static final String ID_NAME = "id";
-        public static final String TITLE_NAME = "title";
-        public static final String BRIEF_NAME = "brief";
-        public static final String EXPLANATION_NAME = "explanation";
-        public static final String CODE_NAME = "code";
+        public static final String ID = "id";
+        public static final String VERSION_ID = "version_id";
+        public static final String ORDER = "order";
+        public static final String TITLE = "title";
+        public static final String BRIEF = "brief";
+        public static final String EXPLANATION = "explanation";
+        public static final String CODE = "code";
 
     }
 

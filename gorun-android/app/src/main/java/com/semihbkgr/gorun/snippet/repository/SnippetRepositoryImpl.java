@@ -25,13 +25,15 @@ public class SnippetRepositoryImpl implements SnippetRepository {
     @Override
     public List<SnippetInfo> findAll() {
         try (Cursor cursor = database.query(
-                TABLE_NAME, new String[]{Columns.ID_NAME, Columns.TITLE_NAME, Columns.BRIEF_NAME},
+                TABLE_NAME, new String[]{Columns.ID, Columns.VERSION_ID, Columns.ORDER, Columns.TITLE, Columns.BRIEF},
                 null, null, null, null, null, null)) {
             List<SnippetInfo> snippetInfoList = new ArrayList<>();
             while (cursor.moveToNext()) {
-                int id = cursor.getInt(cursor.getColumnIndex(Columns.ID_NAME));
-                String title = cursor.getString(cursor.getColumnIndex(Columns.TITLE_NAME));
-                String brief = cursor.getString(cursor.getColumnIndex(Columns.BRIEF_NAME));
+                int id = cursor.getInt(cursor.getColumnIndex(Columns.ID));
+                int versionId = cursor.getInt(cursor.getColumnIndex(Columns.VERSION_ID));
+                int order = cursor.getInt(cursor.getColumnIndex(Columns.ORDER));
+                String title = cursor.getString(cursor.getColumnIndex(Columns.TITLE));
+                String brief = cursor.getString(cursor.getColumnIndex(Columns.BRIEF));
                 snippetInfoList.add(new SnippetInfo(id, versionId, order, title, brief));
             }
             return snippetInfoList;
@@ -42,13 +44,15 @@ public class SnippetRepositoryImpl implements SnippetRepository {
     @Override
     public Snippet findById(int id) {
         try (Cursor cursor = database.query(
-                TABLE_NAME, new String[]{Columns.TITLE_NAME, Columns.BRIEF_NAME, Columns.EXPLANATION_NAME, Columns.CODE_NAME}, Columns.ID_NAME + "=?", new String[]{String.valueOf(id)},
+                TABLE_NAME, new String[]{Columns.TITLE, Columns.BRIEF, Columns.EXPLANATION, Columns.CODE}, Columns.ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null)) {
             if (cursor.moveToNext()) {
-                String title = cursor.getString(cursor.getColumnIndex(Columns.TITLE_NAME));
-                String brief = cursor.getString(cursor.getColumnIndex(Columns.BRIEF_NAME));
-                String explanation = cursor.getString(cursor.getColumnIndex(Columns.EXPLANATION_NAME));
-                String code = cursor.getString(cursor.getColumnIndex(Columns.CODE_NAME));
+                int versionId = cursor.getInt(cursor.getColumnIndex(Columns.VERSION_ID));
+                int order = cursor.getInt(cursor.getColumnIndex(Columns.ORDER));
+                String title = cursor.getString(cursor.getColumnIndex(Columns.TITLE));
+                String brief = cursor.getString(cursor.getColumnIndex(Columns.BRIEF));
+                String explanation = cursor.getString(cursor.getColumnIndex(Columns.EXPLANATION));
+                String code = cursor.getString(cursor.getColumnIndex(Columns.CODE));
                 return new Snippet(id, versionId, order, title, brief, explanation, code);
             } else
                 return null;
@@ -66,20 +70,20 @@ public class SnippetRepositoryImpl implements SnippetRepository {
     public void update(Snippet snippet) {
         ContentValues contentValues = new ContentValues();
         putAllSnippetFields(contentValues, snippet);
-        database.update(TABLE_NAME, contentValues, Columns.ID_NAME + "=?", new String[]{String.valueOf(snippet.id)});
+        database.update(TABLE_NAME, contentValues, Columns.ID + "=?", new String[]{String.valueOf(snippet.id)});
     }
 
     @Override
     public void deleteById(int id) {
-        database.delete(TABLE_NAME,Columns.ID_NAME + "=?",new String[]{String.valueOf(id)});
+        database.delete(TABLE_NAME, Columns.ID + "=?", new String[]{String.valueOf(id)});
     }
 
     private void putAllSnippetFields(@NonNull ContentValues contentValues, @NonNull Snippet snippet) {
-        contentValues.put(Columns.ID_NAME, snippet.id);
-        contentValues.put(Columns.TITLE_NAME, snippet.title);
-        contentValues.put(Columns.BRIEF_NAME, snippet.brief);
-        contentValues.put(Columns.EXPLANATION_NAME, snippet.explanation);
-        contentValues.put(Columns.CODE_NAME, snippet.code);
+        contentValues.put(Columns.ID, snippet.id);
+        contentValues.put(Columns.TITLE, snippet.title);
+        contentValues.put(Columns.BRIEF, snippet.brief);
+        contentValues.put(Columns.EXPLANATION, snippet.explanation);
+        contentValues.put(Columns.CODE, snippet.code);
     }
 
 }

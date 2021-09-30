@@ -2,7 +2,7 @@ package com.semihbkgr.gorun.core;
 
 import android.util.Log;
 import com.google.gson.GsonBuilder;
-import com.semihbkgr.gorun.util.ResourceHelper;
+import com.semihbkgr.gorun.AppResourceHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,9 +11,9 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ResourceHelperTest {
+class AppResourceHelperTest {
 
-    private static final String TAG = ResourceHelperTest.class.getName();
+    private static final String TAG = AppResourceHelperTest.class.getName();
     private static final String TEST_RESOURCE_FILE_NAME = "test.json";
     private static final TestModel TEST_MODEL_INSTANCE;
     private static final String TEST_MODEL_JSON;
@@ -31,11 +31,11 @@ class ResourceHelperTest {
                         "}";
     }
 
-    private ResourceHelper resourceHelper;
+    private AppResourceHelper appResourceHelper;
 
     @BeforeEach
     public void launch() {
-        resourceHelper = new ResourceHelper(null, new GsonBuilder().create());
+        appResourceHelper = new AppResourceHelper(null, new GsonBuilder().create());
     }
 
     @Test
@@ -61,7 +61,7 @@ class ResourceHelperTest {
     @Test
     void readStringFromStreamAndCheckIfEqual() {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(TEST_RESOURCE_FILE_NAME)) {
-            String resourceContent = resourceHelper.readStringFromStream(is);
+            String resourceContent = appResourceHelper.readStringFromStream(is);
             assertEquals(TEST_MODEL_JSON, resourceContent);
             Log.i(TAG, "readStringFromStreamAndCheckIfEqual: Resource content: " + resourceContent.toString());
         } catch (IOException e) {
@@ -73,7 +73,7 @@ class ResourceHelperTest {
     void readTypeFromReaderAndCheckIfEquals() {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(TEST_RESOURCE_FILE_NAME);
              Reader r = new InputStreamReader(is)) {
-            TestModel testModel= resourceHelper.readTypeFromReader(r,TestModel.class);
+            TestModel testModel= appResourceHelper.readTypeFromReader(r,TestModel.class);
             assertEquals(TEST_MODEL_INSTANCE,testModel);
             Log.i(TAG, "readTypeFromReaderAndCheckIfEquals: TestModel content: "+testModel);
         } catch (IOException e) {

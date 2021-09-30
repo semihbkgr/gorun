@@ -7,7 +7,7 @@ import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
-import com.semihbkgr.gorun.util.ResourceHelper;
+import com.semihbkgr.gorun.AppResourceHelper;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,9 +20,9 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ResourceHelperTest {
+public class AppResourceHelperTest {
 
-    private static final String TAG = ResourceHelperTest.class.getName();
+    private static final String TAG = AppResourceHelperTest.class.getName();
     private static final TestModel TEST_MODEL_INSTANCE;
     private static final String TEST_MODEL_JSON;
 
@@ -39,7 +39,7 @@ public class ResourceHelperTest {
                         "}";
     }
 
-    private ResourceHelper resourceHelper;
+    private AppResourceHelper appResourceHelper;
 
     @BeforeClass
     public static void initialize() {
@@ -52,20 +52,20 @@ public class ResourceHelperTest {
 
     @Before
     public void launch() {
-        resourceHelper = AppContext.instance().resourceHelper;
+        appResourceHelper = AppContext.instance().resourceHelper;
         Log.i(TAG, "launch: Required objects have been created successfully");
     }
 
     @Test
     public void readAssetAsString() throws IOException {
-        String resource = resourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME);
+        String resource = appResourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME);
         assertEquals(TEST_MODEL_JSON, resource);
         Log.i(TAG, "readAssetAsString: Resource: " + resource);
     }
 
     @Test
     public void readAssetAsType() throws IOException {
-        TestModel testModel = resourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME, TestModel.class);
+        TestModel testModel = appResourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME, TestModel.class);
         assertEquals(TEST_MODEL_INSTANCE, testModel);
         Log.i(TAG, "readAssetAsType: Resource instance: " + testModel);
     }
