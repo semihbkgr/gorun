@@ -45,34 +45,59 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
         saveButton.setImageDrawable(getContext().getDrawable(snippetInfoViewModelHolder.isDownloaded() ? R.drawable.delete : R.drawable.download));
         saveButton.setOnClickListener(v -> {
             saveButton.setClickable(false);
+            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.waiting));
             if (snippetInfoViewModelHolder.isDownloaded()) {
-                snippetInfoViewModelHolder.setDownloaded(false);
                 AppContext.instance().executorService.execute(() -> {
-                    AppContext.instance().snippetService.delete(snippetInfo.id);
-                    new Handler(getContext().getMainLooper()).post(()->{
-                        saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
-                        Toast.makeText(getContext(), String.format("Snippet '%s' deleted",snippetInfo.title), Toast.LENGTH_SHORT).show();
-                        saveButton.setClickable(true);
-                    });
-                    Log.i(TAG, "getView: snippet has been deleted, snippetId: " + snippetInfo.id);
+                    try {
+                        AppContext.instance().snippetService.delete(snippetInfo.id);
+                        Log.i(TAG, "getView: snippet has been deleted, snippetId: " + snippetInfo.id);
+                        snippetInfoViewModelHolder.setDownloaded(false);
+                        new Handler(getContext().getMainLooper()).post(() -> {
+                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
+                            Toast.makeText(getContext(), String.format("Snippet '%s' deleted", snippetInfo.title), Toast.LENGTH_SHORT).show();
+                            saveButton.setClickable(true);
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, "getView: error while deleting snippet, snippetId: " + snippetInfo.id, e);
+                        new Handler(getContext().getMainLooper()).post(() -> {
+                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
+                            Toast.makeText(getContext(), "Error while deleting", Toast.LENGTH_SHORT).show();
+                            saveButton.setClickable(true);
+                        });
+                    }
                 });
             } else {
-                snippetInfoViewModelHolder.setDownloaded(true);
+                saveButton.setImageDrawable(getContext().getDrawable(R.drawable.waiting));
                 AppContext.instance().snippetService.getSnippetAsync(snippetInfo.id, new ResponseCallback<Snippet>() {
                     @Override
                     public void onResponse(Snippet data) {
-                        AppContext.instance().snippetService.save(data);
-                        new Handler(getContext().getMainLooper()).post(()->{
-                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
-                            Toast.makeText(getContext(), String.format("Snippet '%s' downloaded",snippetInfo.title), Toast.LENGTH_SHORT).show();
-                            saveButton.setClickable(true);
-                        });
-                        Log.i(TAG, "getView: snippet has been downloaded, snippetId: " + snippetInfo.id);
+                        try {
+                            AppContext.instance().snippetService.save(data);
+                            Log.i(TAG, "getView: snippet has been downloaded, snippetId: " + snippetInfo.id);
+                            snippetInfoViewModelHolder.setDownloaded(true);
+                            new Handler(getContext().getMainLooper()).post(() -> {
+                                saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
+                                Toast.makeText(getContext(), String.format("Snippet '%s' downloaded", snippetInfo.title), Toast.LENGTH_SHORT).show();
+                                saveButton.setClickable(true);
+                            });
+                        } catch (Exception e) {
+                            Log.e(TAG, "getView: error while downloading snippet, snippetId: " + snippetInfo.id, e);
+                            new Handler(getContext().getMainLooper()).post(() -> {
+                                saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
+                                Toast.makeText(getContext(), "Error while downloading", Toast.LENGTH_SHORT).show();
+                                saveButton.setClickable(true);
+                            });
+                        }
                     }
 
                     @Override
                     public void onFailure(Exception e) {
                         Log.e(TAG, "onFailure: error while downloading snippet, snippetId: " + snippetInfo.id, e);
+                        new Handler(getContext().getMainLooper()).post(() -> {
+                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
+                            Toast.makeText(getContext(), String.format("Snippet '%s' downloaded", snippetInfo.title), Toast.LENGTH_SHORT).show();
+                            saveButton.setClickable(true);
+                        });
                     }
                 });
             }
