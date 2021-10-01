@@ -31,7 +31,7 @@ public class SnippetInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_snippet_info);
 
         snippetListView = findViewById(R.id.snippetListView);
-
+        snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
 
         AppContext.instance().snippetService.getAllSnippetInfosAsync(new ResponseCallback<List<SnippetInfo>>() {
             @Override
@@ -61,12 +61,12 @@ public class SnippetInfoActivity extends AppCompatActivity {
                 });
             }
         });
-        snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
+
     }
 
     private void onSnippetListViewItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i(TAG, "onCreate: SnippetTextView item selected");
-        SnippetInfo snippetInfo = (SnippetInfo) snippetListView.getAdapter().getItem(position);
+        SnippetInfo snippetInfo = ((SnippetInfoViewModelHolder) snippetListView.getAdapter().getItem(position)).snippetInfo;
         Intent intent = new Intent(this, SnippetActivity.class);
         intent.putExtra(AppConstants.Values.INTENT_SNIPPET_ID_NAME, snippetInfo.id);
         startActivity(intent);

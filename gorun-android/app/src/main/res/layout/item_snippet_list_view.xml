@@ -2,6 +2,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:padding="10dp"
+              android:descendantFocusability="blocksDescendants"
               android:orientation="vertical">
 
 
@@ -21,6 +22,7 @@
                 android:fontFamily="sans-serif-thin"/>
 
         <ImageButton
+                android:focusableInTouchMode="true"
                 android:id="@+id/saveButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

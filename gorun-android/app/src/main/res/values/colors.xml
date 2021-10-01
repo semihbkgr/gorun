@@ -13,6 +13,7 @@
     <color name="white">#fefefe</color>
     <color name="black">#050608</color>
     <color name="gray">#2E3442</color>
+    <color name="dark_gray">#24272E</color>
     <color name="green">#04930A</color>
 
     <!--Code Editor Highlight Colors-->
