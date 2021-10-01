@@ -3,17 +3,12 @@ server:
     whitelabel:
       enabled: false
 
+spring:
+  application:
+    name: gorun-server
+
 file:
   root-path: ${user.dir}\\codes
 
-file-service:
-  path:
-log-service:
-  log-count: 50
-code-run-service.max-time-second: 30
-
 snippet:
   file-path: snippets.json
-
-
-
