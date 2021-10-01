@@ -10,4 +10,8 @@ public interface RunWebSocketSession {
 
     void addMessageConsumer(Consumer<Message> consumer);
 
+    void close();
+
+    boolean connected();
+
 }

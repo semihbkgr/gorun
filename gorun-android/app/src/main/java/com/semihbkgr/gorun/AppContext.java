@@ -1,15 +1,18 @@
 package com.semihbkgr.gorun;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.semihbkgr.gorun.snippet.client.SnippetClient;
-import com.semihbkgr.gorun.snippet.client.SnippetClientImpl;
+import com.semihbkgr.gorun.message.MessageMarshaller;
+import com.semihbkgr.gorun.message.MessageMarshallerImpl;
+import com.semihbkgr.gorun.run.RunWebSocketClient;
+import com.semihbkgr.gorun.run.RunWebSocketClientImpl;
 import com.semihbkgr.gorun.snippet.SnippetService;
 import com.semihbkgr.gorun.snippet.SnippetServiceImpl;
+import com.semihbkgr.gorun.snippet.client.SnippetClient;
+import com.semihbkgr.gorun.snippet.client.SnippetClientImpl;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepository;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepositoryImpl;
 import okhttp3.OkHttpClient;
@@ -28,11 +31,12 @@ public class AppContext {
     public final SnippetService snippetService;
     public final AppDatabaseOpenHelper databaseOpenHelper;
     public final AppResourceHelper resourceHelper;
+    public final RunWebSocketClient runWebSocketClient;
     public final ExecutorService executorService;
     public final ScheduledExecutorService scheduledExecutorService;
 
     private AppContext(Context context) {
-        this.appStatus=new AppStatus(System.currentTimeMillis());
+        this.appStatus = new AppStatus(System.currentTimeMillis());
         Gson gson = new GsonBuilder().create();
         OkHttpClient httpClient = new OkHttpClient();
         this.databaseOpenHelper = new AppDatabaseOpenHelper(context);
@@ -40,8 +44,10 @@ public class AppContext {
         SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
         SnippetRepository snippetRepository = new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
         this.snippetService = new SnippetServiceImpl(snippetClient, snippetRepository);
-        this.executorService= Executors.newCachedThreadPool(r -> new Thread(r,"AppContextExecutorWorkerThread"));
-        this.scheduledExecutorService=Executors.newSingleThreadScheduledExecutor();
+        MessageMarshaller messageMarshaller = new MessageMarshallerImpl();
+        this.runWebSocketClient = new RunWebSocketClientImpl(httpClient, messageMarshaller);
+        this.executorService = Executors.newCachedThreadPool(r -> new Thread(r, "AppContextExecutorWorkerThread"));
+        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
     public static void initialize(@NonNull Context context) {

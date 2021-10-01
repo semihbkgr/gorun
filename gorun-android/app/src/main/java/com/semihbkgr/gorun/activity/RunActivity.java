@@ -88,7 +88,6 @@ public class RunActivity extends AppCompatActivity {
                 this.consoleTextChangeHandler.append(message.body);
         });
 
-
     }
 
     @Override

@@ -16,7 +16,7 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
     private final WebSocket webSocket;
     private final MessageWebSocketListener messageWebSocketListener;
     private final MessageMarshaller messageMarshaller;
-    private final AtomicBoolean connected;
+    private final AtomicBoolean closed;
 
     public RunWebSocketSessionImpl(@NonNull WebSocket webSocket,
                                    @NonNull MessageWebSocketListener messageWebSocketListener,
@@ -24,20 +24,34 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
         this.webSocket = webSocket;
         this.messageWebSocketListener = messageWebSocketListener;
         this.messageMarshaller = messageMarshaller;
-        this.connected = new AtomicBoolean(true);
+        this.closed = new AtomicBoolean(true);
     }
 
     @Override
     public void sendMessage(Message message) {
-        if (connected.get()) {
-            Log.i(TAG, String.format("sendMessage: Message is sending, Command : %s", message.command.name()));
+        if (closed.get()) {
             webSocket.send(messageMarshaller.marshall(message));
+            Log.i(TAG, String.format("sendMessage: Message is sending, Command : %s", message.command.name()));
         } else throw new IllegalArgumentException("Session has already been closed");
     }
 
     @Override
     public void addMessageConsumer(Consumer<Message> consumer) {
         messageWebSocketListener.addMessageConsumer(consumer);
+        Log.i(TAG, "Consumer is added to session successfully");
+    }
+
+    @Override
+    public void close() {
+        //TODO adjust parameters
+        closed.set(false);
+        webSocket.close(0,"");
+        Log.i(TAG, "Session got closed successfully");
+    }
+
+    @Override
+    public boolean connected() {
+        return !closed.get();
     }
 
 }

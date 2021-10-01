@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "onStart: serverStatus, isServerUp: " + isServerUp);
         });
 
+
+
     }
 
 }

@@ -5,6 +5,10 @@ import okhttp3.WebSocketListener;
 
 public interface RunWebSocketClient {
 
-    RunWebSocketSession connect(@Nullable WebSocketListener webSocketListener);
+    void connect(@Nullable WebSocketListener webSocketListener);
+
+    boolean hasSession();
+
+    RunWebSocketSession session();
 
 }
