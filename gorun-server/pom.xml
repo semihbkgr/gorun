@@ -11,7 +11,7 @@
 
     <groupId>com.semihbkgr.gorun</groupId>
     <artifactId>server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>server</name>
 
     <description>Server of GoRun</description>
@@ -19,6 +19,7 @@
     <properties>
         <java.version>11</java.version>
         <okhttp.version>4.9.1</okhttp.version>
+        <finalName>gorun-server-${version}</finalName>
     </properties>
 
     <dependencies>
@@ -75,8 +76,20 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${finalName}</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
+        <finalName>${finalName}</finalName>
     </build>
 
 </project>
