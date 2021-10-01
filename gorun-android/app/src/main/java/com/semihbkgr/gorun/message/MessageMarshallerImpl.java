@@ -2,9 +2,10 @@ package com.semihbkgr.gorun.message;
 
 import static com.semihbkgr.gorun.message.MessageConstant.*;
 
-public class MessageUtils {
+public class MessageMarshallerImpl implements MessageMarshaller {
 
-    public static Message unmarshall(String data) {
+    @Override
+    public Message unmarshall(String data) throws MessageMarshallException {
         data = data.trim();
         if (data.startsWith(MESSAGE_BEGIN_CHARACTER) && data.endsWith(MESSAGE_END_CHARACTER)) {
             data = data.substring(1, data.length() - 1);
@@ -13,7 +14,7 @@ public class MessageUtils {
                 String commandString = data.substring(0, index);
                 String body = data.substring(index + 1);
                 try {
-                    Command command = Command.of(commandString, true);
+                    Command command = Command.of(commandString, false);
                     if (body.equalsIgnoreCase("null") || body.isEmpty())
                         return Message.of(command);
                     else
@@ -30,7 +31,10 @@ public class MessageUtils {
 
     }
 
-    public static String marshall(Message message) {
+    @Override
+    public String marshall(Message message) throws MessageMarshallException {
+        if (!message.command.isInResponse)
+            throw new MessageMarshallException(String.format("Illegal command field, command : %s", message.command.name()));
         StringBuilder unmarshallStringBuilder = new StringBuilder();
         unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
         String commandString = message.command.name();
@@ -39,12 +43,6 @@ public class MessageUtils {
         unmarshallStringBuilder.append(message.body);
         unmarshallStringBuilder.append(MESSAGE_END_CHARACTER);
         return unmarshallStringBuilder.toString();
-    }
-
-    public static class MessageMarshallException extends RuntimeException {
-        public MessageMarshallException(String message) {
-            super(message);
-        }
     }
 
 }

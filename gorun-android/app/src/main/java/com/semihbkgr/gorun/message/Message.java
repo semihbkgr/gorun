@@ -1,5 +1,7 @@
 package com.semihbkgr.gorun.message;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public class Message {
@@ -12,11 +14,11 @@ public class Message {
         this.body = body;
     }
 
-    public static Message of(Command command, String body) {
+    public static Message of(@NonNull Command command,@NonNull String body) {
         return new Message(Objects.requireNonNull(command), Objects.requireNonNull(body));
     }
 
-    public static Message of(Command command) {
+    public static Message of(@NonNull Command command) {
         return new Message(Objects.requireNonNull(command), null);
     }
 
