@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.util;
+package com.semihbkgr.gorun.util.view;
 
 @FunctionalInterface
 public interface TextChangeListener {

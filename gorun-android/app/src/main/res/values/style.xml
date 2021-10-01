@@ -16,7 +16,7 @@
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
-    <!--Code Editor Highlight Styles-->
+    <!--Code Editor HighlightUnits Styles-->
     <style name="PackageStyle">
         <item name="android:textColor">@color/Package</item>
     </style>

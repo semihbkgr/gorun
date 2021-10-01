@@ -9,7 +9,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.semihbkgr.gorun.util.TextWatcherAdapter;
+import com.semihbkgr.gorun.util.view.TextWatcherAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;

@@ -2,7 +2,7 @@ package com.semihbkgr.gorun.editor;
 
 import com.semihbkgr.gorun.R;
 
-public enum Highlight {
+public enum HighlightUnits {
 
     STRING(new String[]{"\""}, new String[]{"\""},R.style.StringStyle),
     FUNCTION( new String[]{"."},  new String[]{"("},R.style.FunctionStyle),
@@ -18,7 +18,7 @@ public enum Highlight {
     public final String[] endWords;
     public final int style;
 
-    Highlight(String[] startWords, String[] endWords, int style) {
+    HighlightUnits(String[] startWords, String[] endWords, int style) {
         this.startWords = startWords;
         this.endWords = endWords;
         this.style=style;

@@ -25,26 +25,26 @@ public class CodeHighlighter {
         handler.post(()->{
             List<CodeHighlightContext> newCodeHighlightContextList=new ArrayList<>();
 
-            for(Highlight highlight : Highlight.values())
-                if(highlight.isOnly())
-                    for(String startWord:highlight.startWords)
+            for(HighlightUnits highlightUnits : HighlightUnits.values())
+                if(highlightUnits.isOnly())
+                    for(String startWord: highlightUnits.startWords)
                         for(int i = code.indexOf(startWord); i>-1; i=code.indexOf(startWord,i+ startWord.length()))
-                            newCodeHighlightContextList.add(CodeHighlightContext.of(this.editText.getContext(), highlight,i,i+startWord.length()));
+                            newCodeHighlightContextList.add(CodeHighlightContext.of(this.editText.getContext(), highlightUnits,i,i+startWord.length()));
                 else{
                     boolean isStarting=true;
                     int index=0;
-                    for(String startWord: highlight.startWords)
-                        for(String endWord: highlight.endWords)
+                    for(String startWord: highlightUnits.startWords)
+                        for(String endWord: highlightUnits.endWords)
                             for(int i = code.indexOf(startWord); i>-1; i=code.indexOf(isStarting?startWord :endWord,i+1),
                                     index+=isStarting?startWord.length():endWord.length())
                                 if(!isStarting){
-                                    newCodeHighlightContextList.add(CodeHighlightContext.of(editText.getContext(), highlight,index,i));
+                                    newCodeHighlightContextList.add(CodeHighlightContext.of(editText.getContext(), highlightUnits,index,i));
                                     isStarting=true;
-                                    if(highlight==Highlight.CUSTOM_FUNCTION){
+                                    if(highlightUnits == HighlightUnits.CUSTOM_FUNCTION){
                                         String functionName=code.substring(index+startWord.length()-1,i);
                                         int functionNameLength=functionName.length();
                                         for(int j=code.indexOf(functionName);j>-1;j=code.indexOf(functionName,j+functionNameLength))
-                                            newCodeHighlightContextList.add(CodeHighlightContext.of(editText.getContext(), highlight,j,j+functionNameLength));
+                                            newCodeHighlightContextList.add(CodeHighlightContext.of(editText.getContext(), highlightUnits,j,j+functionNameLength));
                                     }
                                 }else{
                                     index=i;

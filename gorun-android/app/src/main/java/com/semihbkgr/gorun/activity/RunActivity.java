@@ -14,8 +14,8 @@ import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.editor.CodeEditor;
 import com.semihbkgr.gorun.message.Command;
 import com.semihbkgr.gorun.run.CodeRunContext;
-import com.semihbkgr.gorun.util.TextChangeHandler;
-import com.semihbkgr.gorun.util.TextChangeListener;
+import com.semihbkgr.gorun.util.view.TextChangeHandler;
+import com.semihbkgr.gorun.util.view.TextChangeListener;
 
 public class RunActivity extends AppCompatActivity {
 

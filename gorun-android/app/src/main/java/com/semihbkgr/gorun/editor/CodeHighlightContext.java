@@ -16,8 +16,8 @@ public class CodeHighlightContext {
         this.end = end;
     }
 
-    public static CodeHighlightContext of(Context context, Highlight highlight, int start, int end){
-        return new CodeHighlightContext(new TextAppearanceSpan(context, highlight.style),start,end);
+    public static CodeHighlightContext of(Context context, HighlightUnits highlightUnits, int start, int end){
+        return new CodeHighlightContext(new TextAppearanceSpan(context, highlightUnits.style),start,end);
     }
 
     public CharacterStyle getCharacterStyle() {

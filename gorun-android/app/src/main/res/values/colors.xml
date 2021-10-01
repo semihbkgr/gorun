@@ -16,7 +16,7 @@
     <color name="dark_gray">#24272E</color>
     <color name="green">#04930A</color>
 
-    <!--Code Editor Highlight Colors-->
+    <!--Code Editor HighlightUnits Colors-->
     <color name="Func">#009688</color>
     <color name="Import">#9C27B0</color>
     <color name="Return">#9C27B0</color>
