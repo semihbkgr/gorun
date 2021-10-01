@@ -13,7 +13,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.setting.AppSetting;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -28,6 +27,8 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+
+
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.setTitle("Setting");
@@ -39,7 +40,6 @@ public class SettingActivity extends AppCompatActivity {
 
         deleteSubjectsButton.setOnClickListener(this::onButtonClearSubjectClicked);
 
-        serverStateValueTextView.setText(AppSetting.instance.appState.getServerStateType().value);
 
     }
 
@@ -52,7 +52,7 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.default_menu, menu);
+        inflater.inflate(R.menu.action_bar, menu);
         return true;
     }
 

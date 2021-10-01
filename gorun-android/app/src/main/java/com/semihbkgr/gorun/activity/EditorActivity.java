@@ -10,15 +10,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.AppConstants;
+import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.editor.CodeEditor;
 import com.semihbkgr.gorun.message.Command;
 import com.semihbkgr.gorun.run.CodeRunContext;
-import com.semihbkgr.gorun.setting.AppSetting;
-import com.semihbkgr.gorun.setting.ServerStateType;
 import com.semihbkgr.gorun.util.TextChangeHandler;
 import com.semihbkgr.gorun.util.TextChangeListener;
-import com.semihbkgr.gorun.editor.CodeEditor;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -108,6 +106,7 @@ public class EditorActivity extends AppCompatActivity {
     private void onRunButtonClicked(View v) {
         //TODO add socket connection control
         //TODO avoid button click spam
+        /*
         if (!AppSetting.instance.appState.hasInternetConnection()) {
             AppSetting.instance.updateAllState();
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
@@ -119,7 +118,7 @@ public class EditorActivity extends AppCompatActivity {
             consoleTextChangeHandler.clear();
             CodeRunContext.instance.run(code);
         }
-
+        */
     }
 
     private void onConsoleButtonClicked(View v) {

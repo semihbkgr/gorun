@@ -3,10 +3,15 @@ package com.semihbkgr.gorun.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
@@ -29,6 +34,12 @@ public class SnippetInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snippet_info);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Snippets");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         snippetListView = findViewById(R.id.snippetListView);
         snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
@@ -70,6 +81,28 @@ public class SnippetInfoActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SnippetActivity.class);
         intent.putExtra(AppConstants.Values.INTENT_SNIPPET_ID_NAME, snippetInfo.id);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.settingItem) {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
 }

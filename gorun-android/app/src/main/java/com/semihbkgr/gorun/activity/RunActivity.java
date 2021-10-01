@@ -13,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.setting.AppSetting;
-import com.semihbkgr.gorun.setting.ServerStateType;
 
 public class RunActivity extends AppCompatActivity {
 
@@ -42,7 +40,7 @@ public class RunActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.default_menu, menu);
+        inflater.inflate(R.menu.action_bar, menu);
         return true;
     }
 
@@ -67,6 +65,7 @@ public class RunActivity extends AppCompatActivity {
     }
 
     private void onButtonSnippetClickListener(View v) {
+        /*
         Log.i(TAG, "onButtonSnippetClickListener: button clicked");
         if (!AppSetting.instance.appState.hasInternetConnection()){
             AppSetting.instance.updateAllState();
@@ -75,6 +74,8 @@ public class RunActivity extends AppCompatActivity {
             AppSetting.instance.updateAllState();
             Toast.makeText(this, "Server is down", Toast.LENGTH_LONG).show();
         }
+
+         */
     }
 
 }

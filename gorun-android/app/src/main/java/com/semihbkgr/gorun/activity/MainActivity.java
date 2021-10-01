@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
-import com.semihbkgr.gorun.setting.AppSetting;
 import com.semihbkgr.gorun.snippet.Snippet;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
@@ -29,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AppContext.initialize(getApplicationContext());
-        AppSetting.instance.updateAllState();
+
+
 
         new Handler(getMainLooper())
                 .postDelayed(() -> {
