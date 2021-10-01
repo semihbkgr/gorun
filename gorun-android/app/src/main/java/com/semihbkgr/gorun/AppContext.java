@@ -24,6 +24,7 @@ public class AppContext {
 
     private static AppContext instance;
 
+    public final AppStatus appStatus;
     public final SnippetService snippetService;
     public final AppDatabaseOpenHelper databaseOpenHelper;
     public final AppResourceHelper resourceHelper;
@@ -31,6 +32,7 @@ public class AppContext {
     public final ScheduledExecutorService scheduledExecutorService;
 
     private AppContext(Context context) {
+        this.appStatus=new AppStatus(System.currentTimeMillis());
         Gson gson = new GsonBuilder().create();
         OkHttpClient httpClient = new OkHttpClient();
         this.databaseOpenHelper = new AppDatabaseOpenHelper(context);
