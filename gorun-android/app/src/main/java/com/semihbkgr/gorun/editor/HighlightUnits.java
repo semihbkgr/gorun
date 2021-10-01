@@ -14,9 +14,9 @@ public enum HighlightUnits {
     VAR( new String[]{"var"},null,R.style.ReturnStyle),
     TYPE(new String[]{"int,float","string","bool"},null,R.style.TypeStyle);
 
-    public final String[] startWords;
-    public final String[] endWords;
-    public final int style;
+    final String[] startWords;
+    final String[] endWords;
+    final int style;
 
     HighlightUnits(String[] startWords, String[] endWords, int style) {
         this.startWords = startWords;

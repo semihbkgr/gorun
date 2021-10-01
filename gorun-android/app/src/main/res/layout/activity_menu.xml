@@ -57,7 +57,7 @@
         <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:srcCompat="@drawable/go_pilot"/>
+                app:srcCompat="@drawable/go_inspector"/>
 
         <TextView
                 android:text="Snippet"
@@ -68,30 +68,5 @@
                 android:textColor="@color/black"/>
 
     </LinearLayout>
-
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="100dp"
-                  android:orientation="horizontal"
-                  android:gravity="left"
-                  android:id="@+id/docLayout"
-                  android:background="@color/blue_bg2">
-
-        <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:srcCompat="@drawable/go_inspector"/>
-
-        <TextView
-                android:text="Doc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="25dp"
-                android:textSize="23sp"
-                android:textColor="@color/black"/>
-
-    </LinearLayout>
-
-
-
 
 </LinearLayout>

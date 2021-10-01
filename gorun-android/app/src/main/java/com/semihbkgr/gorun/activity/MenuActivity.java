@@ -19,21 +19,17 @@ public class MenuActivity extends AppCompatActivity {
 
     private LinearLayout runLayout;
     private LinearLayout snippetLayout;
-    private LinearLayout docLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        // find views
         runLayout = findViewById(R.id.runLayout);
         snippetLayout = findViewById(R.id.snippetLayout);
-        docLayout=findViewById(R.id.docLayout);
 
         runLayout.setOnClickListener(this::onRunLayoutClicked);
         snippetLayout.setOnClickListener(this::onSnippetLayoutClicked);
-        docLayout.setOnClickListener(this::onDocLayoutClicked);
 
     }
 
@@ -45,10 +41,6 @@ public class MenuActivity extends AppCompatActivity {
     private void onSnippetLayoutClicked(View v) {
         Intent i=new Intent(this, SnippetInfoActivity.class);
         startActivity(i);
-    }
-
-    private void onDocLayoutClicked(View v){
-
     }
 
     @Override
