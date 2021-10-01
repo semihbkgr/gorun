@@ -52,9 +52,9 @@ public class SnippetInfoActivity extends AppCompatActivity {
                     List<Integer> savedIdList = AppContext.instance().snippetService.getAllSavedId();
                     List<SnippetInfoViewModelHolder> snippetInfoViewModelHolderList = data.parallelStream().map(snippetInfo -> {
                         if (savedIdList.contains(snippetInfo.id))
-                            return SnippetInfoViewModelHolder.downloadedOf(snippetInfo);
+                            return SnippetInfoViewModelHolder.downloadedOf(snippetInfo,false);
                         else
-                            return SnippetInfoViewModelHolder.nonDownloadedOf(snippetInfo);
+                            return SnippetInfoViewModelHolder.nonDownloadedOf(snippetInfo,false);
                     }).sorted().collect(Collectors.toList());
                     runOnUiThread(() -> snippetListView.setAdapter(new SnippetInfoArrayAdapter(getApplicationContext(), snippetInfoViewModelHolderList)));
                 });
@@ -66,7 +66,7 @@ public class SnippetInfoActivity extends AppCompatActivity {
                 AppContext.instance().executorService.execute(() -> {
                     List<SnippetInfo> savedSnippetInfoList = AppContext.instance().snippetService.getAllSavedSnippetInfos();
                     List<SnippetInfoViewModelHolder> snippetInfoViewModelHolderList = savedSnippetInfoList.parallelStream()
-                            .map(SnippetInfoViewModelHolder::downloadedOf)
+                            .map((SnippetInfo snippetInfo) -> SnippetInfoViewModelHolder.downloadedOf(snippetInfo,true))
                             .sorted()
                             .collect(Collectors.toList());
                     runOnUiThread(() -> snippetListView.setAdapter(new SnippetInfoArrayAdapter(getApplicationContext(), snippetInfoViewModelHolderList)));

@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.editor.CodeEditor;
-import com.semihbkgr.gorun.message.Command;
-import com.semihbkgr.gorun.run.CodeRunContext;
 import com.semihbkgr.gorun.util.view.TextChangeHandler;
 import com.semihbkgr.gorun.util.view.TextChangeListener;
 
@@ -30,7 +28,7 @@ public class RunActivity extends AppCompatActivity {
 
     private TextView consoleTextView;
 
-    //Code shortcuts buttons
+
     private Button leftBraceButton;
     private Button rightBraceButton;
     private Button leftCurlyBraceButton;
@@ -45,16 +43,12 @@ public class RunActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run);
 
-        //-Find Views
-        //CodeEditor
+
         codeEditor = findViewById(R.id.codeEditText);
-        //Console
         consoleTextView = findViewById(R.id.outputTextView);
         consoleEditText = findViewById(R.id.inputEditText);
         consoleButton = findViewById(R.id.inputButton);
-        //Run Button
         runButton = findViewById(R.id.runButton);
-        //Shortcuts buttons
         leftBraceButton = findViewById(R.id.leftBraceButton);
         rightBraceButton = findViewById(R.id.rightBraceButton);
         leftCurlyBraceButton = findViewById(R.id.leftCurlyBraceButton);
@@ -62,13 +56,10 @@ public class RunActivity extends AppCompatActivity {
         quoteButton = findViewById(R.id.quoteButton);
         tabButton = findViewById(R.id.tabButton);
 
-        //-Set Listeners
-        //Console
+
         consoleButton.setOnClickListener(this::onConsoleButtonClicked);
         consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
-        //Run Button
         runButton.setOnClickListener(this::onRunButtonClicked);
-        //Shortcuts Buttons
         leftBraceButton.setOnClickListener(this::onLeftBraceButtonClicked);
         rightBraceButton.setOnClickListener(this::onRightBraceButtonClicked);
         leftCurlyBraceButton.setOnClickListener(this::onLeftCurlyBraceButtonClicked);
@@ -82,11 +73,12 @@ public class RunActivity extends AppCompatActivity {
             if (event == TextChangeListener.Event.UPDATE) this.consoleTextView.setText(text);
             else this.consoleTextView.setText(consoleTextView.getText().toString().concat(text));
         }));
-        CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message -> {
+
+       /* CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message -> {
             Log.i(TAG, "onCreate: Message : " + message.command + " - " + message.body);
             if (message.command == Command.OUTPUT)
                 this.consoleTextChangeHandler.append(message.body);
-        });
+        });*/
 
     }
 
@@ -122,7 +114,7 @@ public class RunActivity extends AppCompatActivity {
     private void onConsoleButtonClicked(View v) {
         String command = consoleEditText.getText().toString();
         consoleEditText.setText("");
-        CodeRunContext.instance.send(command);
+//        CodeRunContext.instance.send(command);
     }
 
     private void onConsoleTextViewClicked(View v) {

@@ -6,19 +6,21 @@ import com.semihbkgr.gorun.snippet.SnippetInfo;
 public class SnippetInfoViewModelHolder implements Comparable<SnippetInfoViewModelHolder> {
 
     public final SnippetInfo snippetInfo;
+    public final boolean removeFromListWhenDeleted;
     private boolean downloaded;
 
-    private SnippetInfoViewModelHolder(SnippetInfo snippetInfo, boolean downloaded) {
+    private SnippetInfoViewModelHolder(SnippetInfo snippetInfo, boolean downloaded, boolean removeFromListWhenDeleted) {
         this.snippetInfo = snippetInfo;
         this.downloaded = downloaded;
+        this.removeFromListWhenDeleted = removeFromListWhenDeleted;
     }
 
-    public static SnippetInfoViewModelHolder downloadedOf(@NonNull SnippetInfo snippetInfo){
-        return new SnippetInfoViewModelHolder(snippetInfo,true);
+    public static SnippetInfoViewModelHolder downloadedOf(@NonNull SnippetInfo snippetInfo, boolean removeFromListWhenDeleted) {
+        return new SnippetInfoViewModelHolder(snippetInfo, true, removeFromListWhenDeleted);
     }
 
-    public static SnippetInfoViewModelHolder nonDownloadedOf(@NonNull SnippetInfo snippetInfo){
-        return new SnippetInfoViewModelHolder(snippetInfo,false);
+    public static SnippetInfoViewModelHolder nonDownloadedOf(@NonNull SnippetInfo snippetInfo, boolean removeFromListWhenDeleted) {
+        return new SnippetInfoViewModelHolder(snippetInfo, false, removeFromListWhenDeleted);
     }
 
     public boolean isDownloaded() {
@@ -31,7 +33,7 @@ public class SnippetInfoViewModelHolder implements Comparable<SnippetInfoViewMod
 
     @Override
     public int compareTo(SnippetInfoViewModelHolder o) {
-        return snippetInfo.order-o.snippetInfo.order;
+        return snippetInfo.order - o.snippetInfo.order;
     }
 
 }

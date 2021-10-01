@@ -7,15 +7,12 @@ import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.snippet.Snippet;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
-import com.semihbkgr.gorun.util.ThrowUtils;
 import com.semihbkgr.gorun.util.http.ErrorResponseModel;
 import com.semihbkgr.gorun.util.http.RequestException;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 public class SnippetClientImpl implements SnippetClient {
 

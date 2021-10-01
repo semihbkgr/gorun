@@ -81,20 +81,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AppContext.instance().executorService.execute(() -> {
-            boolean hasNetworkConnection = NetworkUtils.hasNetworkConnection(this);
-            AppContext.instance().appStatus.setHasNetworkConnection(hasNetworkConnection);
-            Log.i(TAG, "onStart: serverStatus, hasNetworkConnection: " + hasNetworkConnection);
-        });
-
-        AppContext.instance().executorService.execute(() -> {
-            boolean isServerUp = NetworkUtils.isServerUp();
-            AppContext.instance().appStatus.setHasNetworkConnection(isServerUp);
-            Log.i(TAG, "onStart: serverStatus, isServerUp: " + isServerUp);
-        });
-
-
-
     }
 
 }
