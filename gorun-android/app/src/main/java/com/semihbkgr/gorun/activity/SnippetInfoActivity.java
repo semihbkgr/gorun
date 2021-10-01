@@ -44,6 +44,7 @@ public class SnippetInfoActivity extends AppCompatActivity {
         snippetListView = findViewById(R.id.snippetListView);
         snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
 
+
         AppContext.instance().snippetService.getAllSnippetInfosAsync(new ResponseCallback<List<SnippetInfo>>() {
             @Override
             public void onResponse(List<SnippetInfo> data) {

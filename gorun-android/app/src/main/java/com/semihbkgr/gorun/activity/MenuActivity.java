@@ -17,7 +17,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private final ExpirationTimer backTimer = new ExpirationTimer(AppConstants.Values.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
 
-    private LinearLayout editorLayout;
+    private LinearLayout runLayout;
     private LinearLayout snippetLayout;
     private LinearLayout docLayout;
 
@@ -27,18 +27,18 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         // find views
-        editorLayout = findViewById(R.id.editorLayout);
+        runLayout = findViewById(R.id.runLayout);
         snippetLayout = findViewById(R.id.snippetLayout);
         docLayout=findViewById(R.id.docLayout);
 
-        editorLayout.setOnClickListener(this::onEditorLayoutClicked);
+        runLayout.setOnClickListener(this::onRunLayoutClicked);
         snippetLayout.setOnClickListener(this::onSnippetLayoutClicked);
         docLayout.setOnClickListener(this::onDocLayoutClicked);
 
     }
 
-    private void onEditorLayoutClicked(View v) {
-        Intent i=new Intent(this,EditorActivity.class);
+    private void onRunLayoutClicked(View v) {
+        Intent i=new Intent(this, RunActivity.class);
         startActivity(i);
     }
 

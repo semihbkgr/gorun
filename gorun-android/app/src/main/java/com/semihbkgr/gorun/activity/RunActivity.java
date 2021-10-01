@@ -1,81 +1,166 @@
 package com.semihbkgr.gorun.activity;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.editor.CodeEditor;
+import com.semihbkgr.gorun.message.Command;
+import com.semihbkgr.gorun.run.CodeRunContext;
+import com.semihbkgr.gorun.util.TextChangeHandler;
+import com.semihbkgr.gorun.util.TextChangeListener;
 
 public class RunActivity extends AppCompatActivity {
 
     private static final String TAG = RunActivity.class.getName();
+    private static final int CODE_EDITOR_UPDATE_DELAY_MS = 500;
 
-    @SuppressLint("RestrictedApi")
+    private CodeEditor codeEditor;
+    private EditText consoleEditText;
+
+    private Button runButton;
+    private Button consoleButton;
+
+    private TextView consoleTextView;
+
+    //Code shortcuts buttons
+    private Button leftBraceButton;
+    private Button rightBraceButton;
+    private Button leftCurlyBraceButton;
+    private Button rightCurlyBraceButton;
+    private Button quoteButton;
+    private Button tabButton;
+
+    private TextChangeHandler consoleTextChangeHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run);
 
-        //MenuBar
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("Run");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        //-Find Views
+        //CodeEditor
+        codeEditor = findViewById(R.id.codeEditText);
+        //Console
+        consoleTextView = findViewById(R.id.outputTextView);
+        consoleEditText = findViewById(R.id.inputEditText);
+        consoleButton = findViewById(R.id.inputButton);
+        //Run Button
+        runButton = findViewById(R.id.runButton);
+        //Shortcuts buttons
+        leftBraceButton = findViewById(R.id.leftBraceButton);
+        rightBraceButton = findViewById(R.id.rightBraceButton);
+        leftCurlyBraceButton = findViewById(R.id.leftCurlyBraceButton);
+        rightCurlyBraceButton = findViewById(R.id.rightCurlyBraceButton);
+        quoteButton = findViewById(R.id.quoteButton);
+        tabButton = findViewById(R.id.tabButton);
 
-        //Components
-        findViewById(R.id.buttonNew).setOnClickListener(this::onButtonNewClickListener);
-        findViewById(R.id.buttonSnippet).setOnClickListener(this::onButtonSnippetClickListener);
+        //-Set Listeners
+        //Console
+        consoleButton.setOnClickListener(this::onConsoleButtonClicked);
+        consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
+        //Run Button
+        runButton.setOnClickListener(this::onRunButtonClicked);
+        //Shortcuts Buttons
+        leftBraceButton.setOnClickListener(this::onLeftBraceButtonClicked);
+        rightBraceButton.setOnClickListener(this::onRightBraceButtonClicked);
+        leftCurlyBraceButton.setOnClickListener(this::onLeftCurlyBraceButtonClicked);
+        rightCurlyBraceButton.setOnClickListener(this::onRightCurlyBraceButtonClicked);
+        quoteButton.setOnClickListener(this::onQuoteButtonClicked);
+        tabButton.setOnClickListener(this::onTabButtonClicked);
+
+        //Console output update by delay
+        consoleTextChangeHandler = new TextChangeHandler(CODE_EDITOR_UPDATE_DELAY_MS);
+        consoleTextChangeHandler.addListener((event, text) -> runOnUiThread(() -> {
+            if (event == TextChangeListener.Event.UPDATE) this.consoleTextView.setText(text);
+            else this.consoleTextView.setText(consoleTextView.getText().toString().concat(text));
+        }));
+        CodeRunContext.instance.getCodeRunWebSocketSession().addMessageConsumer(message -> {
+            Log.i(TAG, "onCreate: Message : " + message.command + " - " + message.body);
+            if (message.command == Command.OUTPUT)
+                this.consoleTextChangeHandler.append(message.body);
+        });
+
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar, menu);
-        return true;
+    protected void onStart() {
+        super.onStart();
+        String code = getIntent().getStringExtra(AppConstants.Values.INTENT_EXTRA_SNIPPET_CODE);
+        if (code != null) {
+            Log.i(TAG, "onStart: Activity started with code");
+            codeEditor.setText(code);
+        } else
+            Log.i(TAG, "onStart: Activity started with no code");
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.settingItem) {
-            Intent intent = new Intent(this, SettingActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
-
-    private void onButtonNewClickListener(View v) {
-        Log.i(TAG, "onNewButtonClickListener: button clicked");
-        startActivity(new Intent(this, EditorActivity.class));
-    }
-
-    private void onButtonSnippetClickListener(View v) {
+    private void onRunButtonClicked(View v) {
+        //TODO add socket connection control
+        //TODO avoid button click spam
         /*
-        Log.i(TAG, "onButtonSnippetClickListener: button clicked");
-        if (!AppSetting.instance.appState.hasInternetConnection()){
+        if (!AppSetting.instance.appState.hasInternetConnection()) {
             AppSetting.instance.updateAllState();
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-        } else if (AppSetting.instance.appState.getServerStateType() == ServerStateType.DOWN){
+        } else if (AppSetting.instance.appState.getServerStateType() == ServerStateType.DOWN) {
             AppSetting.instance.updateAllState();
             Toast.makeText(this, "Server is down", Toast.LENGTH_LONG).show();
+        } else {
+            String code = codeEditor.getText().toString();
+            consoleTextChangeHandler.clear();
+            CodeRunContext.instance.run(code);
         }
-
-         */
+        */
     }
+
+    private void onConsoleButtonClicked(View v) {
+        String command = consoleEditText.getText().toString();
+        consoleEditText.setText("");
+        CodeRunContext.instance.send(command);
+    }
+
+    private void onConsoleTextViewClicked(View v) {
+        this.consoleEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(consoleEditText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    private void onLeftBraceButtonClicked(View view) {
+        Log.v(TAG, "onLeftBraceButtonClicked: button has been clicked");
+        codeEditor.addText("(");
+    }
+
+    private void onRightBraceButtonClicked(View view) {
+        Log.v(TAG, "onRightBraceButtonClicked: button has been clicked");
+        codeEditor.addText(")");
+    }
+
+    private void onLeftCurlyBraceButtonClicked(View view) {
+        Log.v(TAG, "onLeftCurlyBraceButtonClicked: button has been clicked");
+        codeEditor.addText("{");
+    }
+
+    private void onRightCurlyBraceButtonClicked(View view) {
+        Log.v(TAG, "onRightCurlyBraceButtonClicked: button has been clicked");
+        codeEditor.addText("}");
+    }
+
+    private void onQuoteButtonClicked(View view) {
+        Log.v(TAG, "onQuoteButtonClicked: button has been clicked");
+        codeEditor.quote();
+    }
+
+    private void onTabButtonClicked(View view) {
+        Log.v(TAG, "onTabButtonClicked: button has been clicked");
+        codeEditor.addText("\t");
+    }
+
 
 }

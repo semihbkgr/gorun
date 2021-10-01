@@ -20,15 +20,12 @@
             android:parentActivityName=".activity.MenuActivity">
         </activity>
         <activity
-                android:name=".activity.EditorActivity"
+                android:name=".activity.RunActivity"
+                android:parentActivityName=".activity.MenuActivity"
                 android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
                 android:name=".activity.SettingActivity"
-                android:parentActivityName=".activity.MenuActivity">
-        </activity>
-        <activity
-                android:name=".activity.RunActivity"
                 android:parentActivityName=".activity.MenuActivity">
         </activity>
         <activity android:name=".activity.MenuActivity">

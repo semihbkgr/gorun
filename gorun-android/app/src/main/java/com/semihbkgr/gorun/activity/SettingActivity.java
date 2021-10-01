@@ -27,8 +27,6 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-
-
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.setTitle("Setting");

@@ -29,7 +29,7 @@
                   android:layout_height="100dp"
                   android:orientation="horizontal"
                   android:gravity="left"
-                  android:id="@+id/editorLayout"
+                  android:id="@+id/runLayout"
                   android:background="@color/blue_bg2">
 
         <ImageView

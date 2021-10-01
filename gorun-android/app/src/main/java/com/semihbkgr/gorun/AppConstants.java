@@ -11,7 +11,7 @@ public class AppConstants {
         public static final String SERVER_SOCKET_URI = "ws://192.168.1.4:8080";
         public static final String SERVER_SNIPPET_URI = SERVER_HTTP_URI + "/snippet";
         public static final String SERVER_CODE_RUN_URI = SERVER_SOCKET_URI + "/run";
-        public static final String SERVER_CODE_STATE_URI = SERVER_HTTP_URI + "/state";
+        public static final String SERVER_STATUS_URI = SERVER_HTTP_URI + "/status";
     }
 
 

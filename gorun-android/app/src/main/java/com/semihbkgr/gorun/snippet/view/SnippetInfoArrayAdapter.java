@@ -56,6 +56,8 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
                             saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
                             Toast.makeText(getContext(), String.format("Snippet '%s' deleted", snippetInfo.title), Toast.LENGTH_SHORT).show();
                             saveButton.setClickable(true);
+                            if(!AppContext.instance().appStatus.isHasNetworkConnection())
+                                remove(snippetInfoViewModelHolder);
                         });
                     } catch (Exception e) {
                         Log.e(TAG, "getView: error while deleting snippet, snippetId: " + snippetInfo.id, e);
