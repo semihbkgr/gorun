@@ -1,6 +1,7 @@
 package com.semihbkgr.gorun.run;
 
 import android.util.Log;
+import androidx.annotation.NonNull;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.message.MessageUtils;
 import okhttp3.Response;
@@ -16,27 +17,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class MessageConsumeCodeRunWebSocketListener extends WebSocketListener {
+public class MessageWebSocketListener extends WebSocketListener {
 
-    private final String TAG = CodeRunWebSocketClient.class.getName();
+    private final String TAG = RunWebSocketClient.class.getName();
 
     private final List<Consumer<Message>> messageConsumerList;
-    private Optional<WebSocketListener> webSocketListenerOptional;
+    private final Optional<WebSocketListener> webSocketListenerOptional;
 
-    private MessageConsumeCodeRunWebSocketListener() {
-        super();
+    private MessageWebSocketListener(WebSocketListener webSocketListener){
         messageConsumerList = new ArrayList<>();
-        webSocketListenerOptional=Optional.empty();
+        webSocketListenerOptional=Optional.ofNullable(webSocketListener);
     }
 
-    public static MessageConsumeCodeRunWebSocketListener empty(){
-        return new MessageConsumeCodeRunWebSocketListener();
+    private MessageWebSocketListener() {
+        this(null);
     }
 
-    public static MessageConsumeCodeRunWebSocketListener wrap(WebSocketListener webSocketListener){
-        MessageConsumeCodeRunWebSocketListener messageConsumeCodeRunWebSocketListener=new MessageConsumeCodeRunWebSocketListener();
-        messageConsumeCodeRunWebSocketListener.webSocketListenerOptional=Optional.of(webSocketListener);
-        return messageConsumeCodeRunWebSocketListener;
+    public static MessageWebSocketListener empty(){
+        return new MessageWebSocketListener();
+    }
+
+    public static MessageWebSocketListener wrap(@NonNull WebSocketListener webSocketListener){
+        return new MessageWebSocketListener(webSocketListener);
     }
 
     public void addMessageConsumer(Consumer<Message> messageConsumer) {
