@@ -16,7 +16,6 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
     private final WebSocket webSocket;
     private final MessageWebSocketListener messageWebSocketListener;
     private final MessageMarshaller messageMarshaller;
-    private final AtomicBoolean closed;
 
     public RunWebSocketSessionImpl(@NonNull WebSocket webSocket,
                                    @NonNull MessageWebSocketListener messageWebSocketListener,
@@ -24,36 +23,36 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
         this.webSocket = webSocket;
         this.messageWebSocketListener = messageWebSocketListener;
         this.messageMarshaller = messageMarshaller;
-        this.closed = new AtomicBoolean(false);
     }
 
     @Override
-    public void sendMessage(Message message) {
-        if (!closed.get()) {
-            webSocket.send(messageMarshaller.marshall(message));
-            Log.i(TAG, String.format("sendMessage: Message is sending, Command : %s", message.command.name()));
-        } else
-            throw new IllegalArgumentException("Session has already been closed");
+    public boolean sendMessage(Message message) {
+        boolean sent=webSocket.send(messageMarshaller.marshall(message));
+        if(sent)
+            Log.i(TAG, String.format("sendMessage: Message was enqueued successfully, Command : %s", message.command.name()));
+        else
+            Log.w(TAG, "sendMessage: Message cannot be enqueued");
+        return sent;
     }
 
     @Override
-    public void addMessageConsumer(Consumer<Message> consumer) {
-        messageWebSocketListener.addMessageConsumer(consumer);
-        Log.i(TAG, "Consumer is added to session successfully");
+    public  boolean addMessageConsumer(Consumer<Message> consumer) {
+        boolean added=messageWebSocketListener.addMessageConsumer(consumer);
+        if(added)
+            Log.i(TAG, "Consumer was added to session successfully");
+        else
+            Log.w(TAG, "addMessageConsumer: Consumer cannot be added");
+        return added;
     }
 
     @Override
-    public void close() {
-        //TODO adjust parameters
-        closed.set(false);
-        webSocket.close(0,"");
-        Log.i(TAG, "Session got closed successfully");
-    }
-
-    @Override
-    public boolean connected() {
-        webSocket.
-        return !closed.get();
+    public boolean close() {
+        boolean closed=webSocket.close(1000,"App is closing");
+        if(closed)
+            Log.i(TAG, "close: web socket is gracefully closing");
+        else
+            Log.w(TAG, "close: web socket cannot be started closing");
+        return closed;
     }
 
 }

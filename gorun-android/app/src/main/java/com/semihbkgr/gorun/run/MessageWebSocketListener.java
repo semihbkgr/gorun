@@ -43,8 +43,8 @@ class MessageWebSocketListener extends WebSocketListener {
         return new MessageWebSocketListener(messageMarshaller, webSocketListener);
     }
 
-    public void addMessageConsumer(Consumer<Message> messageConsumer) {
-        messageConsumerList.add(messageConsumer);
+    public boolean addMessageConsumer(Consumer<Message> messageConsumer) {
+        return messageConsumerList.add(messageConsumer);
     }
 
     @Override

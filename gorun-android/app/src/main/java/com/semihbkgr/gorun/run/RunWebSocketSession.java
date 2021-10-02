@@ -6,12 +6,10 @@ import java.util.function.Consumer;
 
 public interface RunWebSocketSession {
 
-    void sendMessage(Message message);
+    boolean sendMessage(Message message);
 
-    void addMessageConsumer(Consumer<Message> consumer);
+    boolean addMessageConsumer(Consumer<Message> consumer);
 
-    void close();
-
-    boolean connected();
+    boolean close();
 
 }
