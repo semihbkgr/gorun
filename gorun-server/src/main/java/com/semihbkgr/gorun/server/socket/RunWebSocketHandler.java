@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.server.socket;
 
 import com.semihbkgr.gorun.server.message.MessageMarshaller;
-import com.semihbkgr.gorun.server.service.MessageProcessService;
+import com.semihbkgr.gorun.server.service.MessageProcessingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.socket.WebSocketHandler;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 public class RunWebSocketHandler implements WebSocketHandler {
 
     private final MessageMarshaller messageMarshaller;
-    private final MessageProcessService messageExecutor;
+    private final MessageProcessingService messageExecutor;
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {

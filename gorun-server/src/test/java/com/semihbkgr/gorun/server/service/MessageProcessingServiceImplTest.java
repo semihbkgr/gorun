@@ -21,11 +21,11 @@ import java.time.Duration;
 
 @ExtendWith(ResourceExtension.class)
 @ResourcesDir(path = "./src/test/resources")
-class MessageProcessServiceImplTest {
+class MessageProcessingServiceImplTest {
 
     static final String ROOT_DIR = "test-files";
 
-    MessageProcessServiceImpl messageProcessService;
+    MessageProcessingServiceImpl messageProcessService;
     RunWebSocketSession session;
     FileServiceImpl fileService;
     FileNameGenerator fileNameGenerator;
@@ -36,7 +36,7 @@ class MessageProcessServiceImplTest {
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDirIfNotExists();
         this.fileNameGenerator = new SequentialFileNameGenerator();
-        this.messageProcessService = new MessageProcessServiceImpl(fileService, fileNameGenerator);
+        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator);
     }
 
     @AfterEach

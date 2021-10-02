@@ -3,10 +3,12 @@ package com.semihbkgr.gorun.server.run;
 public abstract class AbstractRunContext implements RunContext{
 
     protected final Process process;
+    protected final String filename;
     protected RunStatus status;
 
-    protected AbstractRunContext(Process process) {
+    protected AbstractRunContext(Process process,String filename) {
         this.process=process;
+        this.filename=filename;
         this.status=RunStatus.EXECUTING;
     }
 

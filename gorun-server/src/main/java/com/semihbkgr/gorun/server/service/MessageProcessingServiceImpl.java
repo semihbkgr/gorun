@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
-public class MessageProcessServiceImpl implements MessageProcessService {
+public class MessageProcessingServiceImpl implements MessageProcessingService {
 
     private final FileService fileService;
     private final FileNameGenerator fileNameGenerator;
@@ -39,14 +39,15 @@ public class MessageProcessServiceImpl implements MessageProcessService {
 
     private Flux<Message> processRunCommand(RunWebSocketSession session, Message message) {
         if (session.runContext == null || (session.runContext != null && session.runContext.status() != RunStatus.EXECUTING)) {
-            return fileService.createFile(fileNameGenerator.generate("go"), message.body)
+            return fileService
+                    .createFile(fileNameGenerator.generate("go"), message.body)
                     .flatMapMany(fileName -> {
                         try {
                             var process = new ProcessBuilder()
                                     .command("go", "run", fileName)
                                     .redirectErrorStream(true)
                                     .start();
-                            session.runContext = new DefaultRunContext(process);
+                            session.runContext = new DefaultRunContext(process,fileName);
                             return DataBufferUtils.readInputStream(process::getInputStream, new DefaultDataBufferFactory(), 256);
                         } catch (Exception e) {
                             return Flux.error(e);

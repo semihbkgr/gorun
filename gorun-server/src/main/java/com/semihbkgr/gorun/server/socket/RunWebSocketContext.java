@@ -1,8 +1,7 @@
 package com.semihbkgr.gorun.server.socket;
 
 import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.service.MessageProcessService;
-import lombok.Data;
+import com.semihbkgr.gorun.server.service.MessageProcessingService;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 
@@ -10,10 +9,10 @@ import reactor.core.publisher.Flux;
 public class RunWebSocketContext {
 
     private final RunWebSocketSession session;
-    private final MessageProcessService messageProcessService;
+    private final MessageProcessingService messageProcessingService;
 
     public Flux<Message> processMessage (Message message){
-        return messageProcessService.process(session,message);
+        return messageProcessingService.process(session,message);
     }
 
 }
