@@ -38,7 +38,7 @@ public class InMemoryCacheService<I, R> implements CacheService<I, R> {
     }
 
     @Override
-    public void invalidateAll() {
+    public void invalidateAllExpiredCaches() {
         recordMap.clear();
     }
 

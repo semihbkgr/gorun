@@ -44,7 +44,7 @@ public class TimedCacheService<I, R> implements CacheService<I, R> {
     }
 
     @Override
-    public void invalidateAll() {
+    public void invalidateAllExpiredCaches() {
         timedRecordMap.clear();
     }
 

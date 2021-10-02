@@ -31,7 +31,6 @@ public class RunWebSocketClientImpl implements RunWebSocketClient {
             Log.w(TAG, "connect: There is already one web socket session available");
             return;
         }
-        Request req = new Request.Builder().url(AppConstants.Nets.SERVER_CODE_RUN_URI).build();
         MessageWebSocketListener messageWebSocketListener;
         if (webSocketListener == null)
             messageWebSocketListener = MessageWebSocketListener.empty(messageMarshaller);
@@ -39,18 +38,15 @@ public class RunWebSocketClientImpl implements RunWebSocketClient {
             messageWebSocketListener = (MessageWebSocketListener) webSocketListener;
         else
             messageWebSocketListener = MessageWebSocketListener.wrap(messageMarshaller, webSocketListener);
-        try{
-            WebSocket webSocket = httpClient.newWebSocket(req, messageWebSocketListener);
-            runWebSocketSessionAtomicReference.set(new RunWebSocketSessionImpl(webSocket, messageWebSocketListener, messageMarshaller));
-            Log.i(TAG, "connect: web socket session has been created successfully");
-        }catch (Exception e){
-            Log.e(TAG, "connect: connection error",e);
-        }
+        Request req = new Request.Builder().url(AppConstants.Nets.SERVER_CODE_RUN_URI).build();
+        WebSocket webSocket = httpClient.newWebSocket(req, messageWebSocketListener);
+        runWebSocketSessionAtomicReference.set(new RunWebSocketSessionImpl(webSocket, messageWebSocketListener, messageMarshaller));
+        Log.i(TAG, "connect: web socket session has been created successfully");
     }
 
     @Override
     public boolean hasSession() {
-        return runWebSocketSessionAtomicReference.get()!=null;
+        return runWebSocketSessionAtomicReference.get()!=null && runWebSocketSessionAtomicReference.get().connected();
     }
 
     @Override

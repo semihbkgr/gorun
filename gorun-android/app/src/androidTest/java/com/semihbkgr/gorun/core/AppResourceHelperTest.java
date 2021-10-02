@@ -58,14 +58,14 @@ public class AppResourceHelperTest {
 
     @Test
     public void readAssetAsString() throws IOException {
-        String resource = appResourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME);
+        String resource = appResourceHelper.readAsset(AppConstants.Resources.TEST_ASSET_FILE_NAME);
         assertEquals(TEST_MODEL_JSON, resource);
         Log.i(TAG, "readAssetAsString: Resource: " + resource);
     }
 
     @Test
     public void readAssetAsType() throws IOException {
-        TestModel testModel = appResourceHelper.readAsset(AppConstants.Files.TEST_ASSET_FILE_NAME, TestModel.class);
+        TestModel testModel = appResourceHelper.readAsset(AppConstants.Resources.TEST_ASSET_FILE_NAME, TestModel.class);
         assertEquals(TEST_MODEL_INSTANCE, testModel);
         Log.i(TAG, "readAssetAsType: Resource instance: " + testModel);
     }

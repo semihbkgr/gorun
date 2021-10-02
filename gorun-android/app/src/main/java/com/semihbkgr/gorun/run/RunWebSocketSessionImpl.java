@@ -24,15 +24,16 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
         this.webSocket = webSocket;
         this.messageWebSocketListener = messageWebSocketListener;
         this.messageMarshaller = messageMarshaller;
-        this.closed = new AtomicBoolean(true);
+        this.closed = new AtomicBoolean(false);
     }
 
     @Override
     public void sendMessage(Message message) {
-        if (closed.get()) {
+        if (!closed.get()) {
             webSocket.send(messageMarshaller.marshall(message));
             Log.i(TAG, String.format("sendMessage: Message is sending, Command : %s", message.command.name()));
-        } else throw new IllegalArgumentException("Session has already been closed");
+        } else
+            throw new IllegalArgumentException("Session has already been closed");
     }
 
     @Override

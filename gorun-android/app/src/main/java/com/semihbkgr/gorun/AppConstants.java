@@ -2,8 +2,10 @@ package com.semihbkgr.gorun;
 
 public class AppConstants {
 
-    public static class Files {
+    public static class Resources {
         public static final String TEST_ASSET_FILE_NAME = "test.json";
+        public static final String DATABASE_NAME = "gorun.db";
+        public static final int DATABASE_VERSION = 1;
     }
 
     public static class Nets {
@@ -14,13 +16,13 @@ public class AppConstants {
         public static final String SERVER_STATUS_URI = SERVER_HTTP_URI + "/status";
     }
 
-
     public static class Values {
         public static final String INTENT_EXTRA_SNIPPET_CODE = "code";
         public static final String INTENT_EXTRA_SECTION_TITLE = "title";
         public static final String INTENT_SNIPPET_ID_NAME = "snippet_id";
         public static final long LOGO_SCREEN_TIME_MS = 2500L;
         public static final long BACK_BUTTON_TIME_MS = 1000L;
+        public static final long CACHE_EXPIRED_CLEAR_TIME_INTERVAL_MS = 60_000L;
     }
 
 }

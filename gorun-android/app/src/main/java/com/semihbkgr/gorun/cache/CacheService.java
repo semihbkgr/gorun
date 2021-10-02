@@ -14,6 +14,6 @@ public interface CacheService<I, R> {
 
     boolean invalidate(I id);
 
-    void invalidateAll();
+    void invalidateAllExpiredCaches();
 
 }

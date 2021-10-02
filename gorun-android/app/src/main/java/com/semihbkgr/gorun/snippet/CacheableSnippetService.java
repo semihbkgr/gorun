@@ -57,4 +57,8 @@ public class CacheableSnippetService extends SnippetServiceImpl {
             callback.onResponse(cachedSnippetOpt.get());
     }
 
+    public void clearExpiredCaches(){
+        snippetTimedCacheService.invalidateAllExpiredCaches();
+    }
+
 }

@@ -9,14 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.snippet.CacheableSnippetService;
 import com.semihbkgr.gorun.snippet.Snippet;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
-import com.semihbkgr.gorun.util.NetworkUtils;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (AppContext.instance().snippetService instanceof CacheableSnippetService)
+            AppContext.instance().scheduledExecutorService.scheduleWithFixedDelay(() -> {
+                ((CacheableSnippetService) AppContext.instance().snippetService).clearExpiredCaches();
+            }, AppConstants.Values.CACHE_EXPIRED_CLEAR_TIME_INTERVAL_MS, AppConstants.Values.CACHE_EXPIRED_CLEAR_TIME_INTERVAL_MS, TimeUnit.MILLISECONDS);
     }
 
 }

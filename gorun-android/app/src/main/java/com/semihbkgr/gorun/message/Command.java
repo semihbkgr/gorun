@@ -3,14 +3,14 @@ package com.semihbkgr.gorun.message;
 public enum Command {
 
     //From Request
-    RUN(false),
-    INPUT(false),
-    INTERRUPT(false),
+    RUN(true),
+    INPUT(true),
+    INTERRUPT(true),
     //To Response
-    OUTPUT(true),
-    INFO(true),
-    WARN(true),
-    SYSTEM(true);
+    OUTPUT(false),
+    INFO(false),
+    WARN(false),
+    SYSTEM(false);
 
     public final boolean isInResponse;
 
