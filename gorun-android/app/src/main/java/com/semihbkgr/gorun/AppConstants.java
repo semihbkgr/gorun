@@ -23,6 +23,8 @@ public class AppConstants {
         public static final long LOGO_SCREEN_TIME_MS = 2500L;
         public static final long BACK_BUTTON_TIME_MS = 1000L;
         public static final long CACHE_EXPIRED_CLEAR_TIME_INTERVAL_MS = 60_000L;
+        public static final int THREAD_POOL_EXECUTOR_SERVICE_WORKER_THREAD_COUNT=5;
+        public static final int THREAD_POOL_SCHEDULED_EXECUTOR_SERVICE_WORKER_THREAD_COUNT=1;
     }
 
 }

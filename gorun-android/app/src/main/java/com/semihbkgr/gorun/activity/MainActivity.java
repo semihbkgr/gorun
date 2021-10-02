@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
             AppContext.instance().scheduledExecutorService.scheduleWithFixedDelay(() -> {
                 ((CacheableSnippetService) AppContext.instance().snippetService).clearExpiredCaches();
             }, AppConstants.Values.CACHE_EXPIRED_CLEAR_TIME_INTERVAL_MS, AppConstants.Values.CACHE_EXPIRED_CLEAR_TIME_INTERVAL_MS, TimeUnit.MILLISECONDS);
+
+        AppContext.instance().runSessionManager.connect();
+
     }
 
 }

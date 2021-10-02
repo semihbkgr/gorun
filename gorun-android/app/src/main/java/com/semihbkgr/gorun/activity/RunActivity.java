@@ -44,6 +44,8 @@ public class RunActivity extends AppCompatActivity {
 
     private TextChangeHandler consoleTextChangeHandler;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

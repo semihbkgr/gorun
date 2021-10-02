@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.semihbkgr.gorun.message.MessageMarshaller;
 import com.semihbkgr.gorun.message.MessageMarshallerImpl;
+import com.semihbkgr.gorun.run.RunSessionManager;
 import com.semihbkgr.gorun.run.RunWebSocketClient;
 import com.semihbkgr.gorun.run.RunWebSocketClientImpl;
 import com.semihbkgr.gorun.snippet.SnippetService;
@@ -30,7 +31,7 @@ public class AppContext {
     public final SnippetService snippetService;
     public final AppDatabaseOpenHelper databaseOpenHelper;
     public final AppResourceHelper resourceHelper;
-    public final RunWebSocketClient runWebSocketClient;
+    public final RunSessionManager runSessionManager;
     public final ExecutorService executorService;
     public final ScheduledExecutorService scheduledExecutorService;
 
@@ -42,10 +43,23 @@ public class AppContext {
         SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
         SnippetRepository snippetRepository = new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
         this.snippetService = new SnippetServiceImpl(snippetClient, snippetRepository);
+        if (AppConstants.Values.THREAD_POOL_EXECUTOR_SERVICE_WORKER_THREAD_COUNT == 1)
+            this.executorService = Executors.newSingleThreadExecutor(
+                    r -> new Thread(r, "AppContextExecutorServiceWorkerThread"));
+        else
+            this.executorService = Executors.newFixedThreadPool(
+                    AppConstants.Values.THREAD_POOL_EXECUTOR_SERVICE_WORKER_THREAD_COUNT,
+                    r -> new Thread(r, "AppContextExecutorServiceWorkerThread"));
+        if (AppConstants.Values.THREAD_POOL_SCHEDULED_EXECUTOR_SERVICE_WORKER_THREAD_COUNT == 1)
+            this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
+                    r -> new Thread(r, "AppContextScheduledExecutorServiceWorkerThread"));
+        else
+            this.scheduledExecutorService = Executors.newScheduledThreadPool(
+                    AppConstants.Values.THREAD_POOL_SCHEDULED_EXECUTOR_SERVICE_WORKER_THREAD_COUNT,
+                    r -> new Thread(r, "AppContextScheduledExecutorServiceWorkerThread"));
         MessageMarshaller messageMarshaller = new MessageMarshallerImpl();
-        this.runWebSocketClient = new RunWebSocketClientImpl(httpClient, messageMarshaller);
-        this.executorService = Executors.newCachedThreadPool(r -> new Thread(r, "AppContextExecutorWorkerThread"));
-        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        RunWebSocketClient runWebSocketClient = new RunWebSocketClientImpl(httpClient, messageMarshaller);
+        this.runSessionManager = new RunSessionManager(runWebSocketClient, executorService);
     }
 
     public static void initialize(@NonNull Context context) {
