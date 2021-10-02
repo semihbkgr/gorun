@@ -52,6 +52,7 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
 
     @Override
     public boolean connected() {
+        webSocket.
         return !closed.get();
     }
 

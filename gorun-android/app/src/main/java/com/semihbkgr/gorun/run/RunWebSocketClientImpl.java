@@ -34,8 +34,6 @@ public class RunWebSocketClientImpl implements RunWebSocketClient {
         MessageWebSocketListener messageWebSocketListener;
         if (webSocketListener == null)
             messageWebSocketListener = MessageWebSocketListener.empty(messageMarshaller);
-        else if (webSocketListener instanceof MessageWebSocketListener)
-            messageWebSocketListener = (MessageWebSocketListener) webSocketListener;
         else
             messageWebSocketListener = MessageWebSocketListener.wrap(messageMarshaller, webSocketListener);
         Request req = new Request.Builder().url(AppConstants.Nets.SERVER_CODE_RUN_URI).build();

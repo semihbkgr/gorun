@@ -56,7 +56,7 @@ public class SnippetClientImpl implements SnippetClient {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "onFailure: AllSnippetInfos request failed", e);
+                Log.e(TAG, "onFailure: AllSnippetInfos request failed");
                 callback.onFailure(e);
             }
 
@@ -74,7 +74,7 @@ public class SnippetClientImpl implements SnippetClient {
                         callback.onFailure(exception);
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "onResponse: AllSnippetInfos response processing failed", e);
+                    Log.e(TAG, "onResponse: AllSnippetInfos response processing failed");
                     callback.onFailure(e);
                 } finally {
                     response.close();
