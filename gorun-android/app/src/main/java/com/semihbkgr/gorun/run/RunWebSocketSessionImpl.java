@@ -6,7 +6,6 @@ import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.message.MessageMarshaller;
 import okhttp3.WebSocket;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class RunWebSocketSessionImpl implements RunWebSocketSession {
@@ -53,6 +52,11 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
         else
             Log.w(TAG, "close: web socket cannot be started closing");
         return closed;
+    }
+
+    @Override
+    public void cancel() {
+        webSocket.cancel();
     }
 
 }

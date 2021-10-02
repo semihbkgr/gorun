@@ -12,4 +12,6 @@ public interface RunWebSocketSession {
 
     boolean close();
 
+    void cancel();
+
 }

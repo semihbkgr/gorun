@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.message.MessageMarshaller;
+import com.semihbkgr.gorun.util.WebSocketListenerWrapper;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -15,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-class MessageWebSocketListener extends WebSocketListener {
-
-    private final String TAG = RunWebSocketClient.class.getName();
+class MessageWebSocketListener extends WebSocketListenerWrapper {
 
     private final MessageMarshaller messageMarshaller;
     private final WebSocketListener webSocketListener;
@@ -25,6 +24,7 @@ class MessageWebSocketListener extends WebSocketListener {
 
     private MessageWebSocketListener(@NonNull MessageMarshaller messageMarshaller,
                                      @Nullable WebSocketListener webSocketListener) {
+        super(webSocketListener);
         this.messageMarshaller = messageMarshaller;
         this.webSocketListener = webSocketListener;
         this.messageConsumerList = new ArrayList<>();
@@ -48,49 +48,15 @@ class MessageWebSocketListener extends WebSocketListener {
     }
 
     @Override
-    public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
-        Log.i(TAG, "onClosed: Session has been closed");
-        if (webSocketListener != null)
-            webSocketListener.onClosed(webSocket, code, reason);
-    }
-
-    @Override
-    public void onClosing(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
-        Log.i(TAG, "onClosing: Session is closing");
-        if (webSocketListener != null)
-            webSocketListener.onClosing(webSocket, code, reason);
-    }
-
-    @Override
-    public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
-        Log.i(TAG, "onFailure: Session has been failed");
-        if (webSocketListener != null)
-            webSocketListener.onFailure(webSocket, t, response);
-    }
-
-    @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
-        Log.i(TAG, "onMessage: Session has been received message in String format");
-        if (webSocketListener != null)
-            webSocketListener.onMessage(webSocket, text);
         Message message = messageMarshaller.unmarshall(text);
         messageConsumerList.forEach(i -> i.accept(message));
     }
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull ByteString bytes) {
-        Log.i(TAG, "onMessage: Session has been received message in byte[] format");
-        if (webSocketListener != null)
-            webSocketListener.onMessage(webSocket, bytes);
         Message message = messageMarshaller.unmarshall(bytes.string(StandardCharsets.UTF_8));
         messageConsumerList.forEach(i -> i.accept(message));
-    }
-
-    @Override
-    public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
-        Log.i(TAG, "onOpen: Session has been opened");
-        if (webSocketListener != null)
-            webSocketListener.onOpen(webSocket, response);
     }
 
 }
