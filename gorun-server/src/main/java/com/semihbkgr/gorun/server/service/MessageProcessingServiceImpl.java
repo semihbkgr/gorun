@@ -1,6 +1,7 @@
 package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
+import com.semihbkgr.gorun.server.component.ProcessTimeoutHandler;
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
@@ -22,6 +23,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
 
     private final FileService fileService;
     private final FileNameGenerator fileNameGenerator;
+    private final ProcessTimeoutHandler processTimeoutHandler;
 
     @Override
     public Flux<Message> process(RunWebSocketSession session, Message message) {
@@ -48,6 +50,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .redirectErrorStream(true)
                                     .start();
                             session.runContext = new DefaultRunContext(process,fileName);
+                            processTimeoutHandler.addProcess(process,System.currentTimeMillis());
                             return DataBufferUtils.readInputStream(process::getInputStream, new DefaultDataBufferFactory(), 256);
                         } catch (Exception e) {
                             return Flux.error(e);
@@ -56,11 +59,12 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                     .map(messageBody -> Message.of(Command.OUTPUT, messageBody))
                     .onErrorReturn(Message.of(Command.SYSTEM))
-                    .doOnComplete(()->{
+                    .doOnComplete(()->session.runContext.setStatus(RunStatus.COMPLETED))
+                    .doOnError(e->session.runContext.setStatus(RunStatus.ERROR))
+                    .doOnTerminate(()->{
                         fileService.deleteFile(session.runContext.filename());
-                        session.runContext.setStatus(RunStatus.COMPLETED);
-                    })
-                    .doOnError(e->session.runContext.setStatus(RunStatus.ERROR));
+                        processTimeoutHandler.removeProcess(session.runContext.process());
+                    });
         } else
             return Flux.just(Message.of(Command.WARN, "This session has  already an on going process"));
     }

@@ -1,6 +1,8 @@
 package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
+import com.semihbkgr.gorun.server.component.ProcessTimeoutHandler;
+import com.semihbkgr.gorun.server.component.ProcessTimeoutHandlerImpl;
 import com.semihbkgr.gorun.server.component.SequentialFileNameGenerator;
 import com.semihbkgr.gorun.server.message.Command;
 import com.semihbkgr.gorun.server.message.Message;
@@ -29,6 +31,7 @@ class MessageProcessingServiceImplTest {
     RunWebSocketSession session;
     FileServiceImpl fileService;
     FileNameGenerator fileNameGenerator;
+    ProcessTimeoutHandler processTimeoutHandler;
 
     @BeforeEach
     void initializeRequiredObjects() throws IOException {
@@ -36,7 +39,8 @@ class MessageProcessingServiceImplTest {
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDirIfNotExists();
         this.fileNameGenerator = new SequentialFileNameGenerator();
-        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator);
+        this.processTimeoutHandler=new ProcessTimeoutHandlerImpl(30_000);
+        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator,processTimeoutHandler);
     }
 
     @AfterEach
