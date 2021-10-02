@@ -17,8 +17,6 @@ public class AppConstants {
     }
 
     public static class Values {
-        public static final String INTENT_EXTRA_SNIPPET_CODE = "code";
-        public static final String INTENT_EXTRA_SECTION_TITLE = "title";
         public static final String INTENT_SNIPPET_ID_NAME = "snippet_id";
         public static final long LOGO_SCREEN_TIME_MS = 2500L;
         public static final long BACK_BUTTON_TIME_MS = 1000L;

@@ -52,20 +52,31 @@
                 android:id="@+id/tabButton"
                 android:text="@string/tab"/>
 
-        <Button android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/runButton"
-                android:text="@string/connect"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="end"
+                  android:orientation="horizontal">
+
+        <ImageButton
+                     android:src="@drawable/disconnected"
+                     android:layout_width="50dp"
+                     android:layout_height="50dp"
+                     android:scaleType="fitCenter"
+                     android:adjustViewBounds="true"
+                     android:padding="5dp"
+                     android:background="@android:color/transparent"
+                     android:id="@+id/runButton"/>
 
     </LinearLayout>
 
-    <!--CodeEditor-->
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:clipToPadding="false"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:clipToPadding="false"
+            android:orientation="vertical">
         <com.semihbkgr.gorun.editor.CodeEditor
                 android:text="@string/code_hello_world"
                 android:id="@+id/codeEditText"
@@ -75,7 +86,7 @@
                 android:lines="13"
                 android:background="@drawable/background_code_edit_view"
                 android:scrollHorizontally="true"
-                android:scrollbars = "vertical"
+                android:scrollbars="vertical"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:textCursorDrawable="@drawable/code_editor_cursor"
@@ -87,7 +98,7 @@
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
-                    android:background="@drawable/console_background">
+                  android:background="@drawable/console_background">
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +112,7 @@
                     android:maxLines="7"
                     android:id="@+id/outputTextView"
                     android:padding="15dp"
-                    android:scrollbars = "vertical"
+                    android:scrollbars="vertical"
                     android:textSize="15sp"/>
 
         </ScrollView>
@@ -133,7 +144,6 @@
                     android:layout_weight="0"/>
         </LinearLayout>
     </LinearLayout>
-
 
 
 </LinearLayout>

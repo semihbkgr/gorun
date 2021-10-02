@@ -38,17 +38,17 @@ public class RunSessionManager implements RunSessionObservable {
         sessionReference.set(client.connect(new WebSocketListener() {
             @Override
             public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
-                statusReference.set(RunSessionStatus.NO_SESSION);
+                changeStatus(RunSessionStatus.NO_SESSION);
             }
 
             @Override
             public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
-                statusReference.set(RunSessionStatus.NO_SESSION);
+                changeStatus(RunSessionStatus.NO_SESSION);
             }
 
             @Override
             public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
-                statusReference.set(RunSessionStatus.HAS_SESSION);
+                changeStatus(RunSessionStatus.HAS_SESSION);
             }
         }));
     }
@@ -62,19 +62,19 @@ public class RunSessionManager implements RunSessionObservable {
         sessionReference.set(client.connect(new WebSocketListenerWrapper(webSocketListener) {
             @Override
             public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
-                statusReference.set(RunSessionStatus.NO_SESSION);
+                changeStatus(RunSessionStatus.NO_SESSION);
                 super.onClosed(webSocket, code, reason);
             }
 
             @Override
             public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @org.jetbrains.annotations.Nullable Response response) {
-                statusReference.set(RunSessionStatus.NO_SESSION);
+                changeStatus(RunSessionStatus.NO_SESSION);
                 super.onFailure(webSocket, t, response);
             }
 
             @Override
             public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
-                statusReference.set(RunSessionStatus.HAS_SESSION);
+                changeStatus(RunSessionStatus.HAS_SESSION);
                 super.onOpen(webSocket, response);
             }
         }));

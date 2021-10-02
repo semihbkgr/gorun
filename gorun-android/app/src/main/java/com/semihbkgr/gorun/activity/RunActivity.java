@@ -4,35 +4,30 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.CycleInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.editor.CodeEditor;
 import com.semihbkgr.gorun.message.Command;
 import com.semihbkgr.gorun.message.Message;
+import com.semihbkgr.gorun.run.RunSessionObserver;
+import com.semihbkgr.gorun.run.RunSessionStatus;
 import com.semihbkgr.gorun.util.view.TextChangeHandler;
 import com.semihbkgr.gorun.util.view.TextChangeListener;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
-import okio.ByteString;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class RunActivity extends AppCompatActivity {
 
     private static final String TAG = RunActivity.class.getName();
     private static final int CODE_EDITOR_UPDATE_DELAY_MS = 500;
 
+    private Toast toast;
+
     private CodeEditor codeEditor;
     private EditText consoleEditText;
-    private Button runButton;
+    private ImageButton runButton;
     private Button consoleButton;
     private TextView consoleTextView;
     private Button leftBraceButton;
@@ -41,10 +36,30 @@ public class RunActivity extends AppCompatActivity {
     private Button rightCurlyBraceButton;
     private Button quoteButton;
     private Button tabButton;
-
     private TextChangeHandler consoleTextChangeHandler;
 
+    private final RunSessionObserver runSessionObserver = status ->{
+        Log.i(TAG, "unSessionObserver: status: "+status.name());
+        runOnUiThread(() -> updateRunButton(status));
+    };
 
+    private final View.OnClickListener hasSessionOnClickListener = view -> {
+        String code=codeEditor.getText().toString();
+        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Command.RUN,code));
+    };
+
+    private final View.OnClickListener creatingOnClickListener = view -> {
+        try{
+            toast.getView().isShown();
+        } catch (Exception e) {
+            toast = Toast.makeText(this, "connecting", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    };
+
+    private final View.OnClickListener noSessionOnClickListener = view -> {
+        AppContext.instance().runSessionManager.connect();
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +80,6 @@ public class RunActivity extends AppCompatActivity {
 
         consoleButton.setOnClickListener(this::onConsoleButtonClicked);
         consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
-        runButton.setOnClickListener(this::onRunButtonClicked);
         leftBraceButton.setOnClickListener(this::onLeftBraceButtonClicked);
         rightBraceButton.setOnClickListener(this::onRightBraceButtonClicked);
         leftCurlyBraceButton.setOnClickListener(this::onLeftCurlyBraceButtonClicked);
@@ -79,80 +93,54 @@ public class RunActivity extends AppCompatActivity {
             else this.consoleTextView.setText(consoleTextView.getText().toString().concat(text));
         }));
 
+        AppContext.instance().runSessionManager.registerObserver(runSessionObserver);
+        updateRunButton(AppContext.instance().runSessionManager.getStatus());
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        String code = getIntent().getStringExtra(AppConstants.Values.INTENT_EXTRA_SNIPPET_CODE);
-        if (code != null) {
-            Log.i(TAG, "onStart: Activity started with code");
-            codeEditor.setText(code);
-        } else
-            Log.i(TAG, "onStart: Activity started with no code");
+        if (AppContext.instance().runSessionManager.getStatus() == RunSessionStatus.NO_SESSION)
+            AppContext.instance().runSessionManager.connect();
     }
 
-    private void onRunButtonClicked(View v) {
-        if (AppContext.instance().runWebSocketClient.hasSession()) {
-            String code = codeEditor.getText().toString();
-            consoleTextChangeHandler.clear();
-            AppContext.instance().runWebSocketClient.session().sendMessage(Message.of(Command.RUN, code));
-        } else {
-            runButton.setText(R.string.connecting);
-            AppContext.instance().executorService.execute(() -> {
-                AppContext.instance().runWebSocketClient.connect(new WebSocketListener() {
-                    @Override
-                    public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppContext.instance().runSessionManager.unregisterObserver(runSessionObserver);
+    }
 
-                    }
-
-                    @Override
-                    public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-
-                    }
-
-                    @Override
-                    public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-                        Log.e(TAG, "onCreate: Connection error");
-                        runOnUiThread(() -> {
-                            runButton.setText(R.string.connect);
-                            Toast.makeText(RunActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
-                        });
-                    }
-
-                    @Override
-                    public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-
-                    }
-
-                    @Override
-                    public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
-
-                    }
-
-                    @Override
-                    public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
-                        Log.e(TAG, "onCreate: Connection successful");
-                        runOnUiThread(() -> {
-                            runButton.setText(R.string.run);
-                            Toast.makeText(RunActivity.this, "Connection successful", Toast.LENGTH_SHORT).show();
-                        });
-                    }
+    private void updateRunButton(RunSessionStatus status) {
+        switch (status) {
+            case HAS_SESSION:
+                runButton.setOnClickListener(hasSessionOnClickListener);
+                runButton.setImageDrawable(getDrawable(R.drawable.run));
+                runButton.animate().cancel();
+                runButton.clearAnimation();
+                AppContext.instance().runSessionManager.session().addMessageConsumer(message -> {
+                    if(message.command==Command.OUTPUT)
+                        consoleTextView.append(message.body);
                 });
-                AppContext.instance().runWebSocketClient.session().addMessageConsumer(message -> {
-                    Log.i(TAG, "onCreate: Message : " + message.command + " - " + message.body);
-                    if (message.command == Command.OUTPUT)
-                        this.consoleTextChangeHandler.append(message.body);
-                });
-            });
+                return;
+            case CREATING:
+                runButton.setOnClickListener(creatingOnClickListener);
+                runButton.setImageDrawable(getDrawable(R.drawable.connecting));
+                runButton.clearAnimation();
+                runButton.animate().rotationBy(1800).setDuration(10000);
+                return;
+            case NO_SESSION:
+                runButton.setOnClickListener(noSessionOnClickListener);
+                runButton.setImageDrawable(getDrawable(R.drawable.disconnected));
+                runButton.animate().cancel();
+                runButton.clearAnimation();
         }
-
     }
 
     private void onConsoleButtonClicked(View v) {
         String command = consoleEditText.getText().toString();
         consoleEditText.setText("");
-        AppContext.instance().executorService.execute(() -> AppContext.instance().runWebSocketClient.session().sendMessage(Message.of(Command.INPUT, command)));
+        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Command.INPUT, command));
     }
 
     private void onConsoleTextViewClicked(View v) {
