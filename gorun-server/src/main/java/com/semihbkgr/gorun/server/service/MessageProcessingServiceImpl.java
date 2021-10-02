@@ -56,7 +56,10 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                     .map(messageBody -> Message.of(Command.OUTPUT, messageBody))
                     .onErrorReturn(Message.of(Command.SYSTEM))
-                    .doOnComplete(()->session.runContext.setStatus(RunStatus.COMPLETED))
+                    .doOnComplete(()->{
+                        fileService.deleteFile(session.runContext.filename());
+                        session.runContext.setStatus(RunStatus.COMPLETED);
+                    })
                     .doOnError(e->session.runContext.setStatus(RunStatus.ERROR));
         } else
             return Flux.just(Message.of(Command.WARN, "This session has  already an on going process"));
