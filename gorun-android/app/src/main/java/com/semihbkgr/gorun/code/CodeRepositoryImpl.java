@@ -3,6 +3,7 @@ package com.semihbkgr.gorun.code;
 import java.util.List;
 
 public class CodeRepositoryImpl implements CodeRepository {
+
     @Override
     public Code findById(int id) {
         return null;
@@ -27,4 +28,5 @@ public class CodeRepositoryImpl implements CodeRepository {
     public void delete(int id) {
 
     }
+
 }
