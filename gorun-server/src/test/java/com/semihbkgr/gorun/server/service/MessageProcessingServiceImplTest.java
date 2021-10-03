@@ -1,11 +1,12 @@
 package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
-import com.semihbkgr.gorun.server.component.ProcessTimeoutHandler;
-import com.semihbkgr.gorun.server.component.ProcessTimeoutHandlerImpl;
+import com.semihbkgr.gorun.server.component.RunContextTimeoutHandler;
+import com.semihbkgr.gorun.server.component.RunContextTimeoutHandlerImpl;
 import com.semihbkgr.gorun.server.component.SequentialFileNameGenerator;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
+import com.semihbkgr.gorun.server.message.MessageMarshaller;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import com.semihbkgr.gorun.server.test.ResourceExtension;
 import com.semihbkgr.gorun.server.test.Resources;
@@ -31,16 +32,18 @@ class MessageProcessingServiceImplTest {
     RunWebSocketSession session;
     FileServiceImpl fileService;
     FileNameGenerator fileNameGenerator;
-    ProcessTimeoutHandler processTimeoutHandler;
+    RunContextTimeoutHandler runContextTimeoutHandler;
+    MessageMarshaller messageMarshaller;
 
     @BeforeEach
     void initializeRequiredObjects() throws IOException {
-        this.session = new RunWebSocketSession();
+        //TODO mock WebSocketSession
+        this.session = new RunWebSocketSession(null);
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDirIfNotExists();
         this.fileNameGenerator = new SequentialFileNameGenerator();
-        this.processTimeoutHandler = new ProcessTimeoutHandlerImpl(30_000);
-        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, processTimeoutHandler);
+        this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(30_000);
+        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, runContextTimeoutHandler,messageMarshaller);
     }
 
     @AfterEach
@@ -54,7 +57,7 @@ class MessageProcessingServiceImplTest {
     @DisplayName("CommandRunWhenOnGoingProcessDoesNotExists")
     void commandRunWhenOnGoingProcessDoesNotExists() {
         var messageBody = Resources.getResourceAsString("hello.go");
-        var session = new RunWebSocketSession();
+        var session = new RunWebSocketSession(null);
         var message = Message.of(Action.RUN, messageBody);
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)

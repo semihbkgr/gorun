@@ -6,6 +6,8 @@ public interface RunContext {
 
     String filename();
 
+    long startTimeMS();
+
     void setStatus(RunStatus status);
 
     Process process();

@@ -1,9 +1,10 @@
 package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
-import com.semihbkgr.gorun.server.component.ProcessTimeoutHandler;
+import com.semihbkgr.gorun.server.component.RunContextTimeoutHandler;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
+import com.semihbkgr.gorun.server.message.MessageMarshaller;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.run.RunStatus;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
@@ -23,23 +24,24 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
 
     private final FileService fileService;
     private final FileNameGenerator fileNameGenerator;
-    private final ProcessTimeoutHandler processTimeoutHandler;
+    private final RunContextTimeoutHandler runContextTimeoutHandler;
+    private final MessageMarshaller messageMarshaller;
 
     @Override
     public Flux<Message> process(RunWebSocketSession session, Message message) {
         switch (message.action) {
             case RUN:
-                return processRunCommand(session, message);
+                return processRunAction(session, message);
             case INPUT:
-                return processInputCommand(session, message);
+                return processInputAction(session, message);
             case INTERRUPT:
-                return processInterruptCommand(session);
+                return processInterruptAction(session);
             default:
                 return Flux.error(new IllegalStateException("Unhandled message action, action: " + message.action.name()));
         }
     }
 
-    private Flux<Message> processRunCommand(RunWebSocketSession session, Message message) {
+    private Flux<Message> processRunAction(RunWebSocketSession session, Message message) {
         if (session.runContext == null || (session.runContext != null && session.runContext.status() != RunStatus.EXECUTING)) {
             return fileService
                     .createFile(fileNameGenerator.generate("go"), message.body)
@@ -50,7 +52,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .redirectErrorStream(true)
                                     .start();
                             session.runContext = new DefaultRunContext(process, fileName);
-                            processTimeoutHandler.addProcess(process, System.currentTimeMillis());
+                            runContextTimeoutHandler.addContext(session.runContext);
                             return DataBufferUtils.readInputStream(process::getInputStream, new DefaultDataBufferFactory(), 256);
                         } catch (Exception e) {
                             return Flux.error(e);
@@ -58,17 +60,18 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                     })
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
+                    .conc
                     .doOnComplete(() -> session.runContext.setStatus(RunStatus.COMPLETED))
                     .doOnError(e -> session.runContext.setStatus(RunStatus.ERROR))
                     .doOnTerminate(() -> {
                         fileService.deleteFile(session.runContext.filename()).block();
-                        processTimeoutHandler.removeProcess(session.runContext.process());
+                        runContextTimeoutHandler.removeContext(session.runContext);
                     });
         } else
             return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has  already an on going process"));
     }
 
-    private Flux<Message> processInputCommand(RunWebSocketSession session, Message message) {
+    private Flux<Message> processInputAction(RunWebSocketSession session, Message message) {
         if (session.runContext != null && session.runContext.status() == RunStatus.EXECUTING) {
             return Flux.create(sink -> {
                 final var fos = session.runContext.process().getOutputStream();
@@ -86,7 +89,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
             return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has not any on going process"));
     }
 
-    private Flux<Message> processInterruptCommand(RunWebSocketSession session) {
+    private Flux<Message> processInterruptAction(RunWebSocketSession session) {
         if (session.runContext != null && session.runContext.status() == RunStatus.EXECUTING) {
             return Flux.defer(() -> {
                 session.runContext.process().destroyForcibly();
