@@ -17,16 +17,16 @@ public class MessageMarshallerImpl implements MessageMarshaller {
                 String commandString = data.substring(0, index);
                 String body = data.substring(index + 1);
                 try {
-                    Command command = Command.of(commandString, false);
+                    Action action = Action.of(commandString, false);
                     if (body.equalsIgnoreCase("null") || body.isEmpty())
-                        return Message.of(command);
+                        return Message.of(action);
                     else
-                        return Message.of(command, body);
+                        return Message.of(action, body);
                 } catch (Exception ignore) {
-                    throw new MessageMarshallException(String.format("Illegal command field, command : %s", commandString));
+                    throw new MessageMarshallException(String.format("Illegal action field, action : %s", commandString));
                 }
             } else throw new MessageMarshallException(
-                    String.format("Missing command body separator, separator = %s",
+                    String.format("Missing action body separator, separator = %s",
                             MESSAGE_COMMAND_BODY_SEPARATOR));
         } else throw new MessageMarshallException(
                 String.format("Missing message start,end character, start : %s, end : %s",
@@ -36,11 +36,11 @@ public class MessageMarshallerImpl implements MessageMarshaller {
 
     @Override
     public String marshall(Message message) throws IllegalArgumentException {
-        if (!message.command.isInResponse)
-            throw new MessageMarshallException(String.format("Illegal command field, command : %s", message.command.name()));
+        if (!message.action.isInResponse)
+            throw new MessageMarshallException(String.format("Illegal action field, action : %s", message.action.name()));
         StringBuilder unmarshallStringBuilder = new StringBuilder();
         unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
-        String commandString = message.command.name();
+        String commandString = message.action.name();
         unmarshallStringBuilder.append(commandString);
         unmarshallStringBuilder.append(MESSAGE_COMMAND_BODY_SEPARATOR);
         unmarshallStringBuilder.append(message.body);

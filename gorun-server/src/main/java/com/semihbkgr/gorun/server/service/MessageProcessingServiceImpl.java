@@ -2,13 +2,12 @@ package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
 import com.semihbkgr.gorun.server.component.ProcessTimeoutHandler;
-import com.semihbkgr.gorun.server.message.Command;
+import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.run.RunStatus;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
 
     @Override
     public Flux<Message> process(RunWebSocketSession session, Message message) {
-        switch (message.command) {
+        switch (message.action) {
             case RUN:
                 return processRunCommand(session, message);
             case INPUT:
@@ -36,7 +35,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
             case INTERRUPT:
                 return processInterruptCommand(session);
             default:
-                return Flux.error(new IllegalStateException("Unhandled message command, command: " + message.command.name()));
+                return Flux.error(new IllegalStateException("Unhandled message action, action: " + message.action.name()));
         }
     }
 
@@ -58,7 +57,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                         }
                     })
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
-                    .map(messageBody -> Message.of(Command.OUTPUT, messageBody))
+                    .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
                     .doOnComplete(()->session.runContext.setStatus(RunStatus.COMPLETED))
                     .doOnError(e->session.runContext.setStatus(RunStatus.ERROR))
                     .doOnTerminate(()->{
@@ -66,7 +65,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                         processTimeoutHandler.removeProcess(session.runContext.process());
                     });
         } else
-            return Flux.just(Message.of(Command.WARN, "This session has  already an on going process"));
+            return Flux.just(Message.of(Action.WARN, "This session has  already an on going process"));
     }
 
     private Flux<Message> processInputCommand(RunWebSocketSession session, Message message) {
@@ -77,14 +76,14 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                     var inputData = message.body.concat(System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
                     fos.write(inputData);
                     fos.flush();
-                    sink.next(Message.of(Command.INFO, message.body));
+                    sink.next(Message.of(Action.INFO, message.body));
                     sink.complete();
                 } catch (IOException e) {
                     sink.error(e);
                 }
             });
         } else
-            return Flux.just(Message.of(Command.WARN, "This session has not any on going process"));
+            return Flux.just(Message.of(Action.WARN, "This session has not any on going process"));
     }
 
     private Flux<Message> processInterruptCommand(RunWebSocketSession session) {
@@ -92,10 +91,10 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
             return Flux.defer(() -> {
                 session.runContext.process().destroyForcibly();
                 session.runContext.setStatus(RunStatus.INTERRUPTED);
-                return Mono.just(Message.of(Command.INFO));
+                return Mono.just(Message.of(Action.INFO));
             });
         } else
-            return Flux.just(Message.of(Command.WARN, "This session has not any on going process"));
+            return Flux.just(Message.of(Action.WARN, "This session has not any on going process"));
     }
 
 }

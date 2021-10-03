@@ -8,20 +8,25 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Message {
 
-    public final Command command;
+    /*
+    * Message format
+    * [action:body]
+    */
+
+    public final Action action;
     public final String body;
 
-    private Message(Command command, String body) {
-        this.command = command;
+    private Message(Action action, String body) {
+        this.action = action;
         this.body = body;
     }
 
-    public static Message of(@NonNull Command command,@NonNull String body) {
-        return new Message(command,body);
+    public static Message of(@NonNull Action action, @NonNull String body) {
+        return new Message(action,body);
     }
 
-    public static Message of(@NonNull Command command) {
-        return new Message(command, null);
+    public static Message of(@NonNull Action action) {
+        return new Message(action, null);
     }
 
 }
