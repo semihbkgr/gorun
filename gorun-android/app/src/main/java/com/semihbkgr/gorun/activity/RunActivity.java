@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.editor.CodeEditor;
-import com.semihbkgr.gorun.message.Command;
+import com.semihbkgr.gorun.message.Action;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.run.RunSessionObserver;
 import com.semihbkgr.gorun.run.RunSessionStatus;
@@ -45,7 +45,7 @@ public class RunActivity extends AppCompatActivity {
 
     private final View.OnClickListener hasSessionOnClickListener = view -> {
         String code=codeEditor.getText().toString();
-        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Command.RUN,code));
+        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.RUN,code));
     };
 
     private final View.OnClickListener creatingOnClickListener = view -> {
@@ -128,8 +128,8 @@ public class RunActivity extends AppCompatActivity {
                 infoTextView.setTextColor(getColor(R.color.green));
                 infoTextView.setText(getString(R.string.connected_info_text));
                 AppContext.instance().runSessionManager.session().addMessageConsumer(message -> {
-                    Log.i(TAG, "Message command: "+message.command.name()+", body: "+message.body);
-                    if(message.command==Command.OUTPUT)
+                    Log.i(TAG, "Message action: "+message.action.name()+", body: "+message.body);
+                    if(message.action == Action.OUTPUT)
                         consoleTextView.append(message.body);
                 });
                 break;
@@ -154,7 +154,7 @@ public class RunActivity extends AppCompatActivity {
     private void onConsoleButtonClicked(View v) {
         String command = consoleEditText.getText().toString();
         consoleEditText.setText("");
-        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Command.INPUT, command));
+        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.INPUT, command));
     }
 
     private void onConsoleTextViewClicked(View v) {

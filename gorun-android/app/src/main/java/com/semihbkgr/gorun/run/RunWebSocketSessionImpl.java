@@ -28,7 +28,7 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
     public boolean sendMessage(Message message) {
         boolean sent=webSocket.send(messageMarshaller.marshall(message));
         if(sent)
-            Log.i(TAG, String.format("sendMessage: Message was enqueued successfully, Command : %s", message.command.name()));
+            Log.i(TAG, String.format("sendMessage: Message was enqueued successfully, Action : %s", message.action.name()));
         else
             Log.w(TAG, "sendMessage: Message cannot be enqueued");
         return sent;

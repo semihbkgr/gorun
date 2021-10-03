@@ -1,48 +1,55 @@
 package com.semihbkgr.gorun.message;
 
+import androidx.annotation.NonNull;
+
 import static com.semihbkgr.gorun.message.MessageConstant.*;
 
 public class MessageMarshallerImpl implements MessageMarshaller {
 
     @Override
-    public Message unmarshall(String data) throws MessageMarshallException {
-        data = data.trim();
-        if (data.startsWith(MESSAGE_BEGIN_CHARACTER) && data.endsWith(MESSAGE_END_CHARACTER)) {
-            data = data.substring(1, data.length() - 1);
+    public Message unmarshall(@NonNull String data) throws MessageMarshallException {
+        if (data.startsWith(MESSAGE_BEGINNING_CHARACTER) && data.endsWith(MESSAGE_END_CHARACTER)) {
             if (data.contains(MESSAGE_COMMAND_BODY_SEPARATOR)) {
+                // has a body
                 int index = data.indexOf(MESSAGE_COMMAND_BODY_SEPARATOR);
-                String commandString = data.substring(0, index);
-                String body = data.substring(index + 1);
+                String actionStr = data.substring(1, index);
+                String body = data.substring(index + 1, data.length() - 1);
                 try {
-                    Command command = Command.of(commandString, false);
-                    if (body.equalsIgnoreCase("null") || body.isEmpty())
-                        return Message.of(command);
-                    else
-                        return Message.of(command, body);
-                } catch (Exception ignore) {
-                    throw new MessageMarshallException(String.format("Illegal command field, command : %s", commandString));
+                    Action action = Action.valueOf(actionStr);
+                    return Message.of(action, body);
+                } catch (Exception e) {
+                    throw new MessageMarshallException("Illegal action in message, action: " + actionStr, e);
                 }
-            } else throw new MessageMarshallException(
-                    String.format("Missing command body separator, separator = %s",
-                            MESSAGE_COMMAND_BODY_SEPARATOR));
+            } else {
+                // has no body
+                String actionStr = data.substring(1, data.length() - 1);
+                try {
+                    Action action = Action.valueOf(actionStr);
+                    return Message.of(action);
+                } catch (Exception e) {
+                    throw new MessageMarshallException("Illegal action in message, action: " + actionStr, e);
+                }
+            }
         } else throw new MessageMarshallException(
-                String.format("Missing message start,end character, start : %s, end : %s",
-                        MESSAGE_BEGIN_CHARACTER, MESSAGE_END_CHARACTER));
-
+                String.format("Illegal message format, message must begin with '%s' and end with '%s' characters",
+                        MESSAGE_BEGINNING_CHARACTER, MESSAGE_END_CHARACTER));
     }
 
     @Override
-    public String marshall(Message message) throws MessageMarshallException {
-        if (!message.command.isInResponse)
-            throw new MessageMarshallException(String.format("Illegal command field, command : %s", message.command.name()));
-        StringBuilder unmarshallStringBuilder = new StringBuilder();
-        unmarshallStringBuilder.append(MESSAGE_BEGIN_CHARACTER);
-        String commandString = message.command.name();
-        unmarshallStringBuilder.append(commandString);
-        unmarshallStringBuilder.append(MESSAGE_COMMAND_BODY_SEPARATOR);
-        unmarshallStringBuilder.append(message.body);
-        unmarshallStringBuilder.append(MESSAGE_END_CHARACTER);
-        return unmarshallStringBuilder.toString();
+    public String marshall(@NonNull Message message) throws IllegalArgumentException {
+        if (message.body != null)
+            // has a body
+            return MESSAGE_BEGINNING_CHARACTER +
+                    message.action.name() +
+                    MESSAGE_COMMAND_BODY_SEPARATOR +
+                    message.body +
+                    MESSAGE_END_CHARACTER;
+        else
+            // has no body
+            return MESSAGE_BEGINNING_CHARACTER +
+                    message.action.name() +
+                    MESSAGE_END_CHARACTER;
     }
+
 
 }
