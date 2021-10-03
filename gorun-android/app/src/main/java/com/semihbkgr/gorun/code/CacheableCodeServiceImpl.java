@@ -8,9 +8,10 @@ public class CacheableCodeServiceImpl extends CodeServiceImpl {
 
     private final TimedCacheService<Integer,Code> codeCacheService;
 
-    public CacheableCodeServiceImpl(@NonNull @NotNull CodeRepository codeRepository) {
+    public CacheableCodeServiceImpl(@NonNull @NotNull CodeRepository codeRepository,
+                                    @NonNull TimedCacheService<Integer, Code> codeCacheService) {
         super(codeRepository);
-        this.codeCacheService=new TimedCacheService<>();
+        this.codeCacheService = codeCacheService;
     }
 
 }

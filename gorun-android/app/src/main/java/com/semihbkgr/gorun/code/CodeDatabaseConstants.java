@@ -1,14 +1,12 @@
 package com.semihbkgr.gorun.code;
 
-import com.semihbkgr.gorun.snippet.repository.SnippetDatabaseConstants;
-
 public class CodeDatabaseConstants {
 
     public static final String TABLE_NAME = "codex";
 
     public static final String SQL_CREATE_TABLE_IF_NOT_EXISTS =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
-                    Columns.ID + " INTEGER NOT NULL PRIMARY KEY, " +
+                    Columns.ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                     Columns.TITLE + " TEXT, " +
                     Columns.CONTENT + " TEXT, " +
                     Columns.CREATED_AT + " BIG INTEGER, " +

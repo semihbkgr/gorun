@@ -5,6 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.semihbkgr.gorun.code.CodeRepository;
+import com.semihbkgr.gorun.code.CodeRepositoryImpl;
+import com.semihbkgr.gorun.code.CodeService;
+import com.semihbkgr.gorun.code.CodeServiceImpl;
 import com.semihbkgr.gorun.message.MessageMarshaller;
 import com.semihbkgr.gorun.message.MessageMarshallerImpl;
 import com.semihbkgr.gorun.run.RunSessionManager;
@@ -34,6 +38,7 @@ public class AppContext {
     public final RunSessionManager runSessionManager;
     public final ExecutorService executorService;
     public final ScheduledExecutorService scheduledExecutorService;
+    private final CodeService codeService;
 
     private AppContext(Context context) {
         Gson gson = new GsonBuilder().create();
@@ -43,6 +48,8 @@ public class AppContext {
         SnippetClient snippetClient = new SnippetClientImpl(httpClient, gson);
         SnippetRepository snippetRepository = new SnippetRepositoryImpl(databaseOpenHelper.getWritableDatabase());
         this.snippetService = new SnippetServiceImpl(snippetClient, snippetRepository);
+        CodeRepository codeRepository = new CodeRepositoryImpl(databaseOpenHelper.getWritableDatabase());
+        this.codeService = new CodeServiceImpl(codeRepository);
         if (AppConstants.Values.THREAD_POOL_EXECUTOR_SERVICE_WORKER_THREAD_COUNT == 1)
             this.executorService = Executors.newSingleThreadExecutor(
                     r -> new Thread(r, "AppContextExecutorServiceWorkerThread"));
