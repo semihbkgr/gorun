@@ -11,6 +11,7 @@ public class Message {
     /*
     * Message format
     * [action:body]
+    * [action]
     */
 
     public final Action action;

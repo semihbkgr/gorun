@@ -9,4 +9,8 @@ public class MessageMarshallException extends RuntimeException{
         super(message);
     }
 
+    public MessageMarshallException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }
