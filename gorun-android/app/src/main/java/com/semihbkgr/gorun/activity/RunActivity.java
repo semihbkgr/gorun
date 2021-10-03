@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.CycleInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +22,6 @@ public class RunActivity extends AppCompatActivity {
     private static final String TAG = RunActivity.class.getName();
     private static final int CODE_EDITOR_UPDATE_DELAY_MS = 500;
 
-    private Toast toast;
-
     private CodeEditor codeEditor;
     private EditText consoleEditText;
     private ImageButton runButton;
@@ -37,6 +34,9 @@ public class RunActivity extends AppCompatActivity {
     private Button quoteButton;
     private Button tabButton;
     private TextChangeHandler consoleTextChangeHandler;
+    private TextView infoTextView;
+
+    private Toast connectingToast;
 
     private final RunSessionObserver runSessionObserver = status ->{
         Log.i(TAG, "unSessionObserver: status: "+status.name());
@@ -49,11 +49,14 @@ public class RunActivity extends AppCompatActivity {
     };
 
     private final View.OnClickListener creatingOnClickListener = view -> {
+        // Show 'connecting' toast massage if it is not showing at that time.
         try{
-            toast.getView().isShown();
+            if(!connectingToast.getView().isShown()){
+                connectingToast.show();
+            }
         } catch (Exception e) {
-            toast = Toast.makeText(this, "connecting", Toast.LENGTH_SHORT);
-            toast.show();
+            this.connectingToast = Toast.makeText(this,getString(R.string.connecting_toast_message),Toast.LENGTH_SHORT);
+            connectingToast.show();
         }
     };
 
@@ -66,17 +69,21 @@ public class RunActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run);
 
-        codeEditor = findViewById(R.id.codeEditText);
-        consoleTextView = findViewById(R.id.outputTextView);
-        consoleEditText = findViewById(R.id.inputEditText);
-        consoleButton = findViewById(R.id.inputButton);
-        runButton = findViewById(R.id.runButton);
-        leftBraceButton = findViewById(R.id.leftBraceButton);
-        rightBraceButton = findViewById(R.id.rightBraceButton);
-        leftCurlyBraceButton = findViewById(R.id.leftCurlyBraceButton);
-        rightCurlyBraceButton = findViewById(R.id.rightCurlyBraceButton);
-        quoteButton = findViewById(R.id.quoteButton);
-        tabButton = findViewById(R.id.tabButton);
+        // Find and assign components.
+        this.codeEditor = findViewById(R.id.codeEditText);
+        this.consoleTextView = findViewById(R.id.outputTextView);
+        this.consoleEditText = findViewById(R.id.inputEditText);
+        this.consoleButton = findViewById(R.id.inputButton);
+        this.runButton = findViewById(R.id.runButton);
+        this.leftBraceButton = findViewById(R.id.leftBraceButton);
+        this.rightBraceButton = findViewById(R.id.rightBraceButton);
+        this.leftCurlyBraceButton = findViewById(R.id.leftCurlyBraceButton);
+        this.rightCurlyBraceButton = findViewById(R.id.rightCurlyBraceButton);
+        this.quoteButton = findViewById(R.id.quoteButton);
+        this.tabButton = findViewById(R.id.tabButton);
+        this.infoTextView=findViewById(R.id.infoTextView);
+
+        this.connectingToast=Toast.makeText(this,getString(R.string.connecting_toast_message),Toast.LENGTH_SHORT);
 
         consoleButton.setOnClickListener(this::onConsoleButtonClicked);
         consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
@@ -118,22 +125,29 @@ public class RunActivity extends AppCompatActivity {
                 runButton.setImageDrawable(getDrawable(R.drawable.run));
                 runButton.animate().cancel();
                 runButton.clearAnimation();
+                infoTextView.setTextColor(getColor(R.color.green));
+                infoTextView.setText(getString(R.string.connected_info_text));
                 AppContext.instance().runSessionManager.session().addMessageConsumer(message -> {
+                    Log.i(TAG, "Message command: "+message.command.name()+", body: "+message.body);
                     if(message.command==Command.OUTPUT)
                         consoleTextView.append(message.body);
                 });
-                return;
+                break;
             case CREATING:
                 runButton.setOnClickListener(creatingOnClickListener);
                 runButton.setImageDrawable(getDrawable(R.drawable.connecting));
                 runButton.clearAnimation();
                 runButton.animate().rotationBy(1800).setDuration(10000);
-                return;
+                infoTextView.setTextColor(getColor(R.color.black));
+                infoTextView.setText(getString(R.string.connecting_info_text));
+                break;
             case NO_SESSION:
                 runButton.setOnClickListener(noSessionOnClickListener);
                 runButton.setImageDrawable(getDrawable(R.drawable.disconnected));
                 runButton.animate().cancel();
                 runButton.clearAnimation();
+                infoTextView.setTextColor(getColor(R.color.red));
+                infoTextView.setText(getString(R.string.disconnected_info_text));
         }
     }
 

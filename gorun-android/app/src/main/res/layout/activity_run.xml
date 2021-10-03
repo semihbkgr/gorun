@@ -59,15 +59,24 @@
                   android:gravity="end"
                   android:orientation="horizontal">
 
+        <TextView android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:id="@+id/infoTextView"
+                  android:gravity="center"
+                  android:textSize="20sp"
+                  android:layout_weight="1">
+
+        </TextView>
+
         <ImageButton
-                     android:src="@drawable/disconnected"
-                     android:layout_width="50dp"
-                     android:layout_height="50dp"
-                     android:scaleType="fitCenter"
-                     android:adjustViewBounds="true"
-                     android:padding="5dp"
-                     android:background="@android:color/transparent"
-                     android:id="@+id/runButton"/>
+                android:src="@drawable/disconnected"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:padding="5dp"
+                android:background="@android:color/transparent"
+                android:id="@+id/runButton"/>
 
     </LinearLayout>
 

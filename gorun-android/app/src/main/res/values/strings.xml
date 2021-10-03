@@ -30,4 +30,10 @@
     <string name="connecting">Connecting</string>
     <string name="run">Run</string>
 
+    <string name="connecting_info_text">Connecting …</string>
+    <string name="connected_info_text">Connected</string>
+    <string name="disconnected_info_text">Disconnected</string>
+
+    <string name="connecting_toast_message">Connecting to the server</string>
+
 </resources>

@@ -30,7 +30,7 @@ public class SnippetClientImpl implements SnippetClient {
     @Override
     public SnippetInfo[] getAllSnippetInfos() throws RequestException {
         Request request = new Request.Builder()
-                .url(AppConstants.Nets.SERVER_SNIPPET_URI)
+                .url(AppConstants.Nets.SERVER_SNIPPET_HTTP_URI)
                 .build();
         Call call = httpClient.newCall(request);
         try {
@@ -51,7 +51,7 @@ public class SnippetClientImpl implements SnippetClient {
 
     @Override
     public void getAllSnippetInfosAsync(ResponseCallback<? super SnippetInfo[]> callback) {
-        Request request = new Request.Builder().url(AppConstants.Nets.SERVER_SNIPPET_URI).build();
+        Request request = new Request.Builder().url(AppConstants.Nets.SERVER_SNIPPET_HTTP_URI).build();
         Call call = httpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -85,7 +85,7 @@ public class SnippetClientImpl implements SnippetClient {
 
     @Override
     public Snippet getSnippet(int id) throws RequestException {
-        String url = AppConstants.Nets.SERVER_SNIPPET_URI + '/' + id;
+        String url = AppConstants.Nets.SERVER_SNIPPET_HTTP_URI + '/' + id;
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -108,7 +108,7 @@ public class SnippetClientImpl implements SnippetClient {
 
     @Override
     public void getSnippetAsync(int id, ResponseCallback<? super Snippet> callback) {
-        String url = AppConstants.Nets.SERVER_SNIPPET_URI + '/' + id;
+        String url = AppConstants.Nets.SERVER_SNIPPET_HTTP_URI + '/' + id;
         Request request = new Request.Builder()
                 .url(url)
                 .build();

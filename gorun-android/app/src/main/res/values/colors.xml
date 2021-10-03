@@ -15,6 +15,7 @@
     <color name="gray">#2E3442</color>
     <color name="dark_gray">#24272E</color>
     <color name="green">#04930A</color>
+    <color name="red">#980738</color>
 
     <!--Code Editor HighlightUnits Colors-->
     <color name="Func">#009688</color>

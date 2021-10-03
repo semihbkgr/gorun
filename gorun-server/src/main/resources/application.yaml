@@ -14,5 +14,5 @@ snippet:
   file-path: snippets.json
 
 run:
-  timeout-ms: 30000L
-  timeout-check-time-interval-ms: 100L
+  timeout-ms: 30_000
+  timeout-check-time-interval-ms: 100
