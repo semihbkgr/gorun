@@ -25,11 +25,14 @@ public class RunWebSocketHandler implements WebSocketHandler {
         return session
                 .receive()
                 .map(WebSocketMessage::getPayloadAsText)
+                .doOnNext(m-> log.info("Incoming message: {}",m.replaceAll("\n", "/")))
                 .map(messageMarshaller::unmarshall)
                 .flatMap(runWebSocketContext::processMessage)
                 .map(messageMarshaller::marshall)
+                .doOnNext(m-> log.info("Outgoing message: {}",m.replaceAll("\n","/")))
                 .map(session::textMessage)
                 .flatMap(i -> session.send(Mono.just(i)))
+                .doOnError(Throwable::printStackTrace)
                 .then();
     }
 

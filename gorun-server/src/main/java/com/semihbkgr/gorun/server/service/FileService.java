@@ -8,7 +8,7 @@ public interface FileService {
 
     Mono<String> createFile(String fileName, String content);
 
-    Mono<String> deleteFile(String fileName);
+    Mono<String> deleteFile(String filepath);
 
     Path getRootDirPath();
 

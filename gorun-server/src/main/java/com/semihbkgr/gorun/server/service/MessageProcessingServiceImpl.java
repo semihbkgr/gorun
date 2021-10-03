@@ -2,6 +2,7 @@ package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
 import com.semihbkgr.gorun.server.component.RunContextTimeoutHandler;
+import com.semihbkgr.gorun.server.error.CodeExecutionError;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.message.MessageMarshaller;
@@ -11,12 +12,17 @@ import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
@@ -41,32 +47,43 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
         }
     }
 
+    //;
+
     private Flux<Message> processRunAction(RunWebSocketSession session, Message message) {
         if (session.runContext == null || (session.runContext != null && session.runContext.status() != RunStatus.EXECUTING)) {
             return fileService
                     .createFile(fileNameGenerator.generate("go"), message.body)
-                    .flatMapMany(fileName -> {
+                    .map(fileName -> {
                         try {
                             var process = new ProcessBuilder()
                                     .command("go", "run", fileName)
                                     .redirectErrorStream(true)
                                     .start();
-                            session.runContext = new DefaultRunContext(process, fileName);
-                            runContextTimeoutHandler.addContext(session.runContext);
-                            return DataBufferUtils.readInputStream(process::getInputStream, new DefaultDataBufferFactory(), 256);
-                        } catch (Exception e) {
-                            return Flux.error(e);
+                            return new DefaultRunContext(process, fileName);
+                        } catch (IOException e) {
+                            throw new CodeExecutionError(e);
                         }
                     })
-                    .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
-                    .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
-                    .conc
-                    .doOnComplete(() -> session.runContext.setStatus(RunStatus.COMPLETED))
-                    .doOnError(e -> session.runContext.setStatus(RunStatus.ERROR))
+                    .map(runContext->{
+                        session.runContext=runContext;
+                        runContextTimeoutHandler.addContext(runContext);
+                        return Message.of(Action.RUN_ACK,String.valueOf(runContext.startTimeMS()));
+                    })
+                    .concatWith(
+                            DataBufferUtils.readInputStream(()->session.runContext.process().getInputStream(), new DefaultDataBufferFactory(), 256)
+                                    .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
+                                    .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
+                                    .doOnComplete(() -> session.runContext.setStatus(RunStatus.COMPLETED))
+
+                    )
+                    //.doOnError(e -> session.runContext.setStatus(RunStatus.ERROR))
+                    .concatWith(
+                            Mono.defer(()->fileService.deleteFile(session.runContext.filename()))
+                            .then(Mono.defer(()->Mono.just(Message.of(Action.COMPLETED,String.valueOf(System.currentTimeMillis()-session.runContext.startTimeMS()))))
+                    )
                     .doOnTerminate(() -> {
-                        fileService.deleteFile(session.runContext.filename()).block();
                         runContextTimeoutHandler.removeContext(session.runContext);
-                    });
+                    }));
         } else
             return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has  already an on going process"));
     }

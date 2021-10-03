@@ -51,10 +51,12 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Mono<String> deleteFile(String fileName) {
+    public Mono<String> deleteFile(String filepath) {
         return Mono.create(sink -> {
             try {
-                var filePath = rootPath.resolve(fileName);
+                var filePath = Path.of(filepath);
+                if(!filePath.isAbsolute())
+                    filePath=rootPath.resolve(filepath);
                 Files.delete(filePath);
                 sink.success(filePath.toString());
             } catch (IOException e) {
