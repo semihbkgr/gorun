@@ -1,20 +1,24 @@
 package com.semihbkgr.gorun.server.component;
 
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@Slf4j
 public class ProcessTimeoutHandlerImpl implements ProcessTimeoutHandler {
 
     private final long timeoutMS;
     private final HashMap<Process,Long> processStartTimeMap;
 
-    public ProcessTimeoutHandlerImpl(@Value("${run.timeout-ms:30000}") long timeoutMS) {
+    public ProcessTimeoutHandlerImpl(@Value("${run.timeout-ms:30_000}") long timeoutMS) {
         this.timeoutMS = timeoutMS;
         this.processStartTimeMap=new HashMap<>();
     }

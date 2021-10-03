@@ -8,6 +8,7 @@ import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.run.RunStatus;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Service;
@@ -58,11 +59,10 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                     })
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                     .map(messageBody -> Message.of(Command.OUTPUT, messageBody))
-                    .onErrorReturn(Message.of(Command.SYSTEM))
                     .doOnComplete(()->session.runContext.setStatus(RunStatus.COMPLETED))
                     .doOnError(e->session.runContext.setStatus(RunStatus.ERROR))
                     .doOnTerminate(()->{
-                        fileService.deleteFile(session.runContext.filename());
+                        fileService.deleteFile(session.runContext.filename()).block();
                         processTimeoutHandler.removeProcess(session.runContext.process());
                     });
         } else
@@ -90,7 +90,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
     private Flux<Message> processInterruptCommand(RunWebSocketSession session) {
         if (session.runContext != null && session.runContext.status() == RunStatus.EXECUTING) {
             return Flux.defer(() -> {
-                session.runContext.process().destroy();
+                session.runContext.process().destroyForcibly();
                 session.runContext.setStatus(RunStatus.INTERRUPTED);
                 return Mono.just(Message.of(Command.INFO));
             });
