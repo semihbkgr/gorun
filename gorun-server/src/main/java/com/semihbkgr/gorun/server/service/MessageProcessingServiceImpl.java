@@ -49,8 +49,8 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .command("go", "run", fileName)
                                     .redirectErrorStream(true)
                                     .start();
-                            session.runContext = new DefaultRunContext(process,fileName);
-                            processTimeoutHandler.addProcess(process,System.currentTimeMillis());
+                            session.runContext = new DefaultRunContext(process, fileName);
+                            processTimeoutHandler.addProcess(process, System.currentTimeMillis());
                             return DataBufferUtils.readInputStream(process::getInputStream, new DefaultDataBufferFactory(), 256);
                         } catch (Exception e) {
                             return Flux.error(e);
@@ -58,14 +58,14 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                     })
                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
-                    .doOnComplete(()->session.runContext.setStatus(RunStatus.COMPLETED))
-                    .doOnError(e->session.runContext.setStatus(RunStatus.ERROR))
-                    .doOnTerminate(()->{
+                    .doOnComplete(() -> session.runContext.setStatus(RunStatus.COMPLETED))
+                    .doOnError(e -> session.runContext.setStatus(RunStatus.ERROR))
+                    .doOnTerminate(() -> {
                         fileService.deleteFile(session.runContext.filename()).block();
                         processTimeoutHandler.removeProcess(session.runContext.process());
                     });
         } else
-            return Flux.just(Message.of(Action.WARN, "This session has  already an on going process"));
+            return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has  already an on going process"));
     }
 
     private Flux<Message> processInputCommand(RunWebSocketSession session, Message message) {
@@ -76,14 +76,14 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                     var inputData = message.body.concat(System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
                     fos.write(inputData);
                     fos.flush();
-                    sink.next(Message.of(Action.INFO, message.body));
+                    sink.next(Message.of(Action.INPUT_ACK, message.body));
                     sink.complete();
                 } catch (IOException e) {
                     sink.error(e);
                 }
             });
         } else
-            return Flux.just(Message.of(Action.WARN, "This session has not any on going process"));
+            return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has not any on going process"));
     }
 
     private Flux<Message> processInterruptCommand(RunWebSocketSession session) {
@@ -91,10 +91,10 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
             return Flux.defer(() -> {
                 session.runContext.process().destroyForcibly();
                 session.runContext.setStatus(RunStatus.INTERRUPTED);
-                return Mono.just(Message.of(Action.INFO));
+                return Mono.just(Message.of(Action.INTERRUPTED, "0"));
             });
         } else
-            return Flux.just(Message.of(Action.WARN, "This session has not any on going process"));
+            return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has not any on going process"));
     }
 
 }

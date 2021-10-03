@@ -39,8 +39,8 @@ class MessageProcessingServiceImplTest {
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDirIfNotExists();
         this.fileNameGenerator = new SequentialFileNameGenerator();
-        this.processTimeoutHandler=new ProcessTimeoutHandlerImpl(30_000);
-        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator,processTimeoutHandler);
+        this.processTimeoutHandler = new ProcessTimeoutHandlerImpl(30_000);
+        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, processTimeoutHandler);
     }
 
     @AfterEach
@@ -68,7 +68,7 @@ class MessageProcessingServiceImplTest {
         var message = Message.of(Action.INPUT, "inputData");
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
-                .expectNextMatches(responseMessage -> responseMessage.action == Action.WARN)
+                .expectNextMatches(responseMessage -> responseMessage.action == Action.ILLEGAL_ACTION)
                 .verifyComplete();
     }
 
@@ -78,7 +78,7 @@ class MessageProcessingServiceImplTest {
         var message = Message.of(Action.INTERRUPT);
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
-                .expectNextMatches(responseMessage -> responseMessage.action == Action.WARN)
+                .expectNextMatches(responseMessage -> responseMessage.action == Action.ILLEGAL_ACTION)
                 .verifyComplete();
     }
 
@@ -98,7 +98,7 @@ class MessageProcessingServiceImplTest {
                 .doOnNext(responseMessage -> {
                     if (responseMessage.body.equals(line1)) {
                         StepVerifier.create(messageProcessService.process(session, inputMessage).log())
-                                .expectNext(Message.of(Action.INFO, inputData))
+                                .expectNext(Message.of(Action.INPUT_ACK, inputData))
                                 .verifyComplete();
                     }
                 });
@@ -119,7 +119,7 @@ class MessageProcessingServiceImplTest {
                 .doOnNext(responseMessage -> {
                     if (responseMessage.body.equals(line1)) {
                         StepVerifier.create(messageProcessService.process(session, message).log())
-                                .expectNextMatches(errorMessage -> errorMessage.action == Action.WARN)
+                                .expectNextMatches(errorMessage -> errorMessage.action == Action.ILLEGAL_ACTION)
                                 .verifyComplete();
                     }
                 });

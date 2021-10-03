@@ -15,7 +15,7 @@ public class MessageMarshallerImpl implements MessageMarshaller {
                 // has a body
                 int index = data.indexOf(MESSAGE_COMMAND_BODY_SEPARATOR);
                 var actionStr = data.substring(1, index);
-                var body = data.substring(index + 1, data.length() - 2);
+                var body = data.substring(index + 1, data.length() - 1);
                 try {
                     var action = Action.valueOf(actionStr);
                     return Message.of(action, body);
