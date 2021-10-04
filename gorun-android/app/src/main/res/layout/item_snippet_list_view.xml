@@ -23,7 +23,7 @@
 
         <ImageButton
                 android:focusableInTouchMode="true"
-                android:id="@+id/saveButton"
+                android:id="@+id/saveOrDeleteImageButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:scaleType="fitCenter"

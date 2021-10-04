@@ -11,9 +11,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.dialog.AppDialog;
+import com.semihbkgr.gorun.dialog.CodeSaveDialog;
 import com.semihbkgr.gorun.editor.CodeEditor;
 import com.semihbkgr.gorun.message.Action;
 import com.semihbkgr.gorun.message.Message;
@@ -42,25 +46,21 @@ public class RunActivity extends AppCompatActivity {
     private TextView infoTextView;
 
     private Toast connectingToast;
+    private AppDialog codeSaveDialog;
 
-    private final RunSessionObserver runSessionObserver = status ->{
-        Log.i(TAG, "unSessionObserver: status: "+status.name());
+    private final RunSessionObserver runSessionObserver = status -> {
+        Log.i(TAG, "unSessionObserver: status: " + status.name());
         runOnUiThread(() -> updateRunButton(status));
-    };
-
-    private final View.OnClickListener hasSessionOnClickListener = view -> {
-        String code=codeEditor.getText().toString();
-        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.RUN,code));
     };
 
     private final View.OnClickListener creatingOnClickListener = view -> {
         // Show 'connecting' toast massage if it is not showing at that time.
-        try{
-            if(!connectingToast.getView().isShown()){
+        try {
+            if (!connectingToast.getView().isShown()) {
                 connectingToast.show();
             }
         } catch (Exception e) {
-            this.connectingToast = Toast.makeText(this,getString(R.string.connecting_toast_message),Toast.LENGTH_SHORT);
+            this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
             connectingToast.show();
         }
     };
@@ -69,10 +69,22 @@ public class RunActivity extends AppCompatActivity {
         AppContext.instance().runSessionManager.connect();
     };
 
+    private final View.OnClickListener hasSessionOnClickListener = view -> {
+        String code = codeEditor.getText().toString();
+        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.RUN, code));
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("GoRun");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // Find and assign components.
         this.codeEditor = findViewById(R.id.codeEditText);
@@ -86,9 +98,11 @@ public class RunActivity extends AppCompatActivity {
         this.rightCurlyBraceButton = findViewById(R.id.rightCurlyBraceButton);
         this.quoteButton = findViewById(R.id.quoteButton);
         this.tabButton = findViewById(R.id.tabButton);
-        this.infoTextView=findViewById(R.id.infoTextView);
+        this.infoTextView = findViewById(R.id.infoTextView);
 
-        this.connectingToast=Toast.makeText(this,getString(R.string.connecting_toast_message),Toast.LENGTH_SHORT);
+        this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
+
+        this.codeSaveDialog=new CodeSaveDialog(this,R.style.Theme_AppCompat_Dialog,AppContext.instance().codeService, AppContext.instance().executorService);
 
         consoleButton.setOnClickListener(this::onConsoleButtonClicked);
         consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
@@ -123,6 +137,27 @@ public class RunActivity extends AppCompatActivity {
         AppContext.instance().runSessionManager.unregisterObserver(runSessionObserver);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_editor, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.settingItem) {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.saveItem) {
+            codeSaveDialog.addProperty(AppConstants.Values.DIALOG_PROPERTY_CODE_CONTENT,codeEditor.getText().toString());
+            codeSaveDialog.show();
+        }else if(item.getItemId()==R.id.listItem){
+            codeSaveDialog.cancel();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void updateRunButton(RunSessionStatus status) {
         switch (status) {
             case HAS_SESSION:
@@ -133,8 +168,8 @@ public class RunActivity extends AppCompatActivity {
                 infoTextView.setTextColor(getColor(R.color.green));
                 infoTextView.setText(getString(R.string.connected_info_text));
                 AppContext.instance().runSessionManager.session().addMessageConsumer(message -> {
-                    Log.i(TAG, "Message action: "+message.action.name()+", body: "+message.body);
-                    if(message.action == Action.OUTPUT)
+                    Log.i(TAG, "Message action: " + message.action.name() + ", body: " + message.body);
+                    if (message.action == Action.OUTPUT)
                         consoleTextView.append(message.body);
                 });
                 break;
@@ -196,22 +231,6 @@ public class RunActivity extends AppCompatActivity {
     private void onTabButtonClicked(View view) {
         Log.v(TAG, "onTabButtonClicked: button has been clicked");
         codeEditor.addText("\t");
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.settingItem) {
-            Intent intent = new Intent(this, SettingActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 

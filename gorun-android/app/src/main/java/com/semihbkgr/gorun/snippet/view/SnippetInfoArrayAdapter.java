@@ -41,11 +41,11 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
         titleTextView.setText(snippetInfo.title);
         TextView briefTextView = convertView.findViewById(R.id.briefTextView);
         briefTextView.setText(snippetInfo.brief);
-        ImageButton saveButton = convertView.findViewById(R.id.saveButton);
-        saveButton.setImageDrawable(getContext().getDrawable(snippetInfoViewModelHolder.isDownloaded() ? R.drawable.delete : R.drawable.download));
-        saveButton.setOnClickListener(v -> {
-            saveButton.setClickable(false);
-            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.waiting));
+        ImageButton saveOrDeleteImageButton = convertView.findViewById(R.id.saveOrDeleteImageButton);
+        saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(snippetInfoViewModelHolder.isDownloaded() ? R.drawable.delete : R.drawable.download));
+        saveOrDeleteImageButton.setOnClickListener(v -> {
+            saveOrDeleteImageButton.setClickable(false);
+            saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(R.drawable.waiting));
             if (snippetInfoViewModelHolder.isDownloaded()) {
                 AppContext.instance().executorService.execute(() -> {
                     try {
@@ -53,23 +53,23 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
                         Log.i(TAG, "getView: snippet has been deleted, snippetId: " + snippetInfo.id);
                         snippetInfoViewModelHolder.setDownloaded(false);
                         new Handler(getContext().getMainLooper()).post(() -> {
-                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
+                            saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
                             Toast.makeText(getContext(), String.format("Snippet '%s' deleted", snippetInfo.title), Toast.LENGTH_SHORT).show();
-                            saveButton.setClickable(true);
+                            saveOrDeleteImageButton.setClickable(true);
                             if(snippetInfoViewModelHolder.removeFromListWhenDeleted)
                                 remove(snippetInfoViewModelHolder);
                         });
                     } catch (Exception e) {
                         Log.e(TAG, "getView: error while deleting snippet, snippetId: " + snippetInfo.id, e);
                         new Handler(getContext().getMainLooper()).post(() -> {
-                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
+                            saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
                             Toast.makeText(getContext(), "Error while deleting", Toast.LENGTH_SHORT).show();
-                            saveButton.setClickable(true);
+                            saveOrDeleteImageButton.setClickable(true);
                         });
                     }
                 });
             } else {
-                saveButton.setImageDrawable(getContext().getDrawable(R.drawable.waiting));
+                saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(R.drawable.waiting));
                 AppContext.instance().snippetService.getSnippetAsync(snippetInfo.id, new ResponseCallback<Snippet>() {
                     @Override
                     public void onResponse(Snippet data) {
@@ -78,16 +78,16 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
                             Log.i(TAG, "getView: snippet has been downloaded, snippetId: " + snippetInfo.id);
                             snippetInfoViewModelHolder.setDownloaded(true);
                             new Handler(getContext().getMainLooper()).post(() -> {
-                                saveButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
+                                saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(R.drawable.delete));
                                 Toast.makeText(getContext(), String.format("Snippet '%s' downloaded", snippetInfo.title), Toast.LENGTH_SHORT).show();
-                                saveButton.setClickable(true);
+                                saveOrDeleteImageButton.setClickable(true);
                             });
                         } catch (Exception e) {
                             Log.e(TAG, "getView: error while downloading snippet, snippetId: " + snippetInfo.id, e);
                             new Handler(getContext().getMainLooper()).post(() -> {
-                                saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
+                                saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
                                 Toast.makeText(getContext(), "Error while downloading", Toast.LENGTH_SHORT).show();
-                                saveButton.setClickable(true);
+                                saveOrDeleteImageButton.setClickable(true);
                             });
                         }
                     }
@@ -96,9 +96,9 @@ public class SnippetInfoArrayAdapter extends ArrayAdapter<SnippetInfoViewModelHo
                     public void onFailure(Exception e) {
                         Log.e(TAG, "onFailure: error while downloading snippet, snippetId: " + snippetInfo.id, e);
                         new Handler(getContext().getMainLooper()).post(() -> {
-                            saveButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
+                            saveOrDeleteImageButton.setImageDrawable(getContext().getDrawable(R.drawable.download));
                             Toast.makeText(getContext(), String.format("Snippet '%s' downloaded", snippetInfo.title), Toast.LENGTH_SHORT).show();
-                            saveButton.setClickable(true);
+                            saveOrDeleteImageButton.setClickable(true);
                         });
                     }
                 });
