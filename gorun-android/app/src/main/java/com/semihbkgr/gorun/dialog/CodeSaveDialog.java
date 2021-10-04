@@ -58,7 +58,7 @@ public class CodeSaveDialog extends AbstractAppDialog {
 
     @Override
     public void onCancelled() {
-        Log.i(TAG, "onHide");
+        Log.i(TAG, "onCancelled");
         titleEditText.setText("");
     }
 
@@ -111,7 +111,6 @@ public class CodeSaveDialog extends AbstractAppDialog {
             code.setContent(codeContent);
             code.setCreatedAt(System.currentTimeMillis());
             code.setUpdatedAt(0);
-            codeService.save(code);
             Log.i(TAG, "onSaveButtonClicked: code is saving, title: " + code.getTitle() + ", createdAt: " + code.getCreatedAt());
             Code savedCode = codeService.save(code);
             if (savedCode.getId() > 0) {

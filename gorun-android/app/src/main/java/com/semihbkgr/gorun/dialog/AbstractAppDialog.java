@@ -35,7 +35,6 @@ public abstract class AbstractAppDialog implements AppDialog {
     @Override
     public final void cancel() {
         dialog.hide();
-        onCancelled();
     }
 
     @Override

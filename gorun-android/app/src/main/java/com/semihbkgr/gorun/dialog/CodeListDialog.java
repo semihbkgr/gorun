@@ -81,7 +81,7 @@ public class CodeListDialog extends AbstractAppDialog {
         executor.execute(()->{
             Code code=codeService.getById(codeInfo.getId());
             if(code!=null){
-                Log.i(TAG, "onCodeListViewItemClick: Code clicked in the list can be foundsuccessfully, id: "+code.getId());
+                Log.i(TAG, "onCodeListViewItemClick: Code clicked in the list can be found successfully, id: "+code.getId());
                 new Handler(getContext().getMainLooper()).post(()->{
                    codeSelectedListener.accept(code);
                    Toast.makeText(getContext(),String.format("Code '%s' loaded successfully",code.getTitle()),Toast.LENGTH_SHORT).show();
