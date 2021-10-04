@@ -38,7 +38,7 @@ public class AppContext {
     public final RunSessionManager runSessionManager;
     public final ExecutorService executorService;
     public final ScheduledExecutorService scheduledExecutorService;
-    private final CodeService codeService;
+    public final CodeService codeService;
 
     private AppContext(Context context) {
         Gson gson = new GsonBuilder().create();

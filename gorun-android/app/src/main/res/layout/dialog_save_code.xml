@@ -15,11 +15,17 @@
               android:textSize="20sp"
               android:text="@string/save_text"/>
 
-    <EditText android:layout_width="300dp"
-              android:layout_height="45dp"
-              android:id="@+id/titleEditText"
-              android:layout_marginBottom="10dp"
-              android:layout_gravity="center"/>
+    <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/title"
+            android:ems="10"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:id="@+id/titleEditText"/>
+
 
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
