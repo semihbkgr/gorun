@@ -6,12 +6,12 @@ public interface CodeRepository {
 
     Code findById(int id);
 
-    List<String> findAllTitle();
+    List<CodeInfo> findAllInfos();
 
     Code save(Code code);
 
     Code update(int id,Code code);
 
-    void delete(int id);
+    int delete(int id);
 
 }

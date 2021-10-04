@@ -13,13 +13,13 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
-    public Code findById(int id) {
+    public Code getById(int id) {
         return codeRepository.findById(id);
     }
 
     @Override
-    public List<String> findAllTitle() {
-        return codeRepository.findAllTitle();
+    public List<CodeInfo> getAllInfos() {
+        return codeRepository.findAllInfos();
     }
 
     @Override
@@ -33,8 +33,8 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
-    public void delete(int id) {
-        codeRepository.delete(id);
+    public int delete(int id) {
+        return codeRepository.delete(id);
     }
 
 }

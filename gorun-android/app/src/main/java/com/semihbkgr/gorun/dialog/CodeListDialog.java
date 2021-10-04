@@ -4,11 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.code.Code;
+import com.semihbkgr.gorun.code.CodeInfo;
 import com.semihbkgr.gorun.code.CodeService;
 
 import java.util.List;
@@ -45,14 +50,61 @@ public class CodeListDialog extends AbstractAppDialog{
         codeListView.removeAllViews();
         infoTextView.setText(R.string.loading);
         executor.execute(()->{
-            List<String> codeTitleList=codeService.findAllTitle();
-
+            List<CodeInfo> codeI=codeService.getAllInfos();
+            ArrayAdapter<Code> arrayAdapter=new CodeSaveListViewAdapter(getContext(),code)
         });
     }
 
     @Override
     public void onCancelled() {
         Log.i(TAG, "onCancelled");
+    }
+
+
+    private static class CodeSaveListViewAdapter extends ArrayAdapter<CodeInfo> {
+
+        private final CodeService codeService;
+        private final Executor executor;
+
+        public CodeSaveListViewAdapter(@NonNull Context context, @NonNull List<CodeInfo> codeInfos, @NonNull CodeService codeService, @NonNull Executor executor) {
+            super(context, 0, codeInfos);
+            this.codeService = codeService;
+            this.executor = executor;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null)
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_code_list_view, parent, false);
+            CodeInfo codeInfos = getItem(position);
+            TextView titleTextView = convertView.findViewById(R.id.titleTextView);
+            titleTextView.setText(codeInfos.getTitle());
+            TextView createdAtTextView = convertView.findViewById(R.id.createdAtTextView);
+            createdAtTextView.setText("CreatedAt: " + codeInfos.getCreatedAt());
+            TextView updatedAtTextView = convertView.findViewById(R.id.updatedAtTextView);
+            updatedAtTextView.setText("UpdatedAt: " + codeInfos.getUpdatedAt());
+            ImageButton deleteImageButton = convertView.findViewById(R.id.deleteImageButton);
+            deleteImageButton.setOnClickListener(v -> {
+                Log.i(TAG, "getView: deleteImageButton clicked");
+                remove(codeInfos);
+                executor.execute(() -> {
+                    int count = codeService.delete(codeInfos.getId());
+                    if (count > 0) {
+                        Log.i(TAG, "getView: code deleted successfully, id: " + codeInfos.getId());
+                        deleteImageButton.post(() -> Toast.makeText(getContext(), String.format("Code '%s' deleted successfully", codeInfos.getTitle()), Toast.LENGTH_SHORT).show());
+                    } else {
+                        Log.w(TAG, "getView: code cannot be deleted, id: " + codeInfos.getId());
+                        deleteImageButton.post(() -> {
+                            Toast.makeText(getContext(), String.format("Code '%s' cannot be deleted", codeInfos.getTitle()), Toast.LENGTH_SHORT).show();
+                            add(codeInfos);
+                        });
+                    }
+                });
+            });
+            return convertView;
+        }
+
     }
 
 }

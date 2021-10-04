@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="10dp"
+              android:descendantFocusability="blocksDescendants"
+              android:layout_gravity="center"
+              android:background="@color/blue"
+              android:orientation="vertical">
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:textColor="@color/black"
+              android:textSize="20sp"
+              android:id="@+id/infoTextView"/>
+
+    <ListView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/codeListView"/>
+
+</LinearLayout>

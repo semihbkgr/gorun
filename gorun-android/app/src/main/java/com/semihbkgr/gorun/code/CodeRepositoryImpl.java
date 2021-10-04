@@ -38,14 +38,19 @@ public class CodeRepositoryImpl implements CodeRepository {
     }
 
     @Override
-    public List<String> findAllTitle() {
+    public List<CodeInfo> findAllInfos() {
         try (Cursor cursor = database.query(
-                TABLE_NAME, new String[]{Columns.TITLE},
+                TABLE_NAME, new String[]{Columns.ID, Columns.TITLE, Columns.CREATED_AT, Columns.UPDATED_AT},
                 null, null, null, null, null)) {
-            List<String> titleList = new ArrayList<>();
-            while (cursor.moveToNext())
-                titleList.add(cursor.getString(cursor.getColumnIndex(Columns.TITLE)));
-            return titleList;
+            List<CodeInfo> codeInfoList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndex(Columns.ID));
+                String title = cursor.getString(cursor.getColumnIndex(Columns.TITLE));
+                long createdAt = cursor.getLong(cursor.getColumnIndex(Columns.CREATED_AT));
+                long updatedAt = cursor.getLong(cursor.getColumnIndex(Columns.UPDATED_AT));
+                codeInfoList.add(new CodeInfo(id, title, createdAt, updatedAt));
+            }
+            return codeInfoList;
         }
     }
 
@@ -68,8 +73,8 @@ public class CodeRepositoryImpl implements CodeRepository {
     }
 
     @Override
-    public void delete(int id) {
-        database.delete(TABLE_NAME, Columns.ID + "=?", new String[]{String.valueOf(id)});
+    public int delete(int id) {
+        return database.delete(TABLE_NAME, Columns.ID + "=?", new String[]{String.valueOf(id)});
     }
 
     private void putAllCodeFields(@NonNull ContentValues contentValues, @NonNull Code code) {
