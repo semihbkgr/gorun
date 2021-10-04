@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="10dp"
+              android:descendantFocusability="blocksDescendants"
+              android:layout_gravity="center"
+              android:background="@color/blue"
+              android:orientation="vertical">
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/black"
+              android:layout_gravity="center"
+              android:layout_marginBottom="10dp"
+              android:textSize="20sp"
+              android:text="@string/save_text"/>
+
+    <EditText android:layout_width="300dp"
+              android:layout_height="45dp"
+              android:id="@+id/titleEditText"
+              android:layout_marginBottom="10dp"
+              android:layout_gravity="center"/>
+
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:id="@+id/saveButton"
+            android:layout_gravity="center"/>
+
+</LinearLayout>
