@@ -53,12 +53,13 @@ public class CodeSaveDialog extends AbstractAppDialog {
 
     @Override
     public void onShow() {
-        Log.i(TAG, "onShow: ");
+        Log.i(TAG, "onShow");
     }
 
     @Override
     public void onCancelled() {
-        Log.i(TAG, "onHide: ");
+        Log.i(TAG, "onHide");
+        titleEditText.setText("");
     }
 
     private void onSaveButtonClicked(View v) {

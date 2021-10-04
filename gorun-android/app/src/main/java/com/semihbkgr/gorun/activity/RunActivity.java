@@ -104,8 +104,13 @@ public class RunActivity extends AppCompatActivity {
 
         this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
 
-        this.codeSaveDialog=new CodeSaveDialog(this,R.style.Theme_AppCompat_Dialog,AppContext.instance().codeService, AppContext.instance().executorService);
-        this.codeListDialog=new CodeListDialog(this,R.style.Theme_AppCompat_Dialog,AppContext.instance().codeService, AppContext.instance().executorService);
+        this.codeSaveDialog=new CodeSaveDialog(this,R.style.Theme_AppCompat_Dialog,
+                AppContext.instance().codeService, AppContext.instance().executorService);
+        this.codeListDialog=new CodeListDialog(this,R.style.Theme_AppCompat_Dialog,
+                AppContext.instance().codeService, AppContext.instance().executorService,
+                code->{
+                    codeEditor.setText(code.getContent());
+                });
 
         consoleButton.setOnClickListener(this::onConsoleButtonClicked);
         consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
