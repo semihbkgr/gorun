@@ -17,6 +17,7 @@ import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.dialog.AppDialog;
+import com.semihbkgr.gorun.dialog.CodeListDialog;
 import com.semihbkgr.gorun.dialog.CodeSaveDialog;
 import com.semihbkgr.gorun.editor.CodeEditor;
 import com.semihbkgr.gorun.message.Action;
@@ -47,6 +48,7 @@ public class RunActivity extends AppCompatActivity {
 
     private Toast connectingToast;
     private AppDialog codeSaveDialog;
+    private AppDialog codeListDialog;
 
     private final RunSessionObserver runSessionObserver = status -> {
         Log.i(TAG, "unSessionObserver: status: " + status.name());
@@ -103,6 +105,7 @@ public class RunActivity extends AppCompatActivity {
         this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
 
         this.codeSaveDialog=new CodeSaveDialog(this,R.style.Theme_AppCompat_Dialog,AppContext.instance().codeService, AppContext.instance().executorService);
+        this.codeListDialog=new CodeListDialog(this,R.style.Theme_AppCompat_Dialog,AppContext.instance().codeService, AppContext.instance().executorService);
 
         consoleButton.setOnClickListener(this::onConsoleButtonClicked);
         consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
@@ -153,7 +156,7 @@ public class RunActivity extends AppCompatActivity {
             codeSaveDialog.addProperty(AppConstants.Values.DIALOG_PROPERTY_CODE_CONTENT,codeEditor.getText().toString());
             codeSaveDialog.show();
         }else if(item.getItemId()==R.id.listItem){
-            codeSaveDialog.cancel();
+            codeListDialog.show();
         }
         return super.onOptionsItemSelected(item);
     }

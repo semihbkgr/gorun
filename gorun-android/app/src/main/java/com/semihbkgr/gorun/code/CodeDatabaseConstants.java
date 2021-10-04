@@ -2,7 +2,7 @@ package com.semihbkgr.gorun.code;
 
 public class CodeDatabaseConstants {
 
-    public static final String TABLE_NAME = "codex";
+    public static final String TABLE_NAME = "code";
 
     public static final String SQL_CREATE_TABLE_IF_NOT_EXISTS =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +

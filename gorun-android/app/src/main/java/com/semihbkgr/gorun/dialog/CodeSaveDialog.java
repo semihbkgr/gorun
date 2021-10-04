@@ -112,11 +112,11 @@ public class CodeSaveDialog extends AbstractAppDialog {
             codeService.save(code);
             Log.i(TAG, "onSaveButtonClicked: code is saving, title: " + code.getTitle() + ", createdAt: " + code.getCreatedAt());
             Code savedCode = codeService.save(code);
-            if (savedCode.getId() == -1) {
-                Log.i(TAG, "onSaveButtonClicked: code cannot be saved");
+            if (savedCode.getId() > 0) {
+                Log.i(TAG, "onSaveButtonClicked: code saved successfully, id: " + savedCode.getId());
                 v.post(() -> Toast.makeText(getContext(), String.format("Code '%s' saved successfully", code.getTitle()), Toast.LENGTH_SHORT).show());
             } else {
-                Log.i(TAG, "onSaveButtonClicked: code saved successfully, id: " + savedCode.getId());
+                Log.i(TAG, "onSaveButtonClicked: code cannot be saved");
                 v.post(() -> Toast.makeText(getContext(), String.format("Code '%s' cannot be saved", code.getTitle()), Toast.LENGTH_SHORT).show());
             }
         });

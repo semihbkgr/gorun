@@ -58,6 +58,7 @@ public class CodeRepositoryImpl implements CodeRepository {
     public Code save(Code code) {
         ContentValues contentValues = new ContentValues();
         putAllCodeFields(contentValues, code);
+        contentValues.remove(Columns.ID);
         long id = database.insert(TABLE_NAME, null, contentValues);
         code.setId((int) id);
         return code;

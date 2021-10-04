@@ -47,11 +47,15 @@ public class CodeListDialog extends AbstractAppDialog{
     @Override
     public void onShow() {
         Log.i(TAG, "onShow");
-        codeListView.removeAllViews();
+        codeListView.setAdapter(null);
         infoTextView.setText(R.string.loading);
         executor.execute(()->{
-            List<CodeInfo> codeI=codeService.getAllInfos();
-            ArrayAdapter<Code> arrayAdapter=new CodeSaveListViewAdapter(getContext(),code)
+            List<CodeInfo> codeInfoList=codeService.getAllInfos();
+            ArrayAdapter<CodeInfo> arrayAdapter=new CodeSaveListViewAdapter(getContext(),codeInfoList,codeService,executor);
+            codeListView.post(()->{
+                codeListView.setAdapter(arrayAdapter);
+                infoTextView.setText("Code count: "+codeInfoList.size());
+            });
         });
     }
 
@@ -66,7 +70,7 @@ public class CodeListDialog extends AbstractAppDialog{
         private final CodeService codeService;
         private final Executor executor;
 
-        public CodeSaveListViewAdapter(@NonNull Context context, @NonNull List<CodeInfo> codeInfos, @NonNull CodeService codeService, @NonNull Executor executor) {
+        private CodeSaveListViewAdapter(@NonNull Context context, @NonNull List<CodeInfo> codeInfos, @NonNull CodeService codeService, @NonNull Executor executor) {
             super(context, 0, codeInfos);
             this.codeService = codeService;
             this.executor = executor;
