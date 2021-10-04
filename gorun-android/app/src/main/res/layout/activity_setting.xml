@@ -8,30 +8,6 @@
         android:orientation="vertical"
         android:background="@color/blue_bg1">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp"
-            android:padding="10dp">
-
-        <TextView
-                android:text="@string/server_state"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/serverStateNameTextView"
-                android:layout_weight="50"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"/>
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/serverStateValueTextView"
-                android:layout_weight="50"
-                android:gravity="center_vertical"/>
-
-    </LinearLayout>
-
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
