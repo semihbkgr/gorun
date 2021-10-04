@@ -12,12 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import com.semihbkgr.gorun.R;
-import com.semihbkgr.gorun.code.Code;
 import com.semihbkgr.gorun.code.CodeInfo;
 import com.semihbkgr.gorun.code.CodeService;
 
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public class CodeListDialog extends AbstractAppDialog{
 
@@ -38,10 +38,10 @@ public class CodeListDialog extends AbstractAppDialog{
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         dialog.setContentView(R.layout.dialog_code_list);
         dialog.setCancelable(true);
+        dialog.setTitle("Code List");
         // find views
         this.codeListView =dialog.findViewById(R.id.codeListView);
         this.infoTextView=dialog.findViewById(R.id.infoTextView);
-
     }
 
     @Override
@@ -51,7 +51,10 @@ public class CodeListDialog extends AbstractAppDialog{
         infoTextView.setText(R.string.loading);
         executor.execute(()->{
             List<CodeInfo> codeInfoList=codeService.getAllInfos();
-            ArrayAdapter<CodeInfo> arrayAdapter=new CodeSaveListViewAdapter(getContext(),codeInfoList,codeService,executor);
+            CodeSaveListViewAdapter arrayAdapter=new CodeSaveListViewAdapter(getContext(),codeInfoList,codeService,executor);
+            arrayAdapter.setListSizeChangeListener(size-> {
+                infoTextView.setText("Code count: "+codeInfoList.size());
+            });
             codeListView.post(()->{
                 codeListView.setAdapter(arrayAdapter);
                 infoTextView.setText("Code count: "+codeInfoList.size());
@@ -69,11 +72,18 @@ public class CodeListDialog extends AbstractAppDialog{
 
         private final CodeService codeService;
         private final Executor executor;
+        private int size;
+        private Consumer<Integer> listSizeChangeListener;
 
         private CodeSaveListViewAdapter(@NonNull Context context, @NonNull List<CodeInfo> codeInfos, @NonNull CodeService codeService, @NonNull Executor executor) {
             super(context, 0, codeInfos);
             this.codeService = codeService;
             this.executor = executor;
+            this.size=codeInfos.size();
+        }
+
+        public void setListSizeChangeListener(Consumer<Integer> listSizeChangeListener) {
+            this.listSizeChangeListener = listSizeChangeListener;
         }
 
         @NonNull
@@ -92,6 +102,7 @@ public class CodeListDialog extends AbstractAppDialog{
             deleteImageButton.setOnClickListener(v -> {
                 Log.i(TAG, "getView: deleteImageButton clicked");
                 remove(codeInfos);
+                listSizeChangeListener.accept(--size);
                 executor.execute(() -> {
                     int count = codeService.delete(codeInfos.getId());
                     if (count > 0) {
@@ -102,6 +113,7 @@ public class CodeListDialog extends AbstractAppDialog{
                         deleteImageButton.post(() -> {
                             Toast.makeText(getContext(), String.format("Code '%s' cannot be deleted", codeInfos.getTitle()), Toast.LENGTH_SHORT).show();
                             add(codeInfos);
+                            listSizeChangeListener.accept(++size);
                         });
                     }
                 });

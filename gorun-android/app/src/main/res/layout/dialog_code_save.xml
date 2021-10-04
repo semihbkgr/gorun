@@ -5,6 +5,9 @@
               android:descendantFocusability="blocksDescendants"
               android:layout_gravity="center"
               android:background="@color/blue"
+              android:clickable="true"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
               android:orientation="vertical">
 
     <TextView android:layout_width="wrap_content"
@@ -18,10 +21,11 @@
     <EditText
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:layout_marginBottom="10dp"
             android:hint="@string/title"
+            android:inputType="textPersonName"
             android:ems="10"
+            android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:id="@+id/titleEditText"/>

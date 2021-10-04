@@ -40,6 +40,7 @@ public class CodeSaveDialog extends AbstractAppDialog {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         dialog.setContentView(R.layout.dialog_code_save);
         dialog.setCancelable(true);
+        dialog.setTitle("Code Save");
         // find views
         this.titleEditText = dialog.findViewById(R.id.titleEditText);
         this.saveButton = dialog.findViewById(R.id.saveButton);
