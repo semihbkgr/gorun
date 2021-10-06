@@ -12,17 +12,12 @@ import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
@@ -47,10 +42,8 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
         }
     }
 
-    //;
-
     private Flux<Message> processRunAction(RunWebSocketSession session, Message message) {
-        if (session.runContext == null || (session.runContext != null && session.runContext.status() != RunStatus.EXECUTING)) {
+        if (!session.hasRunContext() || (session.hasRunContext() && session.getRunContext().status() != RunStatus.EXECUTING)) {
             return fileService
                     .createFile(fileNameGenerator.generate("go"), message.body)
                     .map(fileName -> {
@@ -64,34 +57,34 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                             throw new CodeExecutionError(e);
                         }
                     })
-                    .map(runContext->{
-                        session.runContext=runContext;
+                    .map(runContext -> {
+                        session.setRunContext(runContext);
                         runContextTimeoutHandler.addContext(runContext);
-                        return Message.of(Action.RUN_ACK,String.valueOf(runContext.startTimeMS()));
+                        return Message.of(Action.RUN_ACK, String.valueOf(runContext.startTimeMS()));
                     })
                     .concatWith(
-                            DataBufferUtils.readInputStream(()->session.runContext.process().getInputStream(), new DefaultDataBufferFactory(), 256)
+                            DataBufferUtils.readInputStream(() -> session.getRunContext().process().getInputStream(), new DefaultDataBufferFactory(), 256)
                                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
-                                    .doOnComplete(() -> session.runContext.setStatus(RunStatus.COMPLETED))
+                                    .doOnComplete(() -> session.getRunContext().setStatus(RunStatus.COMPLETED))
 
                     )
                     //.doOnError(e -> session.runContext.setStatus(RunStatus.ERROR))
                     .concatWith(
-                            Mono.defer(()->fileService.deleteFile(session.runContext.filename()))
-                            .then(Mono.defer(()->Mono.just(Message.of(Action.COMPLETED,String.valueOf(System.currentTimeMillis()-session.runContext.startTimeMS()))))
-                    )
-                    .doOnTerminate(() -> {
-                        runContextTimeoutHandler.removeContext(session.runContext);
-                    }));
+                            Mono.defer(() -> fileService.deleteFile(session.getRunContext().filename()))
+                                    .then(Mono.defer(() -> Mono.just(Message.of(Action.COMPLETED, String.valueOf(System.currentTimeMillis() - session.getRunContext().startTimeMS()))))
+                                    )
+                                    .doOnTerminate(() -> {
+                                        runContextTimeoutHandler.removeContext(session.getRunContext());
+                                    }));
         } else
             return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has  already an on going process"));
     }
 
     private Flux<Message> processInputAction(RunWebSocketSession session, Message message) {
-        if (session.runContext != null && session.runContext.status() == RunStatus.EXECUTING) {
+        if (session.hasRunContext() && session.getRunContext().status() == RunStatus.EXECUTING) {
             return Flux.create(sink -> {
-                final var fos = session.runContext.process().getOutputStream();
+                final var fos = session.getRunContext().process().getOutputStream();
                 try {
                     var inputData = message.body.concat(System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
                     fos.write(inputData);
@@ -107,10 +100,10 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
     }
 
     private Flux<Message> processInterruptAction(RunWebSocketSession session) {
-        if (session.runContext != null && session.runContext.status() == RunStatus.EXECUTING) {
+        if (session.hasRunContext() && session.getRunContext().status() == RunStatus.EXECUTING) {
             return Flux.defer(() -> {
-                session.runContext.process().destroyForcibly();
-                session.runContext.setStatus(RunStatus.INTERRUPTED);
+                session.getRunContext().process().destroyForcibly();
+                session.getRunContext().setStatus(RunStatus.INTERRUPTED);
                 return Mono.just(Message.of(Action.INTERRUPTED, "0"));
             });
         } else

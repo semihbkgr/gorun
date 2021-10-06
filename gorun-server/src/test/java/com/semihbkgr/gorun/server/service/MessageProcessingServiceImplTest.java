@@ -38,7 +38,7 @@ class MessageProcessingServiceImplTest {
     @BeforeEach
     void initializeRequiredObjects() throws IOException {
         //TODO mock WebSocketSession
-        this.session = new RunWebSocketSession(null);
+        this.session = new RunWebSocketSession("",null);
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDirIfNotExists();
         this.fileNameGenerator = new SequentialFileNameGenerator();
@@ -57,7 +57,7 @@ class MessageProcessingServiceImplTest {
     @DisplayName("CommandRunWhenOnGoingProcessDoesNotExists")
     void commandRunWhenOnGoingProcessDoesNotExists() {
         var messageBody = Resources.getResourceAsString("hello.go");
-        var session = new RunWebSocketSession(null);
+        var session = new RunWebSocketSession("",null);
         var message = Message.of(Action.RUN, messageBody);
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)

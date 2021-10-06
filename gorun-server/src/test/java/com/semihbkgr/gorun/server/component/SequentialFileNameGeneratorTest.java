@@ -15,9 +15,7 @@ class SequentialFileNameGeneratorTest {
     @Test
     @DisplayName("GenerateByNullExtension")
     void generateBYNullExtension() {
-        assertThrows(NullPointerException.class, () -> {
-            nameGenerator.generate(null);
-        });
+        assertThrows(NullPointerException.class, () -> nameGenerator.generate(null));
     }
 
     @Test
