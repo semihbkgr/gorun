@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.code.Code;
 import com.semihbkgr.gorun.dialog.AppDialog;
 import com.semihbkgr.gorun.dialog.CodeListDialog;
 import com.semihbkgr.gorun.dialog.CodeSaveDialog;
@@ -45,10 +46,14 @@ public class RunActivity extends AppCompatActivity {
     private Button tabButton;
     private TextChangeHandler consoleTextChangeHandler;
     private TextView infoTextView;
+    private TextView codeTitleTextView;
+    private ImageButton codeSaveImageButton;
 
     private Toast connectingToast;
     private AppDialog codeSaveDialog;
     private AppDialog codeListDialog;
+
+    private Code loadedCode;
 
     private final RunSessionObserver runSessionObserver = status -> {
         Log.i(TAG, "unSessionObserver: status: " + status.name());
@@ -101,6 +106,8 @@ public class RunActivity extends AppCompatActivity {
         this.quoteButton = findViewById(R.id.quoteButton);
         this.tabButton = findViewById(R.id.tabButton);
         this.infoTextView = findViewById(R.id.infoTextView);
+        this.codeTitleTextView=findViewById(R.id.codeTitleTextView);
+        this.codeSaveImageButton=findViewById(R.id.codeSaveImageButton);
 
         this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
 
@@ -109,7 +116,12 @@ public class RunActivity extends AppCompatActivity {
         this.codeListDialog=new CodeListDialog(this,R.style.Theme_AppCompat_Dialog,
                 AppContext.instance().codeService, AppContext.instance().executorService,
                 code->{
+                    this.loadedCode=code;
                     codeEditor.setText(code.getContent());
+                    codeTitleTextView.setVisibility(View.VISIBLE);
+                    codeTitleTextView.setText(code.getTitle());
+                    codeSaveImageButton.setVisibility(View.VISIBLE);
+                    codeSaveImageButton.setClickable(true);
                 });
 
         consoleButton.setOnClickListener(this::onConsoleButtonClicked);
@@ -120,6 +132,7 @@ public class RunActivity extends AppCompatActivity {
         rightCurlyBraceButton.setOnClickListener(this::onRightCurlyBraceButtonClicked);
         quoteButton.setOnClickListener(this::onQuoteButtonClicked);
         tabButton.setOnClickListener(this::onTabButtonClicked);
+        codeSaveImageButton.setOnClickListener(this::onCodeSaveImageButtonClicked);
 
         consoleTextChangeHandler = new TextChangeHandler(CODE_EDITOR_UPDATE_DELAY_MS);
         consoleTextChangeHandler.addListener((event, text) -> runOnUiThread(() -> {
@@ -131,6 +144,7 @@ public class RunActivity extends AppCompatActivity {
         updateRunButton(AppContext.instance().runSessionManager.getStatus());
 
     }
+
 
     @Override
     protected void onStart() {
@@ -157,7 +171,7 @@ public class RunActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.settingItem) {
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
-        } else if (item.getItemId() == R.id.saveItem) {
+        } else if (item.getItemId() == R.id.addItem) {
             codeSaveDialog.addProperty(AppConstants.Values.DIALOG_PROPERTY_CODE_CONTENT,codeEditor.getText().toString());
             codeSaveDialog.show();
         }else if(item.getItemId()==R.id.listItem){
@@ -210,6 +224,18 @@ public class RunActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(consoleEditText, InputMethodManager.SHOW_IMPLICIT);
     }
+
+    private void onCodeSaveImageButtonClicked(View v) {
+        if(loadedCode==null){
+            return;
+        }
+        loadedCode.setContent(codeEditor.getText().toString());
+        AppContext.instance().executorService.execute(()->{
+            AppContext.instance().codeService.save(code);
+        });
+
+    }
+
 
     private void onLeftBraceButtonClicked(View view) {
         Log.v(TAG, "onLeftBraceButtonClicked: button has been clicked");

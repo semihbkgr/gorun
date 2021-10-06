@@ -18,6 +18,7 @@
         <TextView android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:visibility="invisible"
+                  android:id="@+id/codeTitleTextView"
                   android:layout_weight="1"/>
 
         <ImageButton android:layout_width="50dp"
@@ -26,6 +27,8 @@
                      android:adjustViewBounds="true"
                      android:padding="5dp"
                      android:visibility="invisible"
+                     android:clickable="false"
+                     android:id="@+id/codeSaveImageButton"
                      android:src="@drawable/save"/>
 
     </LinearLayout>
