@@ -1,9 +1,6 @@
 package com.semihbkgr.gorun.server.service;
 
-import com.semihbkgr.gorun.server.component.FileNameGenerator;
-import com.semihbkgr.gorun.server.component.RunContextTimeoutHandler;
-import com.semihbkgr.gorun.server.component.RunContextTimeoutHandlerImpl;
-import com.semihbkgr.gorun.server.component.SequentialFileNameGenerator;
+import com.semihbkgr.gorun.server.component.*;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.message.MessageMarshaller;
@@ -33,7 +30,8 @@ class MessageProcessingServiceImplTest {
     FileServiceImpl fileService;
     FileNameGenerator fileNameGenerator;
     RunContextTimeoutHandler runContextTimeoutHandler;
-    MessageMarshaller messageMarshaller;
+    ServerInfoManager serverInfoManager;
+
 
     @BeforeEach
     void initializeRequiredObjects() throws IOException {
@@ -43,7 +41,8 @@ class MessageProcessingServiceImplTest {
         fileService.createRootDirIfNotExists();
         this.fileNameGenerator = new SequentialFileNameGenerator();
         this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(30_000);
-        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, runContextTimeoutHandler,messageMarshaller);
+        this.serverInfoManager=new ServerInfoManagerImpl();
+        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, runContextTimeoutHandler,serverInfoManager);
     }
 
     @AfterEach

@@ -48,20 +48,21 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
         if (!session.hasRunContext() || (session.hasRunContext() && session.getRunContext().status() != RunStatus.EXECUTING)) {
             return fileService
                     .createFile(fileNameGenerator.generate("go"), message.body)
+                    .doFirst(() -> log.info("Execution, sessionId: " + session.id + " currentExecutionCount: " + serverInfoManager.increaseCurrentExecutionCount()))
+                    .doOnTerminate(() -> log.info("Execution, sessionId: " + session.id + " currentExecutionCount: " + serverInfoManager.decreaseCurrentExecutionCount()))
                     .map(fileName -> {
                         try {
                             var process = new ProcessBuilder()
                                     .command("go", "run", fileName)
                                     .redirectErrorStream(true)
                                     .start();
-                            serverInfoManager.increaseExecutionCount();
-                            log.info("Execution, sessionId: " + session.id + " executionCount: " + serverInfoManager.decreaseExecutionCount());
                             return new DefaultRunContext(process, fileName);
                         } catch (IOException e) {
                             throw new CodeExecutionError(e);
                         }
                     })
                     .map(runContext -> {
+                        log.info("Execution, sessionId: " + session.id + " executionCount: " + serverInfoManager.increaseExecutionCount());
                         session.setRunContext(runContext);
                         runContextTimeoutHandler.addContext(runContext);
                         return Message.of(Action.RUN_ACK, String.valueOf(runContext.startTimeMS()));

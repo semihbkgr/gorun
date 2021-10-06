@@ -28,9 +28,7 @@ public class SnippetApi {
     @GetMapping("/{id}")
     public Mono<Snippet> getSnippet(@PathVariable("id") int id) {
         return snippetHolder.findById(id)
-                .switchIfEmpty(
-                        Mono.error(() -> new SimpleHttpStatusCodeException(HttpStatus.BAD_REQUEST))
-                );
+                .switchIfEmpty(Mono.error(() -> new SimpleHttpStatusCodeException(HttpStatus.BAD_REQUEST)));
     }
 
 }

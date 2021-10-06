@@ -8,10 +8,14 @@ public interface ServerInfoManager {
 
     int decreaseSessionCount();
 
+    int getCurrentExecutionCount();
+
+    int increaseCurrentExecutionCount();
+
+    int decreaseCurrentExecutionCount();
+
     int getExecutionCount();
 
     int increaseExecutionCount();
-
-    int decreaseExecutionCount();
 
 }
