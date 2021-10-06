@@ -2,14 +2,15 @@ package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
 import com.semihbkgr.gorun.server.component.RunContextTimeoutHandler;
+import com.semihbkgr.gorun.server.component.ServerInfoManager;
 import com.semihbkgr.gorun.server.error.CodeExecutionError;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.message.MessageMarshaller;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.run.RunStatus;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MessageProcessingServiceImpl implements MessageProcessingService {
 
     private final FileService fileService;
     private final FileNameGenerator fileNameGenerator;
     private final RunContextTimeoutHandler runContextTimeoutHandler;
-    private final MessageMarshaller messageMarshaller;
+    private final ServerInfoManager serverInfoManager;
 
     @Override
     public Flux<Message> process(RunWebSocketSession session, Message message) {
@@ -52,6 +54,8 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .command("go", "run", fileName)
                                     .redirectErrorStream(true)
                                     .start();
+                            serverInfoManager.increaseExecutionCount();
+                            log.info("Execution, sessionId: " + session.id + " executionCount: " + serverInfoManager.decreaseExecutionCount());
                             return new DefaultRunContext(process, fileName);
                         } catch (IOException e) {
                             throw new CodeExecutionError(e);
@@ -67,9 +71,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
                                     .doOnComplete(() -> session.getRunContext().setStatus(RunStatus.COMPLETED))
-
                     )
-                    //.doOnError(e -> session.runContext.setStatus(RunStatus.ERROR))
                     .concatWith(
                             Mono.defer(() -> fileService.deleteFile(session.getRunContext().filename()))
                                     .then(Mono.defer(() -> Mono.just(Message.of(Action.COMPLETED, String.valueOf(System.currentTimeMillis() - session.getRunContext().startTimeMS()))))
