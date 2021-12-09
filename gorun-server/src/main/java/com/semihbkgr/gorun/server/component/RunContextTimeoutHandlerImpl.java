@@ -1,14 +1,16 @@
 package com.semihbkgr.gorun.server.component;
 
 import com.semihbkgr.gorun.server.run.RunContext;
+import com.semihbkgr.gorun.server.run.RunProperties;
 import com.semihbkgr.gorun.server.run.RunStatus;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,11 +20,11 @@ import java.util.Set;
 @Slf4j
 public class RunContextTimeoutHandlerImpl implements RunContextTimeoutHandler {
 
-    private final long timeoutMS;
+    private final RunProperties runProperties;
     private final Set<RunContext> runContextSet;
 
-    public RunContextTimeoutHandlerImpl(@Value("${run.timeout-ms:30_000}") long timeoutMS) {
-        this.timeoutMS = timeoutMS;
+    public RunContextTimeoutHandlerImpl(RunProperties runProperties) {
+        this.runProperties = runProperties;
         this.runContextSet = new HashSet<>();
     }
 
@@ -37,13 +39,13 @@ public class RunContextTimeoutHandlerImpl implements RunContextTimeoutHandler {
     }
 
     @Async
-    @Scheduled(fixedDelayString = "${run.timeout-check-time-interval-ms:500}")
+    @Scheduled(fixedDelayString = "${run.timeout-check}")
     @Override
     public void checkTimeout() {
-        long currentTimeMS = System.currentTimeMillis();
+        var currentTimeMS = System.currentTimeMillis();
         List<RunContext> runContextList = new ArrayList<>(runContextSet);
         runContextList.stream()
-                .filter(runContext -> currentTimeMS - runContext.startTimeMS() > timeoutMS)
+                .filter(runContext -> currentTimeMS - runContext.startTimeMS() > runProperties.getTimeout().toMillis())
                 .forEach(runContext -> {
                     runContext.setStatus(RunStatus.TIMEOUT);
                     runContext.process().destroyForcibly();

@@ -3,7 +3,7 @@ package com.semihbkgr.gorun.server.service;
 import com.semihbkgr.gorun.server.component.*;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.message.MessageMarshaller;
+import com.semihbkgr.gorun.server.run.RunProperties;
 import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
 import com.semihbkgr.gorun.server.test.ResourceExtension;
 import com.semihbkgr.gorun.server.test.Resources;
@@ -31,18 +31,19 @@ class MessageProcessingServiceImplTest {
     FileNameGenerator fileNameGenerator;
     RunContextTimeoutHandler runContextTimeoutHandler;
     ServerInfoManager serverInfoManager;
-
+    RunProperties runProperties;
 
     @BeforeEach
     void initializeRequiredObjects() throws IOException {
         //TODO mock WebSocketSession
-        this.session = new RunWebSocketSession("",null);
+        this.session = new RunWebSocketSession("", null);
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDirIfNotExists();
         this.fileNameGenerator = new SequentialFileNameGenerator();
-        this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(30_000);
-        this.serverInfoManager=new ServerInfoManagerImpl();
-        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, runContextTimeoutHandler,serverInfoManager);
+        this.runProperties = new RunProperties();
+        this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(runProperties);
+        this.serverInfoManager = new ServerInfoManagerImpl();
+        this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, runContextTimeoutHandler, serverInfoManager);
     }
 
     @AfterEach
@@ -56,7 +57,7 @@ class MessageProcessingServiceImplTest {
     @DisplayName("CommandRunWhenOnGoingProcessDoesNotExists")
     void commandRunWhenOnGoingProcessDoesNotExists() {
         var messageBody = Resources.getResourceAsString("hello.go");
-        var session = new RunWebSocketSession("",null);
+        var session = new RunWebSocketSession("", null);
         var message = Message.of(Action.RUN, messageBody);
         var messageFlux = messageProcessService.process(session, message).log();
         StepVerifier.create(messageFlux)
@@ -89,7 +90,7 @@ class MessageProcessingServiceImplTest {
 
     @Test
     @DisplayName("CommandRunAndInput")
-    void commandRunAndInput() throws InterruptedException {
+    void commandRunAndInput() {
         var runMessage = Message.of(Action.RUN, Resources.getResourceAsString("input.go"));
         var inputData = "inputData";
         var line1 = "Input = ";

@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "run.url",
+      "type": "java.lang.String",
+      "description": "Url endpoint of websocket."
+    },
+    {
+      "name": "run.timeout",
+      "type": "java.time.Duration",
+      "description": "Expiration time of run contexts."
+    },
+    {
+      "name": "run.timeout-check",
+      "type": "java.time.Duration",
+      "description": "Expiration check time interval."
+    }
+  ]
+}
