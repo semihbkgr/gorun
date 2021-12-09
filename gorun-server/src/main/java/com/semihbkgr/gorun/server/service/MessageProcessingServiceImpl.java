@@ -73,13 +73,11 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
                                     .doOnComplete(() -> session.getRunContext().setStatus(RunStatus.COMPLETED))
                     )
-                    .concatWith(
-                            Mono.defer(() -> fileService.deleteFile(session.getRunContext().filename()))
-                                    .then(Mono.defer(() -> Mono.just(Message.of(Action.COMPLETED, String.valueOf(System.currentTimeMillis() - session.getRunContext().startTimeMS()))))
-                                    )
-                                    .doOnTerminate(() -> {
-                                        runContextTimeoutHandler.removeContext(session.getRunContext());
-                                    }));
+                    .doOnTerminate(()->{
+                        //fileService.deleteFile(session.getRunContext().filename());
+                        runContextTimeoutHandler.removeContext(session.getRunContext());
+                    });
+
         } else
             return Flux.just(Message.of(Action.ILLEGAL_ACTION, "This session has  already an on going process"));
     }
@@ -87,11 +85,11 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
     private Flux<Message> processInputAction(RunWebSocketSession session, Message message) {
         if (session.hasRunContext() && session.getRunContext().status() == RunStatus.EXECUTING) {
             return Flux.create(sink -> {
-                final var fos = session.getRunContext().process().getOutputStream();
+                final var os = session.getRunContext().process().getOutputStream();
                 try {
                     var inputData = message.body.concat(System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
-                    fos.write(inputData);
-                    fos.flush();
+                    os.write(inputData);
+                    os.flush();
                     sink.next(Message.of(Action.INPUT_ACK, message.body));
                     sink.complete();
                 } catch (IOException e) {

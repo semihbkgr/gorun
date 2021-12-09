@@ -9,6 +9,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +48,14 @@ class MessageWebSocketListener extends WebSocketListenerWrapper {
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
+        super.onMessage(webSocket, text);
         Message message = messageMarshaller.unmarshall(text);
         messageConsumerList.forEach(i -> i.accept(message));
     }
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull ByteString bytes) {
+        super.onMessage(webSocket, bytes);
         Message message = messageMarshaller.unmarshall(bytes.string(StandardCharsets.UTF_8));
         messageConsumerList.forEach(i -> i.accept(message));
     }

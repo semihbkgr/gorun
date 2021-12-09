@@ -47,6 +47,8 @@ public class RunContextTimeoutHandlerImpl implements RunContextTimeoutHandler {
                 .forEach(runContext -> {
                     runContext.setStatus(RunStatus.TIMEOUT);
                     runContext.process().destroyForcibly();
+                    removeContext(runContext);
+                    log.info("RunContext has been expired successfully");
                 });
     }
 

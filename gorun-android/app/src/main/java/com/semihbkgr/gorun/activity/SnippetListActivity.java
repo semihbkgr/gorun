@@ -43,7 +43,11 @@ public class SnippetListActivity extends AppCompatActivity {
         snippetListView = findViewById(R.id.snippetListView);
         snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);
 
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         AppContext.instance().snippetService.getAllSnippetInfosAsync(new ResponseCallback<List<SnippetInfo>>() {
             @Override
             public void onResponse(List<SnippetInfo> data) {
@@ -74,7 +78,6 @@ public class SnippetListActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 
     private void onSnippetListViewItemClick(AdapterView<?> parent, View view, int position, long id) {

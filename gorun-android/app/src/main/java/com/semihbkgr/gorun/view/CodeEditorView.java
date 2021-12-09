@@ -44,7 +44,7 @@ public class CodeEditorView extends androidx.appcompat.widget.AppCompatEditText 
             canvas.drawText(String.format(Locale.getDefault(), "%03d ", (i + 1)), rect.left + 10, baseline, paint);
             baseline += getLineHeight();
         }
-        canvas.drawLine(60, firstBaseline - getLineHeight(), 60, lineCount * getLineHeight() + firstBaseline - getLineHeight(), paint);
+        canvas.drawLine(60, firstBaseline - getLineHeight(), 60, lineCount * getLineHeight() + firstBaseline - getLineHeight() + 30, paint);
     }
 
     @Override

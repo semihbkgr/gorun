@@ -28,15 +28,15 @@ public class RunWebSocketHandler implements WebSocketHandler {
                 .receive()
                 .doFirst(() -> log.info("Connection, sessionId: " + runWebSocketSession.id, " sessionCount: " + serverInfoManager.increaseSessionCount()))
                 .doOnTerminate(() -> log.info("Disconnection, sessionId: " + runWebSocketSession.id, " sessionCount: " + serverInfoManager.decreaseSessionCount()))
+                .doOnError(Throwable::printStackTrace)
                 .map(WebSocketMessage::getPayloadAsText)
-                .doOnNext(m -> log.info("Incoming message: {}", m.replaceAll("\n", "/")))
+                .doOnNext(m -> log.info("Incoming message: {}", m.replace("\n", "\\")))
                 .map(messageMarshaller::unmarshall)
                 .flatMap(runWebSocketContext::processMessage)
                 .map(messageMarshaller::marshall)
-                .doOnNext(m -> log.info("Outgoing message: {}", m.replaceAll("\n", "/")))
+                .doOnNext(m -> log.info("Outgoing message: {}", m.replace("\n", "\\")))
                 .map(session::textMessage)
-                .flatMap(i -> session.send(Mono.just(i)))
-                .doOnError(Throwable::printStackTrace)
+                .flatMap(m -> session.send(Mono.just(m)))
                 .then();
     }
 

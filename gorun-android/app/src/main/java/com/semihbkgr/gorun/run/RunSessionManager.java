@@ -6,6 +6,8 @@ import com.semihbkgr.gorun.util.WebSocketListenerWrapper;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+import okio.ByteString;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;

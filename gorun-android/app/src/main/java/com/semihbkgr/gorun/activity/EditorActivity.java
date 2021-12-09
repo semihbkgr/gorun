@@ -71,7 +71,7 @@ public class EditorActivity extends AppCompatActivity {
         }
     };
     private final RunSessionObserver runSessionObserver = status -> {
-        Log.i(TAG, "unSessionObserver: status: " + status.name());
+        Log.i(TAG, "RunSessionObserver: status: " + status.name());
         runOnUiThread(() -> updateRunButton(status));
     };
     private AppDialog codeSaveDialog;
@@ -138,8 +138,10 @@ public class EditorActivity extends AppCompatActivity {
 
         consoleTextChangeHandler = new TextChangeHandler(CODE_EDITOR_UPDATE_DELAY_MS);
         consoleTextChangeHandler.addListener((event, text) -> runOnUiThread(() -> {
-            if (event == TextChangeListener.Event.UPDATE) this.consoleTextView.setText(text);
-            else this.consoleTextView.setText(consoleTextView.getText().toString().concat(text));
+            if (event == TextChangeListener.Event.UPDATE)
+                this.consoleTextView.setText(text);
+            else
+                this.consoleTextView.setText(consoleTextView.getText().toString().concat(text));
         }));
 
         AppContext.instance().runSessionManager.registerObserver(runSessionObserver);
@@ -196,7 +198,7 @@ public class EditorActivity extends AppCompatActivity {
                 AppContext.instance().runSessionManager.session().addMessageConsumer(message -> {
                     Log.i(TAG, "Message action: " + message.action.name() + ", body: " + message.body);
                     if (message.action == Action.OUTPUT)
-                        consoleTextView.append(message.body);
+                        consoleTextChangeHandler.append(message.body);
                 });
                 break;
             case CREATING:
@@ -270,6 +272,5 @@ public class EditorActivity extends AppCompatActivity {
         Log.v(TAG, "onTabButtonClicked: button has been clicked");
         codeEditorView.addText("\t");
     }
-
 
 }
