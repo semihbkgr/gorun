@@ -3,14 +3,16 @@ package com.semihbkgr.gorun.server.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 @Service
 @Slf4j
@@ -23,18 +25,46 @@ public class FileServiceImpl implements FileService {
     }
 
     @PostConstruct
-    void createRootDirIfNotExists() throws IOException {
-        if (!Files.exists(rootPath)) {
-            log.info("Root dir does not exists, Path : {}", rootPath);
+    void createRootDir() throws IOException {
+        log.info("Root dir path: {}", rootPath);
+        if (Files.exists(rootPath)) {
+            log.info("Root dir already exists");
+            clearRootDir();
+            log.info("Root dir has been cleared successfully");
+        } else {
+            log.info("Root dir doesn't exist");
             Files.createDirectories(rootPath);
-            log.info("Root dir has been created successfully, Path : {}", rootPath);
-        } else
-            log.info("Root dir already exists, Path : {}", rootPath);
+            log.info("Root dir has been created successfully");
+        }
     }
 
     @PreDestroy
-    void clearAndDeleteRootDir() throws IOException {
-        FileSystemUtils.deleteRecursively(rootPath);
+    void deleteRootDir() throws IOException {
+        if (Files.exists(rootPath)) {
+            clearRootDir();
+            log.info("Root dir has been cleared successfully");
+            Files.delete(rootPath);
+            log.info("Root dir has been deleted successfully");
+        }
+    }
+
+    private void clearRootDir() throws IOException {
+        Files.walkFileTree(rootPath, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                if (!dir.equals(rootPath)) {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+                return FileVisitResult.TERMINATE;
+            }
+        });
     }
 
     @Override
@@ -55,8 +85,8 @@ public class FileServiceImpl implements FileService {
         return Mono.create(sink -> {
             try {
                 var filePath = Path.of(filepath);
-                if(!filePath.isAbsolute())
-                    filePath=rootPath.resolve(filepath);
+                if (!filePath.isAbsolute())
+                    filePath = rootPath.resolve(filepath);
                 Files.delete(filePath);
                 sink.success(filePath.toString());
             } catch (IOException e) {
@@ -69,5 +99,6 @@ public class FileServiceImpl implements FileService {
     public Path getRootDirPath() {
         return this.rootPath;
     }
+
 
 }

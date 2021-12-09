@@ -9,10 +9,10 @@ import lombok.ToString;
 public class Message {
 
     /*
-    * Message format
-    * [action:body]
-    * [action]
-    */
+     * Message format
+     * [action:body]
+     * [action]
+     */
 
     public final Action action;
     public final String body;
@@ -23,7 +23,7 @@ public class Message {
     }
 
     public static Message of(@NonNull Action action, @NonNull String body) {
-        return new Message(action,body);
+        return new Message(action, body);
     }
 
     public static Message of(@NonNull Action action) {

@@ -38,7 +38,7 @@ class MessageProcessingServiceImplTest {
         //TODO mock WebSocketSession
         this.session = new RunWebSocketSession("", null);
         this.fileService = new FileServiceImpl(ROOT_DIR);
-        fileService.createRootDirIfNotExists();
+        fileService.createRootDir();
         this.fileNameGenerator = new SequentialFileNameGenerator();
         this.runProperties = new RunProperties();
         this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(runProperties);
@@ -48,7 +48,7 @@ class MessageProcessingServiceImplTest {
 
     @AfterEach
     void deleteFileServiceRootDir() throws IOException {
-        fileService.clearAndDeleteRootDir();
+        fileService.deleteRootDir();
     }
 
     // Test methods below test only one message at a time.

@@ -11,8 +11,8 @@ public class RunWebSocketContext {
     private final RunWebSocketSession session;
     private final MessageProcessingService messageProcessingService;
 
-    public Flux<Message> processMessage (Message message){
-        return messageProcessingService.process(session,message);
+    public Flux<Message> processMessage(Message message) {
+        return messageProcessingService.process(session, message);
     }
 
 }

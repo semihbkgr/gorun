@@ -16,12 +16,12 @@ class FileServiceImplTest {
 
     @BeforeEach
     void createRootDir() throws IOException {
-        fileService.createRootDirIfNotExists();
+        fileService.createRootDir();
     }
 
     @AfterEach
     void deleteRootDir() throws IOException {
-        fileService.clearAndDeleteRootDir();
+        fileService.deleteRootDir();
     }
 
     @Test

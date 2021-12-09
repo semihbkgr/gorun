@@ -18,7 +18,7 @@ public class LocalFileSnippetJsonLoader implements CommandLineRunner {
     private final String fileName;
 
     public LocalFileSnippetJsonLoader(InMemorySnippetHoldingStrategy inMemorySnippetHoldingStrategy,
-                                      ObjectMapper objectMapper,@Value("${snippet.file-path:snippets.json}") String fileName) {
+                                      ObjectMapper objectMapper, @Value("${snippet.file-path:snippets.json}") String fileName) {
         this.inMemorySnippetHoldingStrategy = inMemorySnippetHoldingStrategy;
         this.objectMapper = objectMapper;
         this.fileName = fileName;

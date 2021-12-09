@@ -18,9 +18,9 @@ class InMemorySnippetHoldingStrategyTest {
 
     @BeforeAll
     static void createSnippets() {
-        snippetList.add(new Snippet(1,1,-1, "title1", "brief1", "explanation1", "code1"));
-        snippetList.add(new Snippet(2,1,-1, "title2", "brief2", "explanation2", "code2"));
-        snippetList.add(new Snippet(3,1,-1, "title3", "brief3", "explanation3", "code3"));
+        snippetList.add(new Snippet(1, 1, -1, "title1", "brief1", "explanation1", "code1"));
+        snippetList.add(new Snippet(2, 1, -1, "title2", "brief2", "explanation2", "code2"));
+        snippetList.add(new Snippet(3, 1, -1, "title3", "brief3", "explanation3", "code3"));
     }
 
     @BeforeEach

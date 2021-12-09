@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server.message;
 
-public class MessageMarshallException extends RuntimeException{
+public class MessageMarshallException extends RuntimeException {
 
     public MessageMarshallException() {
     }

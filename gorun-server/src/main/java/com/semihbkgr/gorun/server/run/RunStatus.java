@@ -6,6 +6,6 @@ public enum RunStatus {
     COMPLETED,
     INTERRUPTED,
     TIMEOUT,
-    ERROR;
+    ERROR
 
 }

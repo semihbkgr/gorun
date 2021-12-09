@@ -7,10 +7,10 @@ public abstract class AbstractRunContext implements RunContext {
     protected final long startTimeMS;
     protected RunStatus status;
 
-    protected AbstractRunContext(Process process, String filename,long startTimeMS) {
+    protected AbstractRunContext(Process process, String filename, long startTimeMS) {
         this.process = process;
         this.filename = filename;
-        this.startTimeMS=startTimeMS;
+        this.startTimeMS = startTimeMS;
         this.status = RunStatus.EXECUTING;
     }
 

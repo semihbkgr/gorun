@@ -3,8 +3,8 @@ package com.semihbkgr.gorun.server.message;
 public enum Action {
 
     /*
-    * Command Actions
-    */
+     * Command Actions
+     */
 
     // [RUN:<code>]
     // Starting code execution
@@ -19,8 +19,8 @@ public enum Action {
     INTERRUPT,
 
     /*
-    * Acknowledgement Actions
-    */
+     * Acknowledgement Actions
+     */
 
     // [RUN_ACK:<start_time_in_ms>]
     // Acknowledgement of run action
@@ -52,6 +52,6 @@ public enum Action {
 
     // [SYSTEM_ERROR:<reason_text>]
     // Acknowledgement of system based errors
-    SYSTEM_ERROR;
+    SYSTEM_ERROR
 
 }

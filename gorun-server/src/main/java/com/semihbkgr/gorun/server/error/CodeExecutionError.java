@@ -1,6 +1,6 @@
 package com.semihbkgr.gorun.server.error;
 
-public class CodeExecutionError extends RuntimeException{
+public class CodeExecutionError extends RuntimeException {
 
     public CodeExecutionError() {
     }

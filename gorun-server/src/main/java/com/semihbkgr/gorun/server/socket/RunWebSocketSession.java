@@ -22,12 +22,12 @@ public class RunWebSocketSession {
         return runContextReference.get() != null;
     }
 
-    public void setRunContext(@NonNull RunContext runContext){
-        runContextReference.set(runContext);
-    }
-
     public RunContext getRunContext() {
         return runContextReference.get();
+    }
+
+    public void setRunContext(@NonNull RunContext runContext) {
+        runContextReference.set(runContext);
     }
 
 }
