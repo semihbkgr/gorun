@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class SnippetActivity extends AppCompatActivity {
     private TextView titleTextView;
     private TextView explanationTextView;
     private TextView codeTextView;
+    private Button startButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class SnippetActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.snippetTitle);
         explanationTextView = findViewById(R.id.snippetExplanation);
         codeTextView = findViewById(R.id.snippetCode);
+        startButton = findViewById(R.id.startButton);
 
         int snippetId = getIntent().getIntExtra(AppConstants.Values.INTENT_SNIPPET_ID_NAME, Integer.MIN_VALUE);
         Log.i(TAG, "onCreate: snippetId: " + snippetId);
@@ -52,7 +55,7 @@ public class SnippetActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Exception e) {
                     runOnUiThread(() -> {
-                        startActivity(new Intent(SnippetActivity.this, MenuActivity.class));
+                        startActivity(new Intent(SnippetActivity.this, MainActivity.class));
                         Toast.makeText(SnippetActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
                     });
                 }
@@ -60,7 +63,7 @@ public class SnippetActivity extends AppCompatActivity {
         } else {
             Log.w(TAG, "onCreate: Illegal snippetId");
             Toast.makeText(this, "Illegal snippetId", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, MenuActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
 
     }
@@ -69,6 +72,11 @@ public class SnippetActivity extends AppCompatActivity {
         titleTextView.setText(snippet.title);
         explanationTextView.setText(snippet.explanation);
         codeTextView.setText(snippet.code);
+        startButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditorActivity.class);
+            intent.putExtra(AppConstants.Values.INTENT_SNIPPET_CODE_NAME, snippet.code);
+            startActivity(intent);
+        });
     }
 
     @Override

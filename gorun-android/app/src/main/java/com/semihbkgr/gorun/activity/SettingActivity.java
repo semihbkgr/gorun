@@ -34,6 +34,8 @@ public class SettingActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        deleteSubjectsButton=findViewById(R.id.buttonDeleteSubjects);
+
         deleteSubjectsButton.setOnClickListener(this::onButtonClearSubjectClicked);
 
     }

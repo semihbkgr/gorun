@@ -31,4 +31,10 @@
             android:id="@+id/snippetCode"
             android:textColor="@color/gray"/>
 
+    <Button
+            android:text="@string/start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/startButton"/>
+
 </LinearLayout>

@@ -28,9 +28,9 @@ import com.semihbkgr.gorun.run.RunSessionStatus;
 import com.semihbkgr.gorun.util.view.TextChangeHandler;
 import com.semihbkgr.gorun.util.view.TextChangeListener;
 
-public class RunActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity {
 
-    private static final String TAG = RunActivity.class.getName();
+    private static final String TAG = EditorActivity.class.getName();
     private static final int CODE_EDITOR_UPDATE_DELAY_MS = 500;
 
     private CodeEditor codeEditor;
@@ -85,7 +85,7 @@ public class RunActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_run);
+        setContentView(R.layout.activity_editor);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -151,6 +151,8 @@ public class RunActivity extends AppCompatActivity {
         super.onStart();
         if (AppContext.instance().runSessionManager.getStatus() == RunSessionStatus.NO_SESSION)
             AppContext.instance().runSessionManager.connect();
+        String code=getIntent().getStringExtra(AppConstants.Values.INTENT_SNIPPET_CODE_NAME);
+        if(code!=null) codeEditor.setText(code);
     }
 
     @Override
@@ -231,7 +233,7 @@ public class RunActivity extends AppCompatActivity {
         }
         loadedCode.setContent(codeEditor.getText().toString());
         AppContext.instance().executorService.execute(()->{
-            AppContext.instance().codeService.save(code);
+            AppContext.instance().codeService.save(null);
         });
 
     }

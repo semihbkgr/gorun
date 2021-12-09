@@ -23,16 +23,16 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
-public class SnippetInfoActivity extends AppCompatActivity {
+public class SnippetListActivity extends AppCompatActivity {
 
-    private static final String TAG = SnippetInfoActivity.class.getName();
+    private static final String TAG = SnippetListActivity.class.getName();
 
     private ListView snippetListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_snippet_info);
+        setContentView(R.layout.activity_snippet_list);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -62,7 +62,7 @@ public class SnippetInfoActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Exception e) {
-                runOnUiThread(() -> Toast.makeText(SnippetInfoActivity.this, "Connection error", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(SnippetListActivity.this, "Connection error", Toast.LENGTH_SHORT).show());
                 AppContext.instance().executorService.execute(() -> {
                     List<SnippetInfo> savedSnippetInfoList = AppContext.instance().snippetService.getAllSavedSnippetInfos();
                     List<SnippetInfoViewModelHolder> snippetInfoViewModelHolderList = savedSnippetInfoList.parallelStream()
