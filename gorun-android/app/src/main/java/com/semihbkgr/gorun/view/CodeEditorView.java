@@ -17,13 +17,17 @@ public class CodeEditorView extends androidx.appcompat.widget.AppCompatEditText 
     private final Rect rect;
     private final Paint paint;
 
+
     public CodeEditorView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setPadding(70, 10, 50, 10);
         rect = new Rect();
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.GRAY);
-        paint.setTextSize(40);
+        paint.setColor(Color.DKGRAY);
+        paint.setTextSize(25);
+        paint.setAntiAlias(false);
+        paint.setSubpixelText(false);
         setHorizontallyScrolling(true);
         setMovementMethod(new ScrollingMovementMethod());
     }
@@ -31,11 +35,16 @@ public class CodeEditorView extends androidx.appcompat.widget.AppCompatEditText 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int baseline = getBaseline();
+        paint.setStrokeWidth(3);
+        final int firstBaseline = getBaseline();
+        int baseline = firstBaseline;
+        int lineCount = 0;
         for (int i = 0; i < getLineCount(); i++) {
-            canvas.drawText(String.format(Locale.getDefault(), "%3d:", (i + 1)), rect.left, baseline, paint);
+            lineCount++;
+            canvas.drawText(String.format(Locale.getDefault(), "%03d ", (i + 1)), rect.left + 10, baseline, paint);
             baseline += getLineHeight();
         }
+        canvas.drawLine(60, firstBaseline - getLineHeight(), 60, lineCount * getLineHeight() + firstBaseline - getLineHeight(), paint);
     }
 
     @Override
@@ -43,9 +52,9 @@ public class CodeEditorView extends androidx.appcompat.widget.AppCompatEditText 
         super.setText(text, type);
         if (getText() != null) {
             int lineCount = stringLineCount(getText().toString());
-            if (lineCount < 20) {
+            if (lineCount < 10) {
                 String padding = "";
-                for (int i = lineCount; i <= 20; i++)
+                for (int i = lineCount; i <= 10; i++)
                     padding = padding.concat(System.lineSeparator());
                 getText().append(padding);
             }

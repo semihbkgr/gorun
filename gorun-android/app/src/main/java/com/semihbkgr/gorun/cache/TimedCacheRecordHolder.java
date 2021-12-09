@@ -7,7 +7,7 @@ class TimedCacheRecordHolder<T> {
 
     public TimedCacheRecordHolder(T record) {
         this.record = record;
-        this.time=System.currentTimeMillis();
+        this.time = System.currentTimeMillis();
     }
 
 }

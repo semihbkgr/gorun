@@ -1,12 +1,10 @@
 package com.semihbkgr.gorun.run;
 
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.message.MessageMarshaller;
 import com.semihbkgr.gorun.util.WebSocketListenerWrapper;
-import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;

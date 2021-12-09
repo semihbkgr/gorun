@@ -26,8 +26,8 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
 
     @Override
     public boolean sendMessage(Message message) {
-        boolean sent=webSocket.send(messageMarshaller.marshall(message));
-        if(sent)
+        boolean sent = webSocket.send(messageMarshaller.marshall(message));
+        if (sent)
             Log.i(TAG, String.format("sendMessage: Message was enqueued successfully, Action : %s", message.action.name()));
         else
             Log.w(TAG, "sendMessage: Message cannot be enqueued");
@@ -35,9 +35,9 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
     }
 
     @Override
-    public  boolean addMessageConsumer(Consumer<Message> consumer) {
-        boolean added=messageWebSocketListener.addMessageConsumer(consumer);
-        if(added)
+    public boolean addMessageConsumer(Consumer<Message> consumer) {
+        boolean added = messageWebSocketListener.addMessageConsumer(consumer);
+        if (added)
             Log.i(TAG, "Consumer was added to session successfully");
         else
             Log.w(TAG, "addMessageConsumer: Consumer cannot be added");
@@ -46,8 +46,8 @@ public class RunWebSocketSessionImpl implements RunWebSocketSession {
 
     @Override
     public boolean close() {
-        boolean closed=webSocket.close(1000,"App is closing");
-        if(closed)
+        boolean closed = webSocket.close(1000, "App is closing");
+        if (closed)
             Log.i(TAG, "close: web socket is gracefully closing");
         else
             Log.w(TAG, "close: web socket cannot be started closing");

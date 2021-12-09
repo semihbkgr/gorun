@@ -29,7 +29,7 @@ public class CodeServiceImpl implements CodeService {
 
     @Override
     public Code update(int id, @NonNull Code code) {
-        return codeRepository.update(id,code);
+        return codeRepository.update(id, code);
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CacheableCodeServiceImpl extends CodeServiceImpl {
 
-    private final TimedCacheService<Integer,Code> codeCacheService;
+    private final TimedCacheService<Integer, Code> codeCacheService;
 
     public CacheableCodeServiceImpl(@NonNull @NotNull CodeRepository codeRepository,
                                     @NonNull TimedCacheService<Integer, Code> codeCacheService) {

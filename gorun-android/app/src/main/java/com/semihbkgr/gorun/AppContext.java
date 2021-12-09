@@ -20,8 +20,6 @@ import com.semihbkgr.gorun.snippet.client.SnippetClient;
 import com.semihbkgr.gorun.snippet.client.SnippetClientImpl;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepository;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepositoryImpl;
-import com.semihbkgr.gorun.view.highlight.CodeHighlighter;
-import com.semihbkgr.gorun.view.highlight.DefaultCodeHighlighter;
 import okhttp3.OkHttpClient;
 
 import java.util.concurrent.ExecutorService;

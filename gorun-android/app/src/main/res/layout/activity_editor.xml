@@ -108,12 +108,11 @@
             android:gravity="center"
             android:clipToPadding="false"
             android:orientation="vertical">
-        <com.semihbkgr.gorun.editor.CodeEditor
+        <com.semihbkgr.gorun.view.CodeEditorView
                 android:text="@string/code_hello_world"
                 android:id="@+id/codeEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="35dp"
                 android:lines="13"
                 android:background="@drawable/background_code_edit_view"
                 android:scrollHorizontally="true"

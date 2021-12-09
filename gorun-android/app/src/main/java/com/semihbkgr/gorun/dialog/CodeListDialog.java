@@ -78,18 +78,18 @@ public class CodeListDialog extends AbstractAppDialog {
     private void onCodeListViewItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.i(TAG, "onCodeListViewItemClick code selected");
         CodeInfo codeInfo = (CodeInfo) codeListView.getAdapter().getItem(position);
-        executor.execute(()->{
-            Code code=codeService.getById(codeInfo.getId());
-            if(code!=null){
-                Log.i(TAG, "onCodeListViewItemClick: Code clicked in the list can be found successfully, id: "+code.getId());
-                new Handler(getContext().getMainLooper()).post(()->{
-                   codeSelectedListener.accept(code);
-                   Toast.makeText(getContext(),String.format("Code '%s' loaded successfully",code.getTitle()),Toast.LENGTH_SHORT).show();
+        executor.execute(() -> {
+            Code code = codeService.getById(codeInfo.getId());
+            if (code != null) {
+                Log.i(TAG, "onCodeListViewItemClick: Code clicked in the list can be found successfully, id: " + code.getId());
+                new Handler(getContext().getMainLooper()).post(() -> {
+                    codeSelectedListener.accept(code);
+                    Toast.makeText(getContext(), String.format("Code '%s' loaded successfully", code.getTitle()), Toast.LENGTH_SHORT).show();
                 });
-            }else{
-                Log.i(TAG, "onCodeListViewItemClick: Code clicked in list, id: "+code.getId());
-                new Handler(getContext().getMainLooper()).post(()->{
-                    Toast.makeText(getContext(),String.format("Code '%s' cannot be loaded",code.getTitle()),Toast.LENGTH_SHORT).show();
+            } else {
+                Log.i(TAG, "onCodeListViewItemClick: Code clicked in list, id: " + code.getId());
+                new Handler(getContext().getMainLooper()).post(() -> {
+                    Toast.makeText(getContext(), String.format("Code '%s' cannot be loaded", code.getTitle()), Toast.LENGTH_SHORT).show();
                 });
             }
         });

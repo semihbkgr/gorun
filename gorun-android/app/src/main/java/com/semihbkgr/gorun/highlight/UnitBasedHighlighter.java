@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.view.highlight;
+package com.semihbkgr.gorun.highlight;
 
 import java.util.List;
 

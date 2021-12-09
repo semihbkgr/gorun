@@ -10,7 +10,7 @@ public interface CodeRepository {
 
     Code save(Code code);
 
-    Code update(int id,Code code);
+    Code update(int id, Code code);
 
     int delete(int id);
 

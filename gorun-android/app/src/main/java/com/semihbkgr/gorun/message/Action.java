@@ -52,6 +52,6 @@ public enum Action {
 
     // [SYSTEM_ERROR:<reason_text>]
     // Acknowledgement of system based errors
-    SYSTEM_ERROR;
+    SYSTEM_ERROR
 
 }

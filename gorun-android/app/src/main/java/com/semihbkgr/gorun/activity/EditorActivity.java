@@ -20,6 +20,8 @@ import com.semihbkgr.gorun.code.Code;
 import com.semihbkgr.gorun.dialog.AppDialog;
 import com.semihbkgr.gorun.dialog.CodeListDialog;
 import com.semihbkgr.gorun.dialog.CodeSaveDialog;
+import com.semihbkgr.gorun.highlight.CodeHighlighter;
+import com.semihbkgr.gorun.highlight.DefaultCodeHighlighter;
 import com.semihbkgr.gorun.message.Action;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.run.RunSessionObserver;
@@ -28,8 +30,6 @@ import com.semihbkgr.gorun.util.TextChangeHandler;
 import com.semihbkgr.gorun.util.TextChangeListener;
 import com.semihbkgr.gorun.util.TextWatcherAdapter;
 import com.semihbkgr.gorun.view.CodeEditorView;
-import com.semihbkgr.gorun.view.highlight.CodeHighlighter;
-import com.semihbkgr.gorun.view.highlight.DefaultCodeHighlighter;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -106,6 +106,8 @@ public class EditorActivity extends AppCompatActivity {
         this.codeSaveImageButton = findViewById(R.id.codeSaveImageButton);
 
         this.codeHighlighter = new DefaultCodeHighlighter(codeEditorView, AppConstants.Highlights.HIGHLIGHT_UNIT_LIST);
+
+        AppContext.instance().executorService.execute(codeHighlighter::highlight);
         codeEditorView.addTextChangedListener((TextWatcherAdapter) (s, start, before, count) ->
                 AppContext.instance().executorService.execute(codeHighlighter::highlight));
 

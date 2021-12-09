@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.view.highlight;
+package com.semihbkgr.gorun.highlight;
 
 import android.text.Editable;
 import android.text.Spanned;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class DefaultCodeHighlighter extends UnitBasedHighlighter {
 
     private final TextView textView;
-    private AtomicReference<List<CharacterStyle>> characterStyleSpanListReference;
+    private final AtomicReference<List<CharacterStyle>> characterStyleSpanListReference;
 
     public DefaultCodeHighlighter(TextView textView, List<? extends HighlightUnit> highlightUnitList) {
         super(highlightUnitList);

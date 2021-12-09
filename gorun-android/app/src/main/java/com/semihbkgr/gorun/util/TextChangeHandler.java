@@ -18,8 +18,8 @@ public class TextChangeHandler implements Runnable {
     private final AtomicBoolean isRunning;
     private final AtomicBoolean forceUpdate;
     private final AtomicBoolean isUpdate;
-    private AtomicLong textLastUpdateTimeMs;
-    private StringBuilder fullText;
+    private final AtomicLong textLastUpdateTimeMs;
+    private final StringBuilder fullText;
 
     public TextChangeHandler(long delay) {
         if (delay < 0)
@@ -38,8 +38,8 @@ public class TextChangeHandler implements Runnable {
         thread.start();
     }
 
-    public void addListener(TextChangeListener textChangeListener){
-        if(textChangeListener!=null) this.textChangeListenerList.add(textChangeListener);
+    public void addListener(TextChangeListener textChangeListener) {
+        if (textChangeListener != null) this.textChangeListenerList.add(textChangeListener);
         else Log.w(TAG, "addListener: TextChangeListener cannot be null");
     }
 

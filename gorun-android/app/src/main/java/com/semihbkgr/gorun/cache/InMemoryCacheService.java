@@ -9,7 +9,7 @@ public class InMemoryCacheService<I, R> implements CacheService<I, R> {
     private final Map<I, R> recordMap;
 
     public InMemoryCacheService() {
-        this.recordMap=new HashMap<>();
+        this.recordMap = new HashMap<>();
     }
 
     @Override
@@ -24,17 +24,17 @@ public class InMemoryCacheService<I, R> implements CacheService<I, R> {
 
     @Override
     public R get(I id, R def) {
-        return isAvailable(id)?recordMap.get(id):def;
+        return isAvailable(id) ? recordMap.get(id) : def;
     }
 
     @Override
     public void cache(I id, R record) {
-        recordMap.put(id,record);
+        recordMap.put(id, record);
     }
 
     @Override
     public boolean invalidate(I id) {
-        return recordMap.remove(id)!=null;
+        return recordMap.remove(id) != null;
     }
 
     @Override
