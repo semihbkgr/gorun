@@ -9,50 +9,50 @@ import okio.ByteString;
 
 public abstract class WebSocketListenerWrapper extends WebSocketListener {
 
-    private final WebSocketListener webSocketListener;
+    private final WebSocketListener proxy;
 
     protected WebSocketListenerWrapper() {
         this(null);
     }
 
-    protected WebSocketListenerWrapper(@Nullable WebSocketListener webSocketListener) {
-        this.webSocketListener = webSocketListener;
+    protected WebSocketListenerWrapper(@Nullable WebSocketListener proxy) {
+        this.proxy = proxy;
     }
 
     @Override
     public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
-        if (webSocketListener != null)
-            webSocketListener.onClosed(webSocket, code, reason);
+        if (proxy != null)
+            proxy.onClosed(webSocket, code, reason);
     }
 
     @Override
     public void onClosing(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
-        if (webSocketListener != null)
-            webSocketListener.onClosing(webSocket, code, reason);
+        if (proxy != null)
+            proxy.onClosing(webSocket, code, reason);
     }
 
     @Override
     public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
-        if (webSocketListener != null)
-            webSocketListener.onFailure(webSocket, t, response);
+        if (proxy != null)
+            proxy.onFailure(webSocket, t, response);
     }
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
-        if (webSocketListener != null)
-            webSocketListener.onMessage(webSocket, text);
+        if (proxy != null)
+            proxy.onMessage(webSocket, text);
     }
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull ByteString bytes) {
-        if (webSocketListener != null)
-            webSocketListener.onMessage(webSocket, bytes);
+        if (proxy != null)
+            proxy.onMessage(webSocket, bytes);
     }
 
     @Override
     public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
-        if (webSocketListener != null)
-            webSocketListener.onOpen(webSocket, response);
+        if (proxy != null)
+            proxy.onOpen(webSocket, response);
     }
 
 }

@@ -4,14 +4,22 @@ import java.util.Objects;
 
 public class HighlightUnit {
 
-    public final String[] strings;
-    public final boolean isIntermittent;
+    public final String[] startSyntaxes;
+    public final String[] endSyntaxes;
     public final int style;
 
-    public HighlightUnit(String[] strings, boolean isIntermittent, int style) {
-        this.strings = Objects.requireNonNull(strings);
-        this.isIntermittent = isIntermittent;
+    public HighlightUnit(String[] startSyntaxes, String[] endSyntaxes, int style) {
+        this.startSyntaxes = Objects.requireNonNull(startSyntaxes);
+        this.endSyntaxes = endSyntaxes;
         this.style = style;
+    }
+
+    public HighlightUnit(String[] startSyntaxes, int style) {
+        this(startSyntaxes, null, style);
+    }
+
+    public boolean isIntermittent() {
+        return endSyntaxes == null;
     }
 
 }

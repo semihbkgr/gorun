@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.util.view;
+package com.semihbkgr.gorun.util;
 
 import android.text.Editable;
 import android.text.TextWatcher;

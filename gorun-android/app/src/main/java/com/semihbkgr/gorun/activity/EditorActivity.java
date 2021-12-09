@@ -20,20 +20,29 @@ import com.semihbkgr.gorun.code.Code;
 import com.semihbkgr.gorun.dialog.AppDialog;
 import com.semihbkgr.gorun.dialog.CodeListDialog;
 import com.semihbkgr.gorun.dialog.CodeSaveDialog;
-import com.semihbkgr.gorun.editor.CodeEditor;
 import com.semihbkgr.gorun.message.Action;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.run.RunSessionObserver;
 import com.semihbkgr.gorun.run.RunSessionStatus;
-import com.semihbkgr.gorun.util.view.TextChangeHandler;
-import com.semihbkgr.gorun.util.view.TextChangeListener;
+import com.semihbkgr.gorun.util.TextChangeHandler;
+import com.semihbkgr.gorun.util.TextChangeListener;
+import com.semihbkgr.gorun.util.TextWatcherAdapter;
+import com.semihbkgr.gorun.view.CodeEditorView;
+import com.semihbkgr.gorun.view.highlight.CodeHighlighter;
+import com.semihbkgr.gorun.view.highlight.DefaultCodeHighlighter;
 
 public class EditorActivity extends AppCompatActivity {
 
     private static final String TAG = EditorActivity.class.getName();
     private static final int CODE_EDITOR_UPDATE_DELAY_MS = 500;
-
-    private CodeEditor codeEditor;
+    private final View.OnClickListener noSessionOnClickListener = view -> {
+        AppContext.instance().runSessionManager.connect();
+    };
+    private CodeEditorView codeEditorView;
+    private final View.OnClickListener hasSessionOnClickListener = view -> {
+        String code = codeEditorView.getText().toString();
+        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.RUN, code));
+    };
     private EditText consoleEditText;
     private ImageButton runButton;
     private Button consoleButton;
@@ -48,18 +57,8 @@ public class EditorActivity extends AppCompatActivity {
     private TextView infoTextView;
     private TextView codeTitleTextView;
     private ImageButton codeSaveImageButton;
-
+    private CodeHighlighter codeHighlighter;
     private Toast connectingToast;
-    private AppDialog codeSaveDialog;
-    private AppDialog codeListDialog;
-
-    private Code loadedCode;
-
-    private final RunSessionObserver runSessionObserver = status -> {
-        Log.i(TAG, "unSessionObserver: status: " + status.name());
-        runOnUiThread(() -> updateRunButton(status));
-    };
-
     private final View.OnClickListener creatingOnClickListener = view -> {
         // Show 'connecting' toast massage if it is not showing at that time.
         try {
@@ -71,16 +70,13 @@ public class EditorActivity extends AppCompatActivity {
             connectingToast.show();
         }
     };
-
-    private final View.OnClickListener noSessionOnClickListener = view -> {
-        AppContext.instance().runSessionManager.connect();
+    private final RunSessionObserver runSessionObserver = status -> {
+        Log.i(TAG, "unSessionObserver: status: " + status.name());
+        runOnUiThread(() -> updateRunButton(status));
     };
-
-    private final View.OnClickListener hasSessionOnClickListener = view -> {
-        String code = codeEditor.getText().toString();
-        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.RUN, code));
-    };
-
+    private AppDialog codeSaveDialog;
+    private AppDialog codeListDialog;
+    private Code loadedCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +90,7 @@ public class EditorActivity extends AppCompatActivity {
         }
 
         // Find and assign components.
-        this.codeEditor = findViewById(R.id.codeEditText);
+        this.codeEditorView = findViewById(R.id.codeEditText);
         this.consoleTextView = findViewById(R.id.outputTextView);
         this.consoleEditText = findViewById(R.id.inputEditText);
         this.consoleButton = findViewById(R.id.inputButton);
@@ -106,18 +102,22 @@ public class EditorActivity extends AppCompatActivity {
         this.quoteButton = findViewById(R.id.quoteButton);
         this.tabButton = findViewById(R.id.tabButton);
         this.infoTextView = findViewById(R.id.infoTextView);
-        this.codeTitleTextView=findViewById(R.id.codeTitleTextView);
-        this.codeSaveImageButton=findViewById(R.id.codeSaveImageButton);
+        this.codeTitleTextView = findViewById(R.id.codeTitleTextView);
+        this.codeSaveImageButton = findViewById(R.id.codeSaveImageButton);
+
+        this.codeHighlighter = new DefaultCodeHighlighter(codeEditorView, AppConstants.Highlights.HIGHLIGHT_UNIT_LIST);
+        codeEditorView.addTextChangedListener((TextWatcherAdapter) (s, start, before, count) ->
+                AppContext.instance().executorService.execute(codeHighlighter::highlight));
 
         this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
 
-        this.codeSaveDialog=new CodeSaveDialog(this,R.style.Theme_AppCompat_Dialog,
+        this.codeSaveDialog = new CodeSaveDialog(this, R.style.Theme_AppCompat_Dialog,
                 AppContext.instance().codeService, AppContext.instance().executorService);
-        this.codeListDialog=new CodeListDialog(this,R.style.Theme_AppCompat_Dialog,
+        this.codeListDialog = new CodeListDialog(this, R.style.Theme_AppCompat_Dialog,
                 AppContext.instance().codeService, AppContext.instance().executorService,
-                code->{
-                    this.loadedCode=code;
-                    codeEditor.setText(code.getContent());
+                code -> {
+                    this.loadedCode = code;
+                    codeEditorView.setText(code.getContent());
                     codeTitleTextView.setVisibility(View.VISIBLE);
                     codeTitleTextView.setText(code.getTitle());
                     codeSaveImageButton.setVisibility(View.VISIBLE);
@@ -151,8 +151,8 @@ public class EditorActivity extends AppCompatActivity {
         super.onStart();
         if (AppContext.instance().runSessionManager.getStatus() == RunSessionStatus.NO_SESSION)
             AppContext.instance().runSessionManager.connect();
-        String code=getIntent().getStringExtra(AppConstants.Values.INTENT_SNIPPET_CODE_NAME);
-        if(code!=null) codeEditor.setText(code);
+        String code = getIntent().getStringExtra(AppConstants.Values.INTENT_SNIPPET_CODE_NAME);
+        if (code != null) codeEditorView.setText(code);
     }
 
     @Override
@@ -174,9 +174,9 @@ public class EditorActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.addItem) {
-            codeSaveDialog.addProperty(AppConstants.Values.DIALOG_PROPERTY_CODE_CONTENT,codeEditor.getText().toString());
+            codeSaveDialog.addProperty(AppConstants.Values.DIALOG_PROPERTY_CODE_CONTENT, codeEditorView.getText().toString());
             codeSaveDialog.show();
-        }else if(item.getItemId()==R.id.listItem){
+        } else if (item.getItemId() == R.id.listItem) {
             codeListDialog.show();
         }
         return super.onOptionsItemSelected(item);
@@ -228,11 +228,11 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void onCodeSaveImageButtonClicked(View v) {
-        if(loadedCode==null){
+        if (loadedCode == null) {
             return;
         }
-        loadedCode.setContent(codeEditor.getText().toString());
-        AppContext.instance().executorService.execute(()->{
+        loadedCode.setContent(codeEditorView.getText().toString());
+        AppContext.instance().executorService.execute(() -> {
             AppContext.instance().codeService.save(null);
         });
 
@@ -241,32 +241,32 @@ public class EditorActivity extends AppCompatActivity {
 
     private void onLeftBraceButtonClicked(View view) {
         Log.v(TAG, "onLeftBraceButtonClicked: button has been clicked");
-        codeEditor.addText("(");
+        codeEditorView.addText("(");
     }
 
     private void onRightBraceButtonClicked(View view) {
         Log.v(TAG, "onRightBraceButtonClicked: button has been clicked");
-        codeEditor.addText(")");
+        codeEditorView.addText(")");
     }
 
     private void onLeftCurlyBraceButtonClicked(View view) {
         Log.v(TAG, "onLeftCurlyBraceButtonClicked: button has been clicked");
-        codeEditor.addText("{");
+        codeEditorView.addText("{");
     }
 
     private void onRightCurlyBraceButtonClicked(View view) {
         Log.v(TAG, "onRightCurlyBraceButtonClicked: button has been clicked");
-        codeEditor.addText("}");
+        codeEditorView.addText("}");
     }
 
     private void onQuoteButtonClicked(View view) {
         Log.v(TAG, "onQuoteButtonClicked: button has been clicked");
-        codeEditor.quote();
+        codeEditorView.quote();
     }
 
     private void onTabButtonClicked(View view) {
         Log.v(TAG, "onTabButtonClicked: button has been clicked");
-        codeEditor.addText("\t");
+        codeEditorView.addText("\t");
     }
 
 
