@@ -16,6 +16,7 @@ import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.snippet.Snippet;
+import com.semihbkgr.gorun.util.ActivityUtils;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 public class SnippetActivity extends AppCompatActivity {
@@ -32,11 +33,7 @@ public class SnippetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snippet);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("GoRun");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        ActivityUtils.loadActionBar(this, "GoRun");
 
         titleTextView = findViewById(R.id.snippetTitle);
         explanationTextView = findViewById(R.id.snippetExplanation);

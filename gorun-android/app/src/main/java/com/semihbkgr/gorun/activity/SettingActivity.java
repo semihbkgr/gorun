@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.util.ActivityUtils;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -25,11 +26,7 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("Setting");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        ActivityUtils.loadActionBar(this, "Setting");
 
         deleteSubjectsButton = findViewById(R.id.buttonDeleteSubjects);
 

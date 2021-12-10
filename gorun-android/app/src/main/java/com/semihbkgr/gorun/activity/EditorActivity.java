@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.AppContext;
@@ -26,23 +25,16 @@ import com.semihbkgr.gorun.message.Action;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.run.RunSessionObserver;
 import com.semihbkgr.gorun.run.RunSessionStatus;
-import com.semihbkgr.gorun.util.TextChangeHandler;
-import com.semihbkgr.gorun.util.TextChangeListener;
+import com.semihbkgr.gorun.util.ActivityUtils;
 import com.semihbkgr.gorun.util.TextWatcherAdapter;
 import com.semihbkgr.gorun.view.CodeEditorView;
 
 public class EditorActivity extends AppCompatActivity {
 
     private static final String TAG = EditorActivity.class.getName();
-    private static final int CODE_EDITOR_UPDATE_DELAY_MS = 500;
-    private final View.OnClickListener noSessionOnClickListener = view -> {
-        AppContext.instance().runSessionManager.connect();
-    };
+
+    // UI Components
     private CodeEditorView codeEditorView;
-    private final View.OnClickListener hasSessionOnClickListener = view -> {
-        String code = codeEditorView.getText().toString();
-        AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.RUN, code));
-    };
     private EditText consoleEditText;
     private ImageButton runButton;
     private Button consoleButton;
@@ -53,43 +45,28 @@ public class EditorActivity extends AppCompatActivity {
     private Button rightCurlyBraceButton;
     private Button quoteButton;
     private Button tabButton;
-    private TextChangeHandler consoleTextChangeHandler;
     private TextView infoTextView;
     private TextView codeTitleTextView;
     private ImageButton codeSaveImageButton;
-    private CodeHighlighter codeHighlighter;
-    private Toast connectingToast;
-    private final View.OnClickListener creatingOnClickListener = view -> {
-        // Show 'connecting' toast massage if it is not showing at that time.
-        try {
-            if (!connectingToast.getView().isShown()) {
-                connectingToast.show();
-            }
-        } catch (Exception e) {
-            this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
-            connectingToast.show();
-        }
-    };
-    private final RunSessionObserver runSessionObserver = status -> {
-        Log.i(TAG, "RunSessionObserver: status: " + status.name());
-        runOnUiThread(() -> updateRunButton(status));
-    };
     private AppDialog codeSaveDialog;
     private AppDialog codeListDialog;
+
+    // Common used toast
+    private Toast toast;
+
     private Code loadedCode;
+    private RunSessionObserver runSessionObserver;
+    private CodeHighlighter codeHighlighter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("GoRun");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        ActivityUtils.loadActionBar(this, "GoRun");
 
-        // Find and assign components.
+        // Find and assign UI components
         this.codeEditorView = findViewById(R.id.codeEditText);
         this.consoleTextView = findViewById(R.id.outputTextView);
         this.consoleEditText = findViewById(R.id.inputEditText);
@@ -105,13 +82,24 @@ public class EditorActivity extends AppCompatActivity {
         this.codeTitleTextView = findViewById(R.id.codeTitleTextView);
         this.codeSaveImageButton = findViewById(R.id.codeSaveImageButton);
 
+        // Set UI Components' listeners
+        consoleButton.setOnClickListener(this::onConsoleButtonClicked);
+        consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
+        leftBraceButton.setOnClickListener(this::onLeftBraceButtonClicked);
+        rightBraceButton.setOnClickListener(this::onRightBraceButtonClicked);
+        leftCurlyBraceButton.setOnClickListener(this::onLeftCurlyBraceButtonClicked);
+        rightCurlyBraceButton.setOnClickListener(this::onRightCurlyBraceButtonClicked);
+        quoteButton.setOnClickListener(this::onQuoteButtonClicked);
+        tabButton.setOnClickListener(this::onTabButtonClicked);
+        codeSaveImageButton.setOnClickListener(this::onCodeSaveImageButtonClicked);
+
+
         this.codeHighlighter = new DefaultCodeHighlighter(codeEditorView, AppConstants.Highlights.HIGHLIGHT_UNIT_LIST);
-
-        AppContext.instance().executorService.execute(codeHighlighter::highlight);
         codeEditorView.addTextChangedListener((TextWatcherAdapter) (s, start, before, count) ->
-                AppContext.instance().executorService.execute(codeHighlighter::highlight));
+                AppContext.execute(codeHighlighter::highlight));
+        AppContext.execute(codeHighlighter::highlight);
 
-        this.connectingToast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
+        this.toast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
 
         this.codeSaveDialog = new CodeSaveDialog(this, R.style.Theme_AppCompat_Dialog,
                 AppContext.instance().codeService, AppContext.instance().executorService);
@@ -126,29 +114,11 @@ public class EditorActivity extends AppCompatActivity {
                     codeSaveImageButton.setClickable(true);
                 });
 
-        consoleButton.setOnClickListener(this::onConsoleButtonClicked);
-        consoleTextView.setOnClickListener(this::onConsoleTextViewClicked);
-        leftBraceButton.setOnClickListener(this::onLeftBraceButtonClicked);
-        rightBraceButton.setOnClickListener(this::onRightBraceButtonClicked);
-        leftCurlyBraceButton.setOnClickListener(this::onLeftCurlyBraceButtonClicked);
-        rightCurlyBraceButton.setOnClickListener(this::onRightCurlyBraceButtonClicked);
-        quoteButton.setOnClickListener(this::onQuoteButtonClicked);
-        tabButton.setOnClickListener(this::onTabButtonClicked);
-        codeSaveImageButton.setOnClickListener(this::onCodeSaveImageButtonClicked);
-
-        consoleTextChangeHandler = new TextChangeHandler(CODE_EDITOR_UPDATE_DELAY_MS);
-        consoleTextChangeHandler.addListener((event, text) -> runOnUiThread(() -> {
-            if (event == TextChangeListener.Event.UPDATE)
-                this.consoleTextView.setText(text);
-            else
-                this.consoleTextView.setText(consoleTextView.getText().toString().concat(text));
-        }));
-
-        AppContext.instance().runSessionManager.registerObserver(runSessionObserver);
-        updateRunButton(AppContext.instance().runSessionManager.getStatus());
-
+        this.runSessionObserver = status -> {
+            Log.i(TAG, "RunSessionObserver, status: " + status.name());
+            runOnUiThread(() -> onRunSessionStatusChanged(status));
+        };
     }
-
 
     @Override
     protected void onStart() {
@@ -157,6 +127,8 @@ public class EditorActivity extends AppCompatActivity {
             AppContext.instance().runSessionManager.connect();
         String code = getIntent().getStringExtra(AppConstants.Values.INTENT_SNIPPET_CODE_NAME);
         if (code != null) codeEditorView.setText(code);
+        AppContext.instance().runSessionManager.registerObserver(runSessionObserver);
+        onRunSessionStatusChanged(AppContext.instance().runSessionManager.getStatus());
     }
 
     @Override
@@ -186,10 +158,15 @@ public class EditorActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateRunButton(RunSessionStatus status) {
+    //Updates ui and listeners regarding given RunSessionStatus
+    private void onRunSessionStatusChanged(RunSessionStatus status) {
         switch (status) {
             case HAS_SESSION:
-                runButton.setOnClickListener(hasSessionOnClickListener);
+                runButton.setOnClickListener(v -> {
+                    String code = codeEditorView.getText().toString();
+                    AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.RUN, code));
+                    consoleTextView.setText("");
+                });
                 runButton.setImageDrawable(getDrawable(R.drawable.run));
                 runButton.animate().cancel();
                 runButton.clearAnimation();
@@ -197,12 +174,21 @@ public class EditorActivity extends AppCompatActivity {
                 infoTextView.setText(getString(R.string.connected_info_text));
                 AppContext.instance().runSessionManager.session().addMessageConsumer(message -> {
                     Log.i(TAG, "Message action: " + message.action.name() + ", body: " + message.body);
-                    if (message.action == Action.OUTPUT)
-                        consoleTextChangeHandler.append(message.body);
+                    runOnUiThread(() -> onMessageReceived(message));
                 });
                 break;
             case CREATING:
-                runButton.setOnClickListener(creatingOnClickListener);
+                runButton.setOnClickListener(v -> {
+                    // Show 'connecting' toast massage if it is not showing at that time.
+                    try {
+                        if (!toast.getView().isShown()) {
+                            toast.show();
+                        }
+                    } catch (Exception e) {
+                        this.toast = Toast.makeText(this, getString(R.string.connecting_toast_message), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
                 runButton.setImageDrawable(getDrawable(R.drawable.connecting));
                 runButton.clearAnimation();
                 runButton.animate().rotationBy(1800).setDuration(10000);
@@ -210,7 +196,9 @@ public class EditorActivity extends AppCompatActivity {
                 infoTextView.setText(getString(R.string.connecting_info_text));
                 break;
             case NO_SESSION:
-                runButton.setOnClickListener(noSessionOnClickListener);
+                runButton.setOnClickListener(v -> {
+                    AppContext.instance().runSessionManager.connect();
+                });
                 runButton.setImageDrawable(getDrawable(R.drawable.disconnected));
                 runButton.animate().cancel();
                 runButton.clearAnimation();
@@ -219,18 +207,37 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
+    private void onMessageReceived(Message message) {
+        switch (message.action) {
+            case RUN_ACK:
+                consoleTextView.setText("go run main.go : " + message.body+"\n");
+                return;
+            case OUTPUT:
+                consoleTextView.setText(consoleTextView.getText()+message.body);
+                return;
+            case COMPLETED:
+                consoleTextView.setText(consoleTextView.getText()+"Completed, executionTimeMs: "+message.body);
+                return;
+            default:
+                Log.w(TAG, "onMessageReceived: uncovered message, action: " + message.action.name());
+        }
+    }
+
+    // Listener function
     private void onConsoleButtonClicked(View v) {
         String command = consoleEditText.getText().toString();
         consoleEditText.setText("");
         AppContext.instance().runSessionManager.session().sendMessage(Message.of(Action.INPUT, command));
     }
 
+    // Listener function
     private void onConsoleTextViewClicked(View v) {
         this.consoleEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(consoleEditText, InputMethodManager.SHOW_IMPLICIT);
     }
 
+    // Listener function
     private void onCodeSaveImageButtonClicked(View v) {
         if (loadedCode == null) {
             return;
@@ -242,32 +249,37 @@ public class EditorActivity extends AppCompatActivity {
 
     }
 
-
+    // Listener function
     private void onLeftBraceButtonClicked(View view) {
         Log.v(TAG, "onLeftBraceButtonClicked: button has been clicked");
         codeEditorView.addText("(");
     }
 
+    // Listener function
     private void onRightBraceButtonClicked(View view) {
         Log.v(TAG, "onRightBraceButtonClicked: button has been clicked");
         codeEditorView.addText(")");
     }
 
+    // Listener function
     private void onLeftCurlyBraceButtonClicked(View view) {
         Log.v(TAG, "onLeftCurlyBraceButtonClicked: button has been clicked");
         codeEditorView.addText("{");
     }
 
+    // Listener function
     private void onRightCurlyBraceButtonClicked(View view) {
         Log.v(TAG, "onRightCurlyBraceButtonClicked: button has been clicked");
         codeEditorView.addText("}");
     }
 
+    // Listener function
     private void onQuoteButtonClicked(View view) {
         Log.v(TAG, "onQuoteButtonClicked: button has been clicked");
         codeEditorView.quote();
     }
 
+    // Listener function
     private void onTabButtonClicked(View view) {
         Log.v(TAG, "onTabButtonClicked: button has been clicked");
         codeEditorView.addText("\t");

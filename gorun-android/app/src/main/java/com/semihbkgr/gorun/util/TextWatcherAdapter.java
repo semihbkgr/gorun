@@ -3,6 +3,7 @@ package com.semihbkgr.gorun.util;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+@FunctionalInterface
 public interface TextWatcherAdapter extends TextWatcher {
 
     @Override

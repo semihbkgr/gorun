@@ -17,6 +17,7 @@ import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.snippet.Snippet;
 import com.semihbkgr.gorun.snippet.SnippetInfo;
 import com.semihbkgr.gorun.snippet.SnippetService;
+import com.semihbkgr.gorun.util.ActivityUtils;
 import com.semihbkgr.gorun.util.http.ResponseCallback;
 
 import java.util.List;
@@ -34,11 +35,7 @@ public class SnippetListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snippet_list);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("Snippets");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        ActivityUtils.loadActionBar(this, "GoRun");
 
         snippetListView = findViewById(R.id.snippetListView);
         snippetListView.setOnItemClickListener(this::onSnippetListViewItemClick);

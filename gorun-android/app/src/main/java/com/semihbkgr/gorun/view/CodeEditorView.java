@@ -17,7 +17,6 @@ public class CodeEditorView extends androidx.appcompat.widget.AppCompatEditText 
     private final Rect rect;
     private final Paint paint;
 
-
     public CodeEditorView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setPadding(70, 10, 50, 10);
@@ -61,7 +60,15 @@ public class CodeEditorView extends androidx.appcompat.widget.AppCompatEditText 
         }
     }
 
-    public void addText(String text) {
+    @NonNull
+    public String getCode() {
+        if (getText() != null)
+            return getText().toString();
+        return "";
+    }
+
+
+    public void addText(@NonNull String text) {
         if (getText() != null)
             getText().insert(getSelectionStart(), text);
         else
@@ -78,5 +85,6 @@ public class CodeEditorView extends androidx.appcompat.widget.AppCompatEditText 
     private int stringLineCount(String str) {
         return str.split(System.lineSeparator()).length + 1;
     }
+
 
 }

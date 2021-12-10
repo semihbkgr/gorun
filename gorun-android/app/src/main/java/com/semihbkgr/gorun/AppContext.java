@@ -22,15 +22,13 @@ import com.semihbkgr.gorun.snippet.repository.SnippetRepository;
 import com.semihbkgr.gorun.snippet.repository.SnippetRepositoryImpl;
 import okhttp3.OkHttpClient;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 
 public class AppContext {
 
     private static final String TAG = AppContext.class.getName();
 
-    private static AppContext instance;
+    private static AppContext INSTANCE;
 
     public final SnippetService snippetService;
     public final AppDatabaseOpenHelper databaseOpenHelper;
@@ -70,21 +68,33 @@ public class AppContext {
     }
 
     public static void initialize(@NonNull Context context) {
-        if (instance != null)
+        if (INSTANCE != null)
             throw new IllegalStateException("AppContext instance has already been initialized before");
         Log.i(TAG, "initialize: AppContext initialization is being started");
-        instance = new AppContext(context);
+        INSTANCE = new AppContext(context);
         Log.i(TAG, "initialize: AppContext has been initialized");
     }
 
     public static AppContext instance() {
-        if (instance == null)
+        if (INSTANCE == null)
             throw new IllegalStateException("AppContext instance has not been initialized yet");
-        return instance;
+        return INSTANCE;
     }
 
     public static boolean initialized() {
-        return instance != null;
+        return INSTANCE != null;
+    }
+
+    public static void execute(@NonNull Runnable r) {
+        if (!initialized())
+            throw new IllegalStateException("AppContext instance has not been initialized yet");
+        INSTANCE.executorService.execute(r);
+    }
+
+    public static <T> Future<T> submit(Callable<T> c) {
+        if (!initialized())
+            throw new IllegalStateException("AppContext instance has not been initialized yet");
+        return INSTANCE.executorService.submit(c);
     }
 
 }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.R;
+import com.semihbkgr.gorun.util.ActivityUtils;
 import com.semihbkgr.gorun.util.ExpirationTimer;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActivityUtils.loadActionBar(this, "GoRun");
 
         runLayout = findViewById(R.id.runLayout);
         snippetLayout = findViewById(R.id.snippetLayout);
