@@ -1,8 +1,8 @@
 spring:
   r2dbc:
-    url: r2dbc:h2:mem:devdb
+    url: r2dbc:h2:file:///devdb
     username: sa
-    password: password
+    password:
   h2:
     console:
       enabled: true

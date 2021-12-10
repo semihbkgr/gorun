@@ -5,37 +5,37 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("ExpirationTimer")
-class ExpirationTimerTest {
+@DisplayName("IntervalTimer")
+class IntervalTimerTest {
 
     @Test
     @DisplayName("Get Result Before Expiration")
     void getResultBeforeExpiration() throws InterruptedException {
-        ExpirationTimer expirationTimer=new ExpirationTimer(100L);
-        expirationTimer.reflesh();
+        IntervalTimer intervalTimer =new IntervalTimer(100L);
+        intervalTimer.reflesh();
         Thread.sleep(50L);
-        assertTrue(expirationTimer.result());
-        expirationTimer.stop();
+        assertTrue(intervalTimer.result());
+        intervalTimer.stop();
     }
 
     @Test
     @DisplayName("Get Result After Expiration")
     void getResultAfterExpiration() throws InterruptedException {
-        ExpirationTimer expirationTimer=new ExpirationTimer(50L);
-        expirationTimer.reflesh();
+        IntervalTimer intervalTimer =new IntervalTimer(50L);
+        intervalTimer.reflesh();
         Thread.sleep(100L);
-        assertFalse(expirationTimer.result());
-        expirationTimer.stop();
+        assertFalse(intervalTimer.result());
+        intervalTimer.stop();
     }
 
     @Test
     @DisplayName("Get Result After Stop")
     void getResultAfterStop() throws InterruptedException {
-        ExpirationTimer expirationTimer=new ExpirationTimer(100L);
-        expirationTimer.reflesh();
+        IntervalTimer intervalTimer =new IntervalTimer(100L);
+        intervalTimer.reflesh();
         Thread.sleep(50L);
-        expirationTimer.stop();
-        assertThrows(IllegalStateException.class, expirationTimer::result);
+        intervalTimer.stop();
+        assertThrows(IllegalStateException.class, intervalTimer::result);
     }
 
 }

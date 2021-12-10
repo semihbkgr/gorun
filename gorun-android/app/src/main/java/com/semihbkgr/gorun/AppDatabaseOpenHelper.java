@@ -10,7 +10,6 @@ import com.semihbkgr.gorun.snippet.repository.SnippetDatabaseConstants;
 import static com.semihbkgr.gorun.AppConstants.Resources.DATABASE_NAME;
 import static com.semihbkgr.gorun.AppConstants.Resources.DATABASE_VERSION;
 
-
 public class AppDatabaseOpenHelper extends SQLiteOpenHelper {
 
     private static final String TAG = AppDatabaseOpenHelper.class.getName();

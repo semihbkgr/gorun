@@ -12,11 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.semihbkgr.gorun.AppConstants;
 import com.semihbkgr.gorun.R;
 import com.semihbkgr.gorun.util.ActivityUtils;
-import com.semihbkgr.gorun.util.ExpirationTimer;
+import com.semihbkgr.gorun.util.IntervalTimer;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final ExpirationTimer backTimer = new ExpirationTimer(AppConstants.Values.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
+    private final IntervalTimer backTimer = new IntervalTimer(AppConstants.Values.BACK_BUTTON_TIME_MS, "MenuActivityBackTimer");
 
     private LinearLayout runLayout;
     private LinearLayout snippetLayout;

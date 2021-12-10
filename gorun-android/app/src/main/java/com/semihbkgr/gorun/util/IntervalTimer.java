@@ -4,23 +4,24 @@ import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ExpirationTimer {
+public class IntervalTimer {
 
-    private static final String TAG = ExpirationTimer.class.getName();
+    private static final String TAG = IntervalTimer.class.getName();
 
     private final Thread thread;
     private final long timeInterval;
+
     //State
     //-1: Stopped
     //0: Waiting
     //1: OnTime
     private final AtomicInteger state;
 
-    public ExpirationTimer(long timeInterval) {
+    public IntervalTimer(long timeInterval) {
         this(timeInterval, "ExpirationTimerThread");
     }
 
-    public ExpirationTimer(long timeInterval, String name) {
+    public IntervalTimer(long timeInterval, String name) {
         if (timeInterval < 1) throw new IllegalArgumentException("TimeInterval argument must be positive value");
         this.timeInterval = timeInterval;
         this.state = new AtomicInteger(0);
