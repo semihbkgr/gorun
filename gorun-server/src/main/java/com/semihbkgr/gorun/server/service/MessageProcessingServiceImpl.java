@@ -73,6 +73,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
                                     .subscribeOn(Schedulers.boundedElastic())
+                                    //.concatWith(Mono.just(Message.of(Action.COMPLETED, String.valueOf(System.currentTimeMillis() - session.getRunContext().startTimeMS()))))
                     )
                     .doOnTerminate(() -> {
                         // TODO: 12/10/2021 file service adjustment

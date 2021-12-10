@@ -3,10 +3,10 @@ package com.semihbkgr.gorun.server.snippet;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface SnippetHoldingStrategy {
+public interface SnippetService {
+
+    Mono<Snippet> find(int id);
 
     Flux<SnippetInfo> findAllInfo();
-
-    Mono<Snippet> findById(int id);
 
 }

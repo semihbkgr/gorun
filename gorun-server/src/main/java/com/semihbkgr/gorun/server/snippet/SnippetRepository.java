@@ -1,12 +1,10 @@
 package com.semihbkgr.gorun.server.snippet;
 
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-public interface SnippetRepository {
+public interface SnippetRepository extends R2dbcRepository<Snippet, Integer> {
 
-    Flux<SnippetInfo> findAllInfo();
-
-    Mono<Snippet> findById();
+    Flux<SnippetInfo> findAllBy();
 
 }
