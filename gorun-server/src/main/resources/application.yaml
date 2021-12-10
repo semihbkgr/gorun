@@ -6,12 +6,11 @@ server:
 spring:
   application:
     name: gorun-server
+  profiles:
+    active: dev
 
 file:
   root-path: ${user.dir}\\codes
-
-snippet:
-  file-path: snippets.json
 
 run:
   url: /run

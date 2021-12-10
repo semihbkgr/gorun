@@ -14,8 +14,8 @@ public class Snippet {
 
     @Id
     private int id;
-    private int versionId;
-    private int order;
+    private int version;
+    private int displayOrder;
     private String title;
     private String brief;
     private String explanation;
