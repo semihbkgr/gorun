@@ -16,6 +16,7 @@ import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -71,10 +72,12 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                             DataBufferUtils.readInputStream(() -> session.getRunContext().process().getInputStream(), new DefaultDataBufferFactory(), 256)
                                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
-                                    .doOnComplete(() -> session.getRunContext().setStatus(RunStatus.COMPLETED))
+                                    .subscribeOn(Schedulers.boundedElastic())
                     )
-                    .doOnTerminate(()->{
-                        //fileService.deleteFile(session.getRunContext().filename());
+                    .doOnTerminate(() -> {
+                        // TODO: 12/10/2021 file service adjustment
+                        //fileService.deleteFile(session.getRunContext().filename())
+                        session.getRunContext().setStatus(RunStatus.COMPLETED);
                         runContextTimeoutHandler.removeContext(session.getRunContext());
                     });
 

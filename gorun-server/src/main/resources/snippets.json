@@ -30,10 +30,10 @@
     "id": 4,
     "versionId": 1,
     "order": -1,
-    "title": "For Loop",
+    "title": "Blocking For Loop",
     "brief": "brief",
     "explanation": "explanation",
-    "code": "package main\nimport (\n\t\"fmt\"\n\t\"time\"\n)\nfunc main() {\n\tfor i := 1;  i<=5; i++ {\n\t\tfmt.Printf(\"Start Unix Time: %v\\n\", time.Now().Unix())\n\ttime.Sleep(2 * time.Second)\"\t}\n}"
+    "code": "package main\nimport (\n\t\"fmt\"\n\t\"time\"\n)\nfunc main() {\n\tfor i := 1;  i<=5; i++ {\n\t\tfmt.Printf(\"Start Unix Time: %v\\n\", time.Now().Unix())\n\ttime.Sleep(1 * time.Second)\t}\n}"
   },
   {
     "id": 5,
