@@ -1,6 +1,6 @@
 spring:
   r2dbc:
-    url: r2dbc:h2:file:///devdb
+    url: r2dbc:h2:file:./db/devdb
     username: sa
     password:
   h2:
@@ -10,3 +10,11 @@ spring:
       settings:
         trace: false
         web-allow-others: false
+
+sql:
+  init:
+    enabled: true
+    ddl:
+      filepath: sql/schema.sql
+    dml:
+      filepath: sql/data.sql

@@ -2,7 +2,7 @@ package com.semihbkgr.gorun.run;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.semihbkgr.gorun.util.WebSocketListenerWrapper;
+import com.semihbkgr.gorun.util.WebSocketListenerProxy;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -59,7 +59,7 @@ public class RunSessionManager implements RunSessionObservable {
         else if (statusReference.get() == RunSessionStatus.CREATING)
             sessionReference.get().cancel();
         changeStatus(RunSessionStatus.CREATING);
-        sessionReference.set(client.connect(new WebSocketListenerWrapper(webSocketListener) {
+        sessionReference.set(client.connect(new WebSocketListenerProxy(webSocketListener) {
             @Override
             public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
                 changeStatus(RunSessionStatus.NO_SESSION);

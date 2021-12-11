@@ -7,4 +7,4 @@ CREATE TABLE snippets
     brief         VARCHAR(128) NOT NULL,
     explanation   MEDIUMTEXT   NOT NULL,
     code          MEDIUMTEXT   NOT NULL
-)
+);

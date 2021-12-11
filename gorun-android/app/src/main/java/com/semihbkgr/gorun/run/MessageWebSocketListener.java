@@ -4,18 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.semihbkgr.gorun.message.Message;
 import com.semihbkgr.gorun.message.MessageMarshaller;
-import com.semihbkgr.gorun.util.WebSocketListenerWrapper;
+import com.semihbkgr.gorun.util.WebSocketListenerProxy;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-class MessageWebSocketListener extends WebSocketListenerWrapper {
+class MessageWebSocketListener extends WebSocketListenerProxy {
 
     private final MessageMarshaller messageMarshaller;
     private final WebSocketListener webSocketListener;
