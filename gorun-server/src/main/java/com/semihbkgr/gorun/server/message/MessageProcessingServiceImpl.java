@@ -1,8 +1,8 @@
 package com.semihbkgr.gorun.server.message;
 
-import com.semihbkgr.gorun.server.code.file.FileService;
-import com.semihbkgr.gorun.server.code.file.FilenameGenerator;
 import com.semihbkgr.gorun.server.error.CodeExecutionError;
+import com.semihbkgr.gorun.server.file.FileService;
+import com.semihbkgr.gorun.server.file.FilenameGenerator;
 import com.semihbkgr.gorun.server.metric.ServerInfoManager;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.run.RunContextTimeoutHandler;
@@ -29,6 +29,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
     private final FilenameGenerator fileNameGenerator;
     private final RunContextTimeoutHandler runContextTimeoutHandler;
     private final ServerInfoManager serverInfoManager;
+    private boolean deleteFilesAfterExecution=false;
 
     @Override
     public Flux<Message> process(RunWebSocketSession session, Message message) {
@@ -72,11 +73,14 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
                                     .subscribeOn(Schedulers.boundedElastic())
-                            //.concatWith(Mono.just(Message.of(Action.COMPLETED, String.valueOf(System.currentTimeMillis() - session.getRunContext().startTimeMS()))))
+                                    .concatWith(Mono.defer(() -> {
+                                        var currentTimeMs = System.currentTimeMillis();
+                                        return Mono.just(Message.of(Action.COMPLETED, String.valueOf(currentTimeMs - session.getRunContext().startTimeMS())));
+                                    }))
                     )
                     .doOnTerminate(() -> {
-                        // TODO: 12/10/2021 file service adjustment
-                        //fileService.deleteFile(session.getRunContext().filename())
+                        if(deleteFilesAfterExecution)
+                            fileService.deleteFile(session.getRunContext().filename()).block();
                         session.getRunContext().setStatus(RunStatus.COMPLETED);
                         runContextTimeoutHandler.removeContext(session.getRunContext());
                     });

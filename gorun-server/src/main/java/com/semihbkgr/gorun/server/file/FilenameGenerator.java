@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.code.file;
+package com.semihbkgr.gorun.server.file;
 
 public interface FilenameGenerator {
 

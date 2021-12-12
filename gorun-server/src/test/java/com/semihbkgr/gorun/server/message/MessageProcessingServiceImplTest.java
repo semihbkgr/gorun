@@ -1,8 +1,8 @@
 package com.semihbkgr.gorun.server.message;
 
-import com.semihbkgr.gorun.server.code.file.FileServiceImpl;
-import com.semihbkgr.gorun.server.code.file.FilenameGenerator;
-import com.semihbkgr.gorun.server.code.file.SequentialFilenameGenerator;
+import com.semihbkgr.gorun.server.file.FileServiceImpl;
+import com.semihbkgr.gorun.server.file.FilenameGenerator;
+import com.semihbkgr.gorun.server.file.SequentialFilenameGenerator;
 import com.semihbkgr.gorun.server.metric.ServerInfoManager;
 import com.semihbkgr.gorun.server.metric.ServerInfoManagerImpl;
 import com.semihbkgr.gorun.server.run.RunContextTimeoutHandler;

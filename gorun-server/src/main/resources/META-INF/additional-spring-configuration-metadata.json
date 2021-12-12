@@ -33,7 +33,7 @@
     {
       "name": "file.root-dir",
       "type": "java.lang.String",
-      "description": "Path to root dir of files."
+      "description": "Path to root dir of code files."
     }
   ]
 }

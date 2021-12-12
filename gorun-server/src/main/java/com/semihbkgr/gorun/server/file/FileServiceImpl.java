@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.code.file;
+package com.semihbkgr.gorun.server.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +20,7 @@ public class FileServiceImpl implements FileService {
 
     private final Path rootPath;
 
-    public FileServiceImpl(@Value("${run-file.root-path:files}") String rootFolderPath) {
+    public FileServiceImpl(@Value("${file.root-dir:files}") String rootFolderPath) {
         this.rootPath = Path.of(rootFolderPath);
     }
 
@@ -68,10 +68,10 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Mono<String> createFile(String fileName, String content) {
+    public Mono<String> createFile(String filename, String content) {
         return Mono.create(sink -> {
             try {
-                var filePath = Files.createFile(rootPath.resolve(fileName));
+                var filePath = Files.createFile(rootPath.resolve(filename));
                 Files.write(filePath, content.getBytes());
                 sink.success(filePath.toString());
             } catch (IOException e) {
@@ -81,12 +81,12 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Mono<String> deleteFile(String filepath) {
+    public Mono<String> deleteFile(String filename) {
         return Mono.create(sink -> {
             try {
-                var filePath = Path.of(filepath);
+                var filePath = Path.of(filename);
                 if (!filePath.isAbsolute())
-                    filePath = rootPath.resolve(filepath);
+                    filePath = rootPath.resolve(filename);
                 Files.delete(filePath);
                 sink.success(filePath.toString());
             } catch (IOException e) {
@@ -99,6 +99,5 @@ public class FileServiceImpl implements FileService {
     public Path getRootDirPath() {
         return this.rootPath;
     }
-
 
 }

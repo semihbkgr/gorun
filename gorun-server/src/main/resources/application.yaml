@@ -8,7 +8,7 @@ spring:
   profiles:
     active: dev
 file:
-  root-dir: ${user.dir}\\codes
+  root-dir: ${user.dir}\\code
 run:
   url: /run
   timeout: 30s
