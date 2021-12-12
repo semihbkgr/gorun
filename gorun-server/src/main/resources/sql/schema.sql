@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS snippets;
+
 CREATE TABLE snippets
 (
     id            INT AUTO_INCREMENT PRIMARY KEY,

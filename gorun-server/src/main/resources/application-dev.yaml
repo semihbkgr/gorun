@@ -1,16 +1,8 @@
 spring:
   r2dbc:
-    url: r2dbc:h2:file:./db/devdb
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        trace: false
-        web-allow-others: false
-
+    url: r2dbc:mysql://localhost:3306/gorun
+    username: user
+    password: password
 sql:
   init:
     enabled: true

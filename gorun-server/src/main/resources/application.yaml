@@ -2,16 +2,13 @@ server:
   error:
     whitelabel:
       enabled: false
-
 spring:
   application:
     name: gorun-server
   profiles:
     active: dev
-
 file:
   root-path: ${user.dir}\\codes
-
 run:
   url: /run
   timeout: 30s

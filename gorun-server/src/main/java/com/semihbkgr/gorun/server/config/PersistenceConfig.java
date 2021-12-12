@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.snippet;
+package com.semihbkgr.gorun.server.config;
 
 import io.r2dbc.spi.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Configuration
 @Slf4j
-public class SnippetConfig {
+public class PersistenceConfig {
 
     @Bean
     @Profile("dev")

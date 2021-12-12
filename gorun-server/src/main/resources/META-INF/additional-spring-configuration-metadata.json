@@ -14,6 +14,21 @@
       "name": "run.timeout-check",
       "type": "java.time.Duration",
       "description": "Expiration check time interval."
+    },
+    {
+      "name": "sql.init.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Decides if sql init scripts will be executes at start up time or not."
+    },
+    {
+      "name": "sql.init.ddl.filepath",
+      "type": "java.lang.String",
+      "description": "Path to init ddl file resource."
+    },
+    {
+      "name": "sql.init.dml.filepath",
+      "type": "java.lang.String",
+      "description": "Path to init dml file resource."
     }
   ]
 }

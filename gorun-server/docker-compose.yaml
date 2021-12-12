@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  database:
+    image: mysql:5.7
+    container_name: gorun-mysql-database
+    hostname: database
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'gorun'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - "3306:3306"
+    networks:
+      - gorun-server
+
+networks:
+  gorun-server:
+    driver: bridge
+    external: false
