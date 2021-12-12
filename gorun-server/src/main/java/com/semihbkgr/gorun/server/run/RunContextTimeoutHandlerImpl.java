@@ -20,7 +20,7 @@ public class RunContextTimeoutHandlerImpl implements RunContextTimeoutHandler {
     private final Set<RunContext> runContextSet;
     private final long timeoutMs;
 
-    public RunContextTimeoutHandlerImpl(@Value("${run}") Duration timeout) {
+    public RunContextTimeoutHandlerImpl(@Value("${run.timeout}") Duration timeout) {
         this.timeoutMs = timeout.toMillis();
         this.runContextSet = new HashSet<>();
     }

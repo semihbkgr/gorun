@@ -1,6 +1,5 @@
-package com.semihbkgr.gorun.server.api;
+package com.semihbkgr.gorun.server.metric;
 
-import com.semihbkgr.gorun.server.component.ServerInfoManager;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/info")
 @RequiredArgsConstructor
-public class InfoApi {
+public class MetricApi {
 
     private final ServerInfoManager serverInfoManager;
 

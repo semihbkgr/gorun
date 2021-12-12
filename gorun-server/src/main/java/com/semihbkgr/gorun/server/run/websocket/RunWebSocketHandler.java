@@ -1,8 +1,8 @@
 package com.semihbkgr.gorun.server.run.websocket;
 
-import com.semihbkgr.gorun.server.component.ServerInfoManager;
 import com.semihbkgr.gorun.server.message.MessageMarshaller;
-import com.semihbkgr.gorun.server.service.MessageProcessingService;
+import com.semihbkgr.gorun.server.message.MessageProcessingService;
+import com.semihbkgr.gorun.server.metric.ServerInfoManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

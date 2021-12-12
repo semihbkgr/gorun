@@ -1,7 +1,7 @@
 package com.semihbkgr.gorun.server.run.websocket;
 
 import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.service.MessageProcessingService;
+import com.semihbkgr.gorun.server.message.MessageProcessingService;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 

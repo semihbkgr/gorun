@@ -1,11 +1,10 @@
-package com.semihbkgr.gorun.server.service;
+package com.semihbkgr.gorun.server.message;
 
-import com.semihbkgr.gorun.server.component.FileNameGenerator;
-import com.semihbkgr.gorun.server.component.SequentialFileNameGenerator;
-import com.semihbkgr.gorun.server.component.ServerInfoManager;
-import com.semihbkgr.gorun.server.component.ServerInfoManagerImpl;
-import com.semihbkgr.gorun.server.message.Action;
-import com.semihbkgr.gorun.server.message.Message;
+import com.semihbkgr.gorun.server.code.file.FileServiceImpl;
+import com.semihbkgr.gorun.server.code.file.FilenameGenerator;
+import com.semihbkgr.gorun.server.code.file.SequentialFilenameGenerator;
+import com.semihbkgr.gorun.server.metric.ServerInfoManager;
+import com.semihbkgr.gorun.server.metric.ServerInfoManagerImpl;
 import com.semihbkgr.gorun.server.run.RunContextTimeoutHandler;
 import com.semihbkgr.gorun.server.run.RunContextTimeoutHandlerImpl;
 import com.semihbkgr.gorun.server.run.websocket.RunWebSocketSession;
@@ -32,7 +31,7 @@ class MessageProcessingServiceImplTest {
     MessageProcessingServiceImpl messageProcessService;
     RunWebSocketSession session;
     FileServiceImpl fileService;
-    FileNameGenerator fileNameGenerator;
+    FilenameGenerator fileNameGenerator;
     RunContextTimeoutHandler runContextTimeoutHandler;
     ServerInfoManager serverInfoManager;
 
@@ -42,7 +41,7 @@ class MessageProcessingServiceImplTest {
         this.session = new RunWebSocketSession("", null);
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDir();
-        this.fileNameGenerator = new SequentialFileNameGenerator();
+        this.fileNameGenerator = new SequentialFilenameGenerator();
         this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(Duration.ofMillis(30_000L));
         this.serverInfoManager = new ServerInfoManagerImpl();
         this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, runContextTimeoutHandler, serverInfoManager);

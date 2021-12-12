@@ -14,7 +14,7 @@
     <artifactId>server</artifactId>
     <version>1.0.0</version>
 
-    <name>Server</name>
+    <name>gorun-server</name>
     <description>Server of GoRun</description>
 
     <properties>

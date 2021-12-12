@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.service;
+package com.semihbkgr.gorun.server.code.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @PostConstruct
-    void createRootDir() throws IOException {
+    public void createRootDir() throws IOException {
         log.info("Root dir path: {}", rootPath);
         if (Files.exists(rootPath)) {
             log.info("Root dir already exists");
@@ -39,7 +39,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @PreDestroy
-    void deleteRootDir() throws IOException {
+    public void deleteRootDir() throws IOException {
         if (Files.exists(rootPath)) {
             clearRootDir();
             log.info("Root dir has been cleared successfully");

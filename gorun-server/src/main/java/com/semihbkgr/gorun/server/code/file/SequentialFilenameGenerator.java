@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.component;
+package com.semihbkgr.gorun.server.code.file;
 
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-public class SequentialFileNameGenerator implements FileNameGenerator {
+public class SequentialFilenameGenerator implements FilenameGenerator {
 
     private final AtomicInteger sequence;
 
-    public SequentialFileNameGenerator() {
+    public SequentialFilenameGenerator() {
         this.sequence = new AtomicInteger(0);
     }
 

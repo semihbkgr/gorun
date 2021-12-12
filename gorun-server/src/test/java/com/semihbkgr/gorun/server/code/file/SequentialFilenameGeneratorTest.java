@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.component;
+package com.semihbkgr.gorun.server.code.file;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,9 +8,9 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SequentialFileNameGeneratorTest {
+class SequentialFilenameGeneratorTest {
 
-    SequentialFileNameGenerator nameGenerator = new SequentialFileNameGenerator();
+    SequentialFilenameGenerator nameGenerator = new SequentialFilenameGenerator();
 
     @Test
     @DisplayName("GenerateByNullExtension")

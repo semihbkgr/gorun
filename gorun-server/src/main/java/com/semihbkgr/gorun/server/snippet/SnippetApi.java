@@ -1,8 +1,5 @@
-package com.semihbkgr.gorun.server.api;
+package com.semihbkgr.gorun.server.snippet;
 
-import com.semihbkgr.gorun.server.snippet.Snippet;
-import com.semihbkgr.gorun.server.snippet.SnippetInfo;
-import com.semihbkgr.gorun.server.snippet.SnippetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

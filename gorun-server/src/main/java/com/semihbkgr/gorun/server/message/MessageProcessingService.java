@@ -1,6 +1,5 @@
-package com.semihbkgr.gorun.server.service;
+package com.semihbkgr.gorun.server.message;
 
-import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.run.websocket.RunWebSocketSession;
 import reactor.core.publisher.Flux;
 

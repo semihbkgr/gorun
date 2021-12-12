@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.component;
+package com.semihbkgr.gorun.server.metric;
 
 import org.springframework.stereotype.Component;
 

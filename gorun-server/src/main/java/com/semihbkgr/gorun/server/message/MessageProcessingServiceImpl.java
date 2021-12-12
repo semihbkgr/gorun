@@ -1,12 +1,11 @@
-package com.semihbkgr.gorun.server.service;
+package com.semihbkgr.gorun.server.message;
 
-import com.semihbkgr.gorun.server.component.FileNameGenerator;
-import com.semihbkgr.gorun.server.run.RunContextTimeoutHandler;
-import com.semihbkgr.gorun.server.component.ServerInfoManager;
+import com.semihbkgr.gorun.server.code.file.FileService;
+import com.semihbkgr.gorun.server.code.file.FilenameGenerator;
 import com.semihbkgr.gorun.server.error.CodeExecutionError;
-import com.semihbkgr.gorun.server.message.Action;
-import com.semihbkgr.gorun.server.message.Message;
+import com.semihbkgr.gorun.server.metric.ServerInfoManager;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
+import com.semihbkgr.gorun.server.run.RunContextTimeoutHandler;
 import com.semihbkgr.gorun.server.run.RunStatus;
 import com.semihbkgr.gorun.server.run.websocket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 public class MessageProcessingServiceImpl implements MessageProcessingService {
 
     private final FileService fileService;
-    private final FileNameGenerator fileNameGenerator;
+    private final FilenameGenerator fileNameGenerator;
     private final RunContextTimeoutHandler runContextTimeoutHandler;
     private final ServerInfoManager serverInfoManager;
 
@@ -73,7 +72,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
                                     .map(messageBody -> Message.of(Action.OUTPUT, messageBody))
                                     .subscribeOn(Schedulers.boundedElastic())
-                                    //.concatWith(Mono.just(Message.of(Action.COMPLETED, String.valueOf(System.currentTimeMillis() - session.getRunContext().startTimeMS()))))
+                            //.concatWith(Mono.just(Message.of(Action.COMPLETED, String.valueOf(System.currentTimeMillis() - session.getRunContext().startTimeMS()))))
                     )
                     .doOnTerminate(() -> {
                         // TODO: 12/10/2021 file service adjustment
