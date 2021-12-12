@@ -1,14 +1,14 @@
 package com.semihbkgr.gorun.server.service;
 
 import com.semihbkgr.gorun.server.component.FileNameGenerator;
-import com.semihbkgr.gorun.server.component.RunContextTimeoutHandler;
+import com.semihbkgr.gorun.server.run.RunContextTimeoutHandler;
 import com.semihbkgr.gorun.server.component.ServerInfoManager;
 import com.semihbkgr.gorun.server.error.CodeExecutionError;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.run.DefaultRunContext;
 import com.semihbkgr.gorun.server.run.RunStatus;
-import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
+import com.semihbkgr.gorun.server.run.websocket.RunWebSocketSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBufferUtils;

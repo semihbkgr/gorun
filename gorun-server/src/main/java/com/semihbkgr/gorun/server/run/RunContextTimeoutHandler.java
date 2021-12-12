@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.component;
+package com.semihbkgr.gorun.server.run;
 
 import com.semihbkgr.gorun.server.run.RunContext;
 

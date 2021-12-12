@@ -1,14 +1,13 @@
-package com.semihbkgr.gorun.server.component;
+package com.semihbkgr.gorun.server.run;
 
-import com.semihbkgr.gorun.server.run.RunContext;
-import com.semihbkgr.gorun.server.run.RunProperties;
-import com.semihbkgr.gorun.server.run.RunStatus;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,11 +17,11 @@ import java.util.Set;
 @Slf4j
 public class RunContextTimeoutHandlerImpl implements RunContextTimeoutHandler {
 
-    private final RunProperties runProperties;
     private final Set<RunContext> runContextSet;
+    private final long timeoutMs;
 
-    public RunContextTimeoutHandlerImpl(RunProperties runProperties) {
-        this.runProperties = runProperties;
+    public RunContextTimeoutHandlerImpl(@Value("${run}") Duration timeout) {
+        this.timeoutMs = timeout.toMillis();
         this.runContextSet = new HashSet<>();
     }
 
@@ -43,7 +42,7 @@ public class RunContextTimeoutHandlerImpl implements RunContextTimeoutHandler {
         var currentTimeMS = System.currentTimeMillis();
         List<RunContext> runContextList = new ArrayList<>(runContextSet);
         runContextList.stream()
-                .filter(runContext -> currentTimeMS - runContext.startTimeMS() > runProperties.getTimeout().toMillis())
+                .filter(runContext -> currentTimeMS - runContext.startTimeMS() > timeoutMs)
                 .forEach(runContext -> {
                     runContext.setStatus(RunStatus.TIMEOUT);
                     runContext.process().destroyForcibly();

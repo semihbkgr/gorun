@@ -1,4 +1,4 @@
-package com.semihbkgr.gorun.server.socket;
+package com.semihbkgr.gorun.server.run.websocket;
 
 import com.semihbkgr.gorun.server.message.Message;
 import com.semihbkgr.gorun.server.service.MessageProcessingService;

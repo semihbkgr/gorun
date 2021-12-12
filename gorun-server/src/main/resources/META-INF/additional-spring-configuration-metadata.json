@@ -29,6 +29,11 @@
       "name": "sql.init.dml.filepath",
       "type": "java.lang.String",
       "description": "Path to init dml file resource."
+    },
+    {
+      "name": "file.root-dir",
+      "type": "java.lang.String",
+      "description": "Path to root dir of files."
     }
   ]
 }

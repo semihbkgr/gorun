@@ -1,10 +1,14 @@
 package com.semihbkgr.gorun.server.service;
 
-import com.semihbkgr.gorun.server.component.*;
+import com.semihbkgr.gorun.server.component.FileNameGenerator;
+import com.semihbkgr.gorun.server.component.SequentialFileNameGenerator;
+import com.semihbkgr.gorun.server.component.ServerInfoManager;
+import com.semihbkgr.gorun.server.component.ServerInfoManagerImpl;
 import com.semihbkgr.gorun.server.message.Action;
 import com.semihbkgr.gorun.server.message.Message;
-import com.semihbkgr.gorun.server.run.RunProperties;
-import com.semihbkgr.gorun.server.socket.RunWebSocketSession;
+import com.semihbkgr.gorun.server.run.RunContextTimeoutHandler;
+import com.semihbkgr.gorun.server.run.RunContextTimeoutHandlerImpl;
+import com.semihbkgr.gorun.server.run.websocket.RunWebSocketSession;
 import com.semihbkgr.gorun.server.test.ResourceExtension;
 import com.semihbkgr.gorun.server.test.Resources;
 import com.semihbkgr.gorun.server.test.ResourcesDir;
@@ -31,7 +35,6 @@ class MessageProcessingServiceImplTest {
     FileNameGenerator fileNameGenerator;
     RunContextTimeoutHandler runContextTimeoutHandler;
     ServerInfoManager serverInfoManager;
-    RunProperties runProperties;
 
     @BeforeEach
     void initializeRequiredObjects() throws IOException {
@@ -40,8 +43,7 @@ class MessageProcessingServiceImplTest {
         this.fileService = new FileServiceImpl(ROOT_DIR);
         fileService.createRootDir();
         this.fileNameGenerator = new SequentialFileNameGenerator();
-        this.runProperties = new RunProperties();
-        this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(runProperties);
+        this.runContextTimeoutHandler = new RunContextTimeoutHandlerImpl(Duration.ofMillis(30_000L));
         this.serverInfoManager = new ServerInfoManagerImpl();
         this.messageProcessService = new MessageProcessingServiceImpl(fileService, fileNameGenerator, runContextTimeoutHandler, serverInfoManager);
     }

@@ -20,7 +20,7 @@ public class FileServiceImpl implements FileService {
 
     private final Path rootPath;
 
-    public FileServiceImpl(@Value("${file.root-path:files}") String rootFolderPath) {
+    public FileServiceImpl(@Value("${run-file.root-path:files}") String rootFolderPath) {
         this.rootPath = Path.of(rootFolderPath);
     }
 
