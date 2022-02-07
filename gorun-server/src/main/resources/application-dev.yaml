@@ -1,6 +1,6 @@
 spring:
   r2dbc:
-    url: r2dbc:mysql://localhost:3306/gorun
+    url: r2dbc:mysql://database:3306/gorun?tlsVersion=TLSv1.2
     username: user
     password: password
 sql:
