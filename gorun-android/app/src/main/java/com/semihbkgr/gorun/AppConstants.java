@@ -15,8 +15,8 @@ public class AppConstants {
     }
 
     public static class Nets {
-        public static final String SERVER_HTTP_URI = "http://192.168.1.108:8080";
-        public static final String SERVER_WEB_SOCKET_URI = "ws://192.168.1.108:8080";
+        public static final String SERVER_HTTP_URI = "http://192.168.1.4:8080";
+        public static final String SERVER_WEB_SOCKET_URI = "ws://192.168.1.4:8080";
         public static final String SERVER_SNIPPET_HTTP_URI = SERVER_HTTP_URI + "/snippet";
         public static final String SERVER_RUN_WEB_SOCKET_URI = SERVER_WEB_SOCKET_URI + "/run";
     }
