@@ -29,7 +29,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
     private final FilenameGenerator fileNameGenerator;
     private final RunContextTimeoutHandler runContextTimeoutHandler;
     private final ServerInfoManager serverInfoManager;
-    private boolean deleteFilesAfterExecution=false;
+    private final boolean deleteFilesAfterExecution = false;
 
     @Override
     public Flux<Message> process(RunWebSocketSession session, Message message) {
@@ -79,7 +79,7 @@ public class MessageProcessingServiceImpl implements MessageProcessingService {
                                     }))
                     )
                     .doOnTerminate(() -> {
-                        if(deleteFilesAfterExecution)
+                        if (deleteFilesAfterExecution)
                             fileService.deleteFile(session.getRunContext().filename()).block();
                         session.getRunContext().setStatus(RunStatus.COMPLETED);
                         runContextTimeoutHandler.removeContext(session.getRunContext());

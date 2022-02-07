@@ -50,7 +50,7 @@ class AppResourceHelperTest {
                 resourceContent.append(line)
                         .append(System.lineSeparator());
             assertTrue(resourceContent.length() > 0);
-            Log.i(TAG, "checkIfLocalResourceFileExistsAndNotEmpty: Resource content: " + resourceContent.toString());
+            Log.i(TAG, "checkIfLocalResourceFileExistsAndNotEmpty: Resource content: " + resourceContent);
             br.close();
             isr.close();
         } catch (IOException e) {
@@ -63,7 +63,7 @@ class AppResourceHelperTest {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(TEST_RESOURCE_FILE_NAME)) {
             String resourceContent = appResourceHelper.readStringFromStream(is);
             assertEquals(TEST_MODEL_JSON, resourceContent);
-            Log.i(TAG, "readStringFromStreamAndCheckIfEqual: Resource content: " + resourceContent.toString());
+            Log.i(TAG, "readStringFromStreamAndCheckIfEqual: Resource content: " + resourceContent);
         } catch (IOException e) {
             fail(e);
         }
@@ -73,9 +73,9 @@ class AppResourceHelperTest {
     void readTypeFromReaderAndCheckIfEquals() {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(TEST_RESOURCE_FILE_NAME);
              Reader r = new InputStreamReader(is)) {
-            TestModel testModel= appResourceHelper.readTypeFromReader(r,TestModel.class);
-            assertEquals(TEST_MODEL_INSTANCE,testModel);
-            Log.i(TAG, "readTypeFromReaderAndCheckIfEquals: TestModel content: "+testModel);
+            TestModel testModel = appResourceHelper.readTypeFromReader(r, TestModel.class);
+            assertEquals(TEST_MODEL_INSTANCE, testModel);
+            Log.i(TAG, "readTypeFromReaderAndCheckIfEquals: TestModel content: " + testModel);
         } catch (IOException e) {
             fail(e);
         }

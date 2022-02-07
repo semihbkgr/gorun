@@ -1,2 +1,2 @@
-rootProject.name='GoRun'
+rootProject.name='gorun-android'
 include ':app'

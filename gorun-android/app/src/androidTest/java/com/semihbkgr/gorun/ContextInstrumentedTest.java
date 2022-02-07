@@ -20,7 +20,7 @@ public class ContextInstrumentedTest {
     }
 
     @Test
-    public void initializeAppContext(){
+    public void initializeAppContext() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         AppContext.initialize(context);
     }

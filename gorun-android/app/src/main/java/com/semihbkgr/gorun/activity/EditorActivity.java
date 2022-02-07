@@ -210,13 +210,13 @@ public class EditorActivity extends AppCompatActivity {
     private void onMessageReceived(Message message) {
         switch (message.action) {
             case RUN_ACK:
-                consoleTextView.setText("go run main.go : " + message.body+"\n");
+                consoleTextView.setText("go run main.go : " + message.body + "\n");
                 return;
             case OUTPUT:
-                consoleTextView.setText(consoleTextView.getText()+message.body);
+                consoleTextView.setText(consoleTextView.getText() + message.body);
                 return;
             case COMPLETED:
-                consoleTextView.setText(consoleTextView.getText()+"Completed, executionTimeMs: "+message.body);
+                consoleTextView.setText(consoleTextView.getText() + "Completed, executionTimeMs: " + message.body);
                 return;
             default:
                 Log.w(TAG, "onMessageReceived: uncovered message, action: " + message.action.name());

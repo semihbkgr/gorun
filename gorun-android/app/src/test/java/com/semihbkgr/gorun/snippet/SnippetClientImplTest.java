@@ -138,11 +138,10 @@ class SnippetClientImplTest {
 
             @Override
             public void onFailure(Exception e) {
-                if(e instanceof RequestException){
-                    assertTrue(((RequestException)e).errorResponseModelOptional().isPresent());
+                if (e instanceof RequestException) {
+                    assertTrue(((RequestException) e).errorResponseModelOptional().isPresent());
                     latch.countDown();
-                }
-                else
+                } else
                     fail();
 
             }

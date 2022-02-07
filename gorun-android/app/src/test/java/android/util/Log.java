@@ -161,7 +161,7 @@ public class Log {
         D,
         I,
         W,
-        E;
+        E
     }
 
 }

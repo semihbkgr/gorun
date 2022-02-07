@@ -23,7 +23,7 @@ public class ResourceExtension implements BeforeAllCallback {
                 rootDirPath = Path.of(resourcesDir.path());
             }
         }
-        log.info("Resources root dir path: {}", rootDirPath.toString());
+        log.info("Resources root dir path: {}", rootDirPath);
         final int rootDirPathLength = rootDirPath.toString().length();
         Files.walk(rootDirPath).parallel().forEach(path -> {
             if (!Files.isDirectory(path)) {

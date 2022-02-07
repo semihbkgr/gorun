@@ -11,16 +11,13 @@
     </parent>
 
     <groupId>com.semihbkgr.gorun</groupId>
-    <artifactId>gorun-server</artifactId>
+    <artifactId>gorun</artifactId>
     <version>1.0.0</version>
-
-    <name>GoRun Server</name>
-    <description>Server of GoRun</description>
 
     <properties>
         <java.version>17</java.version>
         <okhttp.version>4.9.1</okhttp.version>
-        <finalName>gorun-server-${version}</finalName>
+        <finalName>gorun-${version}</finalName>
     </properties>
 
     <dependencies>
